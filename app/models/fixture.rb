@@ -67,7 +67,7 @@ class Fixture < ActiveRecord::Base
     bool = team == 'h'
     arr = []
     player_fixture_histories.where(was_home: bool).where.not("#{stat}": 0).each do |player_stat|
-      arr << { player: "#{player_stat.player.name}", value: player_stat.public_send(stat) }
+      arr << { player: player_stat.player.name, value: player_stat.public_send(stat) }
     end
     arr
   end
