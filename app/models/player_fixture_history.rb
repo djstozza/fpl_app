@@ -55,5 +55,4 @@ class PlayerFixtureHistory < ActiveRecord::Base
   belongs_to :player
   belongs_to :round
   belongs_to :fixture
-
 end
