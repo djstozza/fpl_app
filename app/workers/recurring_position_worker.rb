@@ -7,7 +7,7 @@ class RecurringPositionWorker
   include Sidetiq::Schedulable
   sidekiq_options retry: 2
 
-  recurrence { daily.hour_of_day(18) }
+  recurrence { yearly.month_of_year(:june) }
 
   def perform
     HTTParty.get('https://fantasy.premierleague.com/drf/element-types').each do |position|

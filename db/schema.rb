@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170125231650) do
+ActiveRecord::Schema.define(version: 20170126111025) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -84,6 +84,35 @@ ActiveRecord::Schema.define(version: 20170125231650) do
     t.integer  "opponent_team_id"
     t.datetime "created_at",                      null: false
     t.datetime "updated_at",                      null: false
+  end
+
+  create_table "player_past_histories", force: :cascade do |t|
+    t.string   "season_name"
+    t.integer  "player_code"
+    t.integer  "start_cost"
+    t.integer  "end_cost"
+    t.integer  "total_points"
+    t.integer  "minutes"
+    t.integer  "goals_scored"
+    t.integer  "assists"
+    t.integer  "clean_sheets"
+    t.integer  "goals_conceded"
+    t.integer  "own_goals"
+    t.integer  "penalties_saved"
+    t.integer  "penalties_missed"
+    t.integer  "yellow_cards"
+    t.integer  "red_cards"
+    t.integer  "saves"
+    t.integer  "bonus"
+    t.integer  "bps"
+    t.decimal  "influence"
+    t.decimal  "creativity"
+    t.decimal  "threat"
+    t.decimal  "ict_index"
+    t.integer  "ea_index"
+    t.integer  "season"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
   end
 
   create_table "players", force: :cascade do |t|
