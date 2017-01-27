@@ -167,8 +167,8 @@ class Team < ActiveRecord::Base
 
   def biggest_win_streak
     results_array.chunk { |result| result == 'W' }
-                 .map {|result, results| [result, results.length]}
-                 .delete_if{|group| group[0] == false}
+                 .map { |result, results| [result, results.length] }
+                 .delete_if { |group| group[0] == false }
                  .max[1]
   end
 
@@ -181,8 +181,8 @@ class Team < ActiveRecord::Base
 
   def undefeated_streak
     results_array.chunk { |result| result == 'W' || result == 'D' }
-                 .map {|result, results| [result, results.length]}
-                 .delete_if{|group| group[0] == false}
+                 .map { |result, results| [result, results.length] }
+                 .delete_if { |group| group[0] == false }
                  .max[1]
   end
 

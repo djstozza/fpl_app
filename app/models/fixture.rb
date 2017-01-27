@@ -59,7 +59,7 @@ class Fixture < ActiveRecord::Base
 
   def team_stat(team)
     stats = {}
-    key_stats_arr.map { |stat| stats[stat] = stat_arr(team, stat) }
+    key_stats_arr.each { |stat| stats[stat] = stat_arr(team, stat) }
     stats
   end
 
