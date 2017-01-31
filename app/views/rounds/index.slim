@@ -1,0 +1,26 @@
+.container
+  .row: .col-md-12
+
+    ul.nav.nav-tabs.js-scrollable-nav role='tablist'
+      - @rounds.each do |round|
+        li[class="#{'active' if round.is_current}", role='presentation']
+          = link_to round.name,
+                    "##{round.short_name}",
+                    'data-toggle' => 'tab',
+                    'aria-controls' => "#{round.short_name}"
+.container
+  .tab-content
+    - @rounds.each do |round|
+      .tab-pane[class="#{'active' if round.is_current}", id="#{round.short_name}"]
+        - round.fixture_arr.each do |fixture_group|
+          b #{fixture_group[0]}
+          - fixture_group[1].each do |fixture|
+            .tab-pane
+              span #{fixture.home_team.name}&nbsp;
+              img[class="#{fixture.home_team.short_name.downcase}"]
+              - if fixture.started || fixture.finished
+                span &nbsp;#{fixture.team_h_score} - #{fixture.team_a_score}&nbsp;
+              - else
+                span &nbsp;#{fixture.adjusted_kickoff_time}&nbsp;
+              img[class="#{fixture.away_team.short_name.downcase}"]&nbsp;
+              span #{fixture.away_team.name}

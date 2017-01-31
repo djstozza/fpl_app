@@ -19,4 +19,12 @@
 class Round < ActiveRecord::Base
   has_many :fixtures
   has_many :player_fixture_histories
+
+  def short_name
+    "GW#{id}"
+  end
+
+  def fixture_arr
+    fixtures.sort_by(&:kickoff_time).group_by { |fixture| fixture.kickoff_time.to_time.strftime('%A %-d %B %Y') }
+  end
 end
