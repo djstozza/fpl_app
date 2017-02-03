@@ -28,11 +28,10 @@ class Fixture < ActiveRecord::Base
   belongs_to :team
   has_many :player_fixture_histories
 
+  scope :active, -> { where(started: true).where(finished: false) }
+
   def stats
-    {
-      home_team_stats: team_stat('h'),
-      away_team_stats: team_stat('a')
-    }
+    key_stats_hash
   end
 
   def home_team
@@ -49,6 +48,12 @@ class Fixture < ActiveRecord::Base
 
   private
 
+  def key_stats_hash
+    stats = {}
+    key_stats_arr.each { |stat| stats[stat] = stat_hash(stat) }
+    stats
+  end
+
   def key_stats_arr
     ['goals_scored',
      'assists',
@@ -61,18 +66,16 @@ class Fixture < ActiveRecord::Base
      'bonus']
   end
 
-  def team_stat(team)
-    stats = {}
-    key_stats_arr.each { |stat| stats[stat] = stat_arr(team, stat) }
-    stats
-  end
-
-  def stat_arr(team, stat)
-    bool = team == 'h'
-    arr = []
-    player_fixture_histories.where(was_home: bool).where.not("#{stat}": 0).each do |player_stat|
-      arr << { player: player_stat.player.name, value: player_stat.public_send(stat) }
+  def stat_hash(stat)
+    hash = {}
+    home_team_arr = []
+    away_team_arr = []
+    hash['home_team'] = home_team_arr
+    hash['away_team'] = away_team_arr
+    player_fixture_histories.where.not("#{stat}": 0).each do |player_stat|
+      arr = player_stat.was_home ? home_team_arr : away_team_arr
+      arr  << { player: player_stat.player.name, value: player_stat.public_send(stat) }
     end
-    arr
+    hash
   end
 end

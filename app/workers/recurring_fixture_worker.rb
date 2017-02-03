@@ -7,7 +7,7 @@ class RecurringFixtureWorker
   include Sidetiq::Schedulable
   sidekiq_options retry: 2
 
-  recurrence { daily.hour_of_day(18) }
+  recurrence { secondly(180) }
 
   def perform
     HTTParty.get('https://fantasy.premierleague.com/drf/fixtures/').each do |fixture|

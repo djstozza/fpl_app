@@ -1,0 +1,63 @@
+.container
+  .row: .col-md-12
+
+    ul.nav.nav-tabs.js-scrollable-nav role='tablist'
+      - @rounds.sort.each do |round|
+        li[class="#{'active' if round == @round}", role='presentation']
+          = link_to round.name, round
+.container: .row: .col-md-offset-3.col-md-6
+  - @round.fixture_arr.each do |fixture_group|
+    b #{fixture_group[0]}
+    - fixture_group[1].each do |fixture|
+      - if fixture.started || fixture.finished
+        .panel-group aria-multiselectable='true' role='tablist' id="accordion-sharing-#{fixture.id}"
+          .panel
+            .panel-heading role='tab' id="accordion-sharing-#{fixture.id}"
+              a aria-controls="sharing-tab-#{fixture.id}" aria-expanded='false' data-parent=\
+                "#accordion-sharing-#{fixture.id}" data-toggle=\
+                'collapse' href="#sharing-tab-#{fixture.id}" role='button'
+                span #{fixture.home_team.name}&nbsp;
+                img[class="#{fixture.home_team.short_name.downcase}"]
+                pan &nbsp;#{fixture.team_h_score} - #{fixture.team_a_score}&nbsp;
+                img[class="#{fixture.away_team.short_name.downcase}"]&nbsp;
+                span #{fixture.away_team.name}
+            .panel-collapse.collapse aria-labelledby="accordion-sharing-#{fixture.id}" role=\
+              'tabpanel' id="sharing-tab-#{fixture.id}"
+              .panel-body
+                table.table.table-striped.table-bordered
+                  thead
+                    tr
+                      td
+                      td
+                        b #{fixture.home_team.name}
+                      td
+                        b #{fixture.team_h_score}
+                      td
+                        b #{fixture.away_team.name}
+                      td
+                        b #{fixture.team_a_score}
+                  tbody
+                    - fixture.stats.each do |stat|
+                      - unless stat[1]['home_team'].empty? && stat[1]['away_team'].empty?
+                          tr
+                            td #{stat[0].humanize.capitalize}
+                            td
+                              - stat[1]['home_team'].each do |player_stat|
+                                p #{player_stat[:player]}
+                            td
+                              - stat[1]['home_team'].each do |player_stat|
+                                p #{player_stat[:value]}
+                            td
+                              - stat[1]['away_team'].each do |player_stat|
+                                p #{player_stat[:player]}
+                            td
+                              - stat[1]['away_team'].each do |player_stat|
+                                p #{player_stat[:value]}
+
+      - else
+        p
+          span #{fixture.home_team.name}&nbsp;
+          img[class="#{fixture.home_team.short_name.downcase}"]
+          span &nbsp;#{fixture.adjusted_kickoff_time}&nbsp;
+          img[class="#{fixture.away_team.short_name.downcase}"]&nbsp;
+          span #{fixture.away_team.name}

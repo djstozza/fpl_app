@@ -13,7 +13,8 @@ class RecurringPlayerFixtureHistoryWorker
       HTTParty.get("https://fantasy.premierleague.com/drf/element-summary/#{player.id}")['history']
               .each do |player_fixture_history|
         fpl_player_fixture_history = PlayerFixtureHistory.find_or_create_by(id: player_fixture_history['id'])
-        unless fpl_player_fixture_history.round.data_checked
+        if (fpl_player_fixture_history&.round&.is_previous && !fpl_player_fixture_history&.round&.data_checked) ||
+           fpl_player_fixture_history&.round&.is_current
           fpl_player_fixture_history.update(
             kickoff_time: player_fixture_history['kickoff_time'],
             team_h_score: player_fixture_history['team_h_score'],
