@@ -3,10 +3,7 @@ require 'sidekiq'
 class RecurringPlayerPastHistoryWorker
   include HTTParty
   include Sidekiq::Worker
-  include Sidetiq::Schedulable
   sidekiq_options retry: 2
-
-  recurrence { yearly.month_of_year(:june) }
 
   def perform
     Player.all.each do |player|
@@ -22,7 +19,7 @@ class RecurringPlayerPastHistoryWorker
                                           goals_scored: history['goals_scored'],
                                           assists: history['assists'],
                                           clean_sheets: history['clean_sheets'],
-                                          goals_scored: history['own_goals'],
+                                          own_goals: history['own_goals'],
                                           penalties_saved: history['penalties_saved'],
                                           penalties_missed: history['penalties_missed'],
                                           yellow_cards: history['yellow_cards'],
