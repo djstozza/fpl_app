@@ -90,6 +90,6 @@ class RecurringActivePlayerFixtureHistoriesWorker
   end
 end
 
-Sidekiq::Cron::Job.create(name: 'RecurringActivePlayerFixtureHistoriesWorker - every 3min',
-                          cron: '*/3 * * * *',
+Sidekiq::Cron::Job.create(name: 'RecurringActivePlayerFixtureHistoriesWorker - every 3min between 11pm and 9am UTC',
+                          cron: '00-59/3 0-9,23 * * * *',
                           class: 'RecurringActivePlayerFixtureHistoriesWorker')

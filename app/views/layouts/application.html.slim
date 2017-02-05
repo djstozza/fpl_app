@@ -1,0 +1,11 @@
+doctype html
+html
+  head
+    title FplApp
+    = stylesheet_link_tag('application', media: 'all', 'data-turbolinks-track' => true)
+    = javascript_include_tag('application', 'data-turbolinks-track' => true)
+    meta http-equiv="Content-Language" content="en"
+    = csrf_meta_tags
+
+  body class="controller-#{params[:controller].gsub('_', '-')} action-#{params[:action].gsub('_', '-')}"
+    = yield

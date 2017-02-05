@@ -1,7 +1,6 @@
 $(document).ready ->
-
+  # Adapted from https://gist.github.com/tim-reynolds/3019761
   centerItVariableWidth = (target, outer) ->
-    console.log('blah')
     out = $(outer)
     tar = $(target)
     x = out.width()
