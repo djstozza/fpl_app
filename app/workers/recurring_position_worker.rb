@@ -1,13 +1,9 @@
 require 'sidekiq'
-require 'sidetiq'
 
 class RecurringPositionWorker
   include HTTParty
   include Sidekiq::Worker
-  include Sidetiq::Schedulable
   sidekiq_options retry: 2
-
-  recurrence { yearly.month_of_year(:june) }
 
   def perform
     HTTParty.get('https://fantasy.premierleague.com/drf/element-types').each do |position|
@@ -19,3 +15,7 @@ class RecurringPositionWorker
     end
   end
 end
+
+Sidekiq::Cron::Job.create(name: 'RecurringPositionWorker - every day at 12pm UTC',
+                          cron: '00 12 * * *',
+                          class: 'RecurringPositionWorker')

@@ -10,7 +10,7 @@
     b #{fixture_group[0]}
     - fixture_group[1].each do |fixture|
       - if fixture.started || fixture.finished
-        .panel-group aria-multiselectable='true' role='tablist' id="accordion-sharing-#{fixture.id}"
+        .panel-group.fixture-group aria-multiselectable='true' role='tablist' id="accordion-sharing-#{fixture.id}"
           .panel
             .panel-heading role='tab' id="accordion-sharing-#{fixture.id}"
               a aria-controls="sharing-tab-#{fixture.id}" aria-expanded='false' data-parent=\
@@ -55,9 +55,11 @@
                                 p #{player_stat[:value]}
 
       - else
-        p
-          span #{fixture.home_team.name}&nbsp;
-          img[class="#{fixture.home_team.short_name.downcase}"]
-          span &nbsp;#{fixture.adjusted_kickoff_time}&nbsp;
-          img[class="#{fixture.away_team.short_name.downcase}"]&nbsp;
-          span #{fixture.away_team.name}
+        .panel-group.fixture-group
+          .panel
+            .panel-heading
+              span #{fixture.home_team.name}&nbsp;
+              img[class="#{fixture.home_team.short_name.downcase}"]
+              span &nbsp;#{fixture.adjusted_kickoff_time}&nbsp;
+              img[class="#{fixture.away_team.short_name.downcase}"]&nbsp;
+              span #{fixture.away_team.name}

@@ -35,7 +35,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # gem 'capistrano-rails', group: :development
 
 gem 'sidekiq'
-gem 'sidetiq'
+gem "sidekiq-cron", "~> 0.4.0"
 gem 'httparty'
 
 group :development, :test do

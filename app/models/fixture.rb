@@ -24,7 +24,7 @@
 #
 
 class Fixture < ActiveRecord::Base
-  belongs_to :round
+  belongs_to :round, foreign_key: 'round_id'
   belongs_to :team
   has_many :player_fixture_histories
 

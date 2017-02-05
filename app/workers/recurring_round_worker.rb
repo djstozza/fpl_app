@@ -1,13 +1,9 @@
 require 'sidekiq'
-require 'sidetiq'
 
 class RecurringRoundWorker
   include HTTParty
   include Sidekiq::Worker
-  include Sidetiq::Schedulable
   sidekiq_options retry: 2
-
-  recurrence { daily.hour_of_day(18) }
 
   def perform
     HTTParty.get('https://fantasy.premierleague.com/drf/events').each do |round|
@@ -24,3 +20,7 @@ class RecurringRoundWorker
     end
   end
 end
+
+Sidekiq::Cron::Job.create(name: 'RecurringRoundWorker - every day at 12pm UTC',
+                          cron: '00 12 * * *',
+                          class: 'RecurringRoundWorker')

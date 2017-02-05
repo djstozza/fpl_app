@@ -1,22 +1,39 @@
 require 'sidekiq'
-require 'sidetiq'
 
-class RecurringPlayerFixtureHistoryWorker
+class RecurringActivePlayerFixtureHistoriesWorker
   include HTTParty
   include Sidekiq::Worker
-  include Sidetiq::Schedulable
   sidekiq_options retry: 2
 
-  recurrence { daily.hour_of_day(18) }
   def perform
-    Player.all.each do |player|
-      HTTParty.get("https://fantasy.premierleague.com/drf/element-summary/#{player.id}")['history']
-              .each do |player_fixture_history|
-        fpl_player_fixture_history = PlayerFixtureHistory.find_or_create_by(id: player_fixture_history['id'])
-        if (fpl_player_fixture_history&.round&.is_previous && !fpl_player_fixture_history&.round&.data_checked) ||
-           fpl_player_fixture_history&.round&.is_current
-          fpl_player_fixture_history.update(
-            kickoff_time: player_fixture_history['kickoff_time'],
+    HTTParty.get('https://fantasy.premierleague.com/drf/fixtures/').each do |fixture|
+      fpl_fixture = Fixture.find_or_create_by(id: fixture['id'])
+      fpl_fixture.update(kickoff_time: fixture['kickoff_time'],
+                         deadline_time: fixture['deadline_time'],
+                         team_h_difficulty: fixture['team_h_difficulty'],
+                         team_a_difficulty: fixture['team_a_difficulty'],
+                         code: fixture['code'],
+                         team_h_score: fixture['team_h_score'],
+                         team_a_score: fixture['team_a_score'],
+                         round_id: fixture['event'],
+                         minutes: fixture['minutes'],
+                         team_a_id: fixture['team_a'],
+                         team_h_id: fixture['team_h'],
+                         started: fixture['started'],
+                         finished: fixture['finished'],
+                         provisional_start_time: fixture['provisional_start_time'],
+                         finished_provisional: fixture['finished_provisional'],
+                         round_day: fixture['event_day'])
+    end
+
+    Fixture.active.each do |fixture|
+      team_arr.each do |team|
+        fixture.public_send(team).players.each do |player|
+          player_fixture_history =
+            HTTParty.get("https://fantasy.premierleague.com/drf/element-summary/#{player.id}")['history']
+                    .find { |pfh| pfh['kickoff_time'] == fixture.kickoff_time && pfh['minutes'] > 0 }
+          pfh = PlayerFixtureHistory.find_or_create_by(id: player_fixture_history['id']) if player_fixture_history
+          pfh&.update(
             team_h_score: player_fixture_history['team_h_score'],
             team_a_score: player_fixture_history['team_a_score'],
             was_home: player_fixture_history['was_home'],
@@ -26,8 +43,6 @@ class RecurringPlayerFixtureHistoryWorker
             total_points: player_fixture_history['total_points'],
             value: player_fixture_history['fixture'],
             minutes: player_fixture_history['minutes'],
-            total_points: player_fixture_history['total_points'],
-            value: player_fixture_history['value'],
             goals_scored: player_fixture_history['goals_scored'],
             assists: player_fixture_history['assists'],
             clean_sheets: player_fixture_history['clean_sheets'],
@@ -67,4 +82,14 @@ class RecurringPlayerFixtureHistoryWorker
       end
     end
   end
+
+  private
+
+  def team_arr
+    ['home_team', 'away_team']
+  end
 end
+
+Sidekiq::Cron::Job.create(name: 'RecurringActivePlayerFixtureHistoriesWorker - every 3min',
+                          cron: '*/3 * * * *',
+                          class: 'RecurringActivePlayerFixtureHistoriesWorker')

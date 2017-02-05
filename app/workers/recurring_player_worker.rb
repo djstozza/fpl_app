@@ -1,13 +1,9 @@
 require 'sidekiq'
-require 'sidetiq'
 
 class RecurringPlayerWorker
   include HTTParty
   include Sidekiq::Worker
-  include Sidetiq::Schedulable
   sidekiq_options retry: 2
-
-  recurrence { daily.hour_of_day(18) }
 
   def perform
     HTTParty.get('https://fantasy.premierleague.com/drf/elements').each do |player|
@@ -73,3 +69,8 @@ class RecurringPlayerWorker
     end
   end
 end
+
+
+Sidekiq::Cron::Job.create(name: 'RecurringPlayerWorker - every 3 minutes',
+                          cron: '*/3 * * * *',
+                          class: 'RecurringPlayerWorker')
