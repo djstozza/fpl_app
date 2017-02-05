@@ -27,4 +27,25 @@ class Round < ActiveRecord::Base
   def fixture_arr
     fixtures.sort_by(&:kickoff_time).group_by { |fixture| fixture.kickoff_time.to_time.strftime('%A %-d %B %Y') }
   end
+
+  def fixture_hash
+    {
+      round: self,
+      daily_fixtures: fixtures.sort_by(&:kickoff_time)
+                              .group_by { |fixture| fixture.kickoff_time.to_time.strftime('%A %-d %B %Y') }
+                              .map do |fixture_group|
+                                {
+                                  day: fixture_group[0],
+                                  fixtures: fixture_group[1].map do |fixture|
+                                    {
+                                      fixture: fixture,
+                                      home_team: fixture.home_team,
+                                      away_team: fixture.away_team,
+                                      stats: fixture.stats
+                                    }
+                                  end
+                                }
+                              end
+    }
+  end
 end

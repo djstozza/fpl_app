@@ -40,7 +40,8 @@
                     - fixture.stats.each do |stat|
                       - unless stat[1]['home_team'].empty? && stat[1]['away_team'].empty?
                           tr
-                            td #{stat[0].humanize.capitalize}
+                            td
+                              b #{stat[0].humanize.capitalize}
                             td
                               - stat[1]['home_team'].each do |player_stat|
                                 p #{player_stat[:player]}

@@ -19,7 +19,7 @@ class RecurringRoundWorker
                        is_next: round['is_next'])
     end
 
-    Round.find_by(is_previous: true, data_checked: true).fixtures.each do |fixture|
+    Round.where(data_checked: true).last.fixtures.each do |fixture|
       team_arr.each do |team|
         fixture.public_send(team).players.each do |player|
           player_fixture_history =
@@ -83,6 +83,6 @@ class RecurringRoundWorker
   end
 end
 
-Sidekiq::Cron::Job.create(name: 'RecurringRoundWorker - every Friday at 12pm UTC',
-                          cron: '00 12 * * 5 *',
+Sidekiq::Cron::Job.create(name: 'RecurringRoundWorker - every 12 hours',
+                          cron: '* */12 * * * *',
                           class: 'RecurringRoundWorker')
