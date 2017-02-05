@@ -1,5 +1,4 @@
 require 'sidekiq'
-require 'sidetiq'
 
 class RecurringPlayerPastHistoryWorker
   include HTTParty
@@ -41,3 +40,7 @@ class RecurringPlayerPastHistoryWorker
     end
   end
 end
+
+Sidekiq::Cron::Job.create(name: 'RecurringPlayerPastHistoryWorker - every day at 12pm UTC',
+                          cron: '00 12 * * *',
+                          class: 'RecurringPlayerPastHistoryWorker')
