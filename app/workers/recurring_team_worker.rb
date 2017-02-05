@@ -31,6 +31,6 @@ class RecurringTeamWorker
   end
 end
 
-Sidekiq::Cron::Job.create(name: 'RecurringTeamWorker - every day at 12pm UTC',
-                          cron: '00 12 * * *',
+Sidekiq::Cron::Job.create(name: 'RecurringTeamWorker - every 3 minutes',
+                          cron: '*/3 * * * *',
                           class: 'RecurringTeamWorker')
