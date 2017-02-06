@@ -16,6 +16,6 @@ class RecurringPositionWorker
   end
 end
 
-Sidekiq::Cron::Job.create(name: 'RecurringPositionWorker - every Friday at 12pm UTC',
+Sidekiq::Cron::Job.create(name: 'RecurringPositionWorker - every Friday at 12pm',
                           cron: '00 12 * * 5 *',
                           class: 'RecurringPositionWorker')
