@@ -6,10 +6,6 @@ class RoundsController < ApplicationController
   # GET /rounds.json
   def index
     @round = Round.find_by(is_current: true)
-    respond_to do |format|
-      format.html
-      format.json { render json: @round.fixture_hash }
-    end
   end
 
   # GET /rounds/1

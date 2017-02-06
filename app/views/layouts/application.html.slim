@@ -6,6 +6,9 @@ html
     = javascript_include_tag('application', 'data-turbolinks-track' => true)
     meta http-equiv="Content-Language" content="en"
     = csrf_meta_tags
+    javascript:
+      window.fplVars = {};
+    = yield :inline_javascript_vars
 
   body class="controller-#{params[:controller].gsub('_', '-')} action-#{params[:action].gsub('_', '-')}"
     = yield

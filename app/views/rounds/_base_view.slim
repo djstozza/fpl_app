@@ -9,58 +9,65 @@
   - @round.fixture_arr.each do |fixture_group|
     b #{fixture_group[0]}
     - fixture_group[1].each do |fixture|
-      - if fixture.started || fixture.finished
-        .panel-group.fixture-group aria-multiselectable='true' role='tablist' id="accordion-sharing-#{fixture.id}"
-          .panel
-            .panel-heading role='tab' id="accordion-sharing-#{fixture.id}"
+      .panel-group.fixture-group aria-multiselectable='true' role='tablist' id="accordion-sharing-#{fixture.id}"
+        .panel
+          .panel-heading role='tab' id="accordion-sharing-#{fixture.id}"
+            - if fixture.started
               a aria-controls="sharing-tab-#{fixture.id}" aria-expanded='false' data-parent=\
                 "#accordion-sharing-#{fixture.id}" data-toggle=\
                 'collapse' href="#sharing-tab-#{fixture.id}" role='button'
                 span #{fixture.home_team.name}&nbsp;
                 img[class="#{fixture.home_team.short_name.downcase}"]
-                pan &nbsp;#{fixture.team_h_score} - #{fixture.team_a_score}&nbsp;
+                span.js-fixture-desc
+                  - if fixture.started
+                    |  #{fixture.team_h_score} - #{fixture.team_a_score}&nbsp;
+                  - else
+                    |  #{fixture.adjusted_kickoff_time}&nbsp;
                 img[class="#{fixture.away_team.short_name.downcase}"]&nbsp;
                 span #{fixture.away_team.name}
-            .panel-collapse.collapse aria-labelledby="accordion-sharing-#{fixture.id}" role=\
-              'tabpanel' id="sharing-tab-#{fixture.id}"
-              .panel-body
-                table.table.table-striped.table-bordered
-                  thead
-                    tr
-                      td
-                      td
-                        b #{fixture.home_team.name}
-                      td
-                        b #{fixture.team_h_score}
-                      td
-                        b #{fixture.away_team.name}
-                      td
-                        b #{fixture.team_a_score}
-                  tbody
-                    - fixture.stats.each do |stat|
-                      - unless stat[1]['home_team'].empty? && stat[1]['away_team'].empty?
-                          tr
-                            td
-                              b #{stat[0].humanize.capitalize}
-                            td
-                              - stat[1]['home_team'].each do |player_stat|
-                                p #{player_stat[:player]}
-                            td
-                              - stat[1]['home_team'].each do |player_stat|
-                                p #{player_stat[:value]}
-                            td
-                              - stat[1]['away_team'].each do |player_stat|
-                                p #{player_stat[:player]}
-                            td
-                              - stat[1]['away_team'].each do |player_stat|
-                                p #{player_stat[:value]}
-
-      - else
-        .panel-group.fixture-group
-          .panel
-            .panel-heading
-              span #{fixture.home_team.name}&nbsp;
-              img[class="#{fixture.home_team.short_name.downcase}"]
-              span &nbsp;#{fixture.adjusted_kickoff_time}&nbsp;
-              img[class="#{fixture.away_team.short_name.downcase}"]&nbsp;
-              span #{fixture.away_team.name}
+            - else
+              = content_tag(:div, nil, class: "js-pending-fixture-#{fixture.id}")
+                span #{fixture.home_team.name}&nbsp;
+                img[class="#{fixture.home_team.short_name.downcase}"]
+                span.js-fixture-desc
+                  - if fixture.started
+                    |  #{fixture.team_h_score} - #{fixture.team_a_score}&nbsp;
+                  - else
+                    |  #{fixture.adjusted_kickoff_time}&nbsp;
+                img[class="#{fixture.away_team.short_name.downcase}"]&nbsp;
+                span #{fixture.away_team.name}
+          .panel-collapse.collapse aria-labelledby="accordion-sharing-#{fixture.id}" role=\
+            'tabpanel' id="sharing-tab-#{fixture.id}"
+            .panel-body
+              table.table.table-striped.table-bordered
+                thead
+                  tr
+                    td
+                    td
+                      b #{fixture.home_team.name}
+                    td
+                      b.js-home-team-score #{fixture.team_h_score}
+                    td
+                      b #{fixture.away_team.name}
+                    td
+                      b.js-away-team-score #{fixture.team_a_score}
+                tbody
+                  - fixture.stats.each do |stat|
+                      tr
+                        td
+                          b #{stat[0].humanize.capitalize}
+                        td class="js-#{stat[0].tr('_', '-')}-home-team-players"
+                          - stat[1]['home_team'].each do |player_stat|
+                            p #{player_stat[:player]}
+                        td class="js-#{stat[0].tr('_', '-')}-home-team-values"
+                          - stat[1]['home_team'].each do |player_stat|
+                            p #{player_stat[:value]}
+                        td class="js-#{stat[0].tr('_', '-')}-away-team-players"
+                          - stat[1]['away_team'].each do |player_stat|
+                            p #{player_stat[:player]}
+                        td class="js-#{stat[0].tr('_', '-')}-away-team-values"
+                          - stat[1]['away_team'].each do |player_stat|
+                            p #{player_stat[:value]}
+= content_for :inline_javascript_vars do
+  javascript:
+    window.fplVars.round_id = #{@round.id}
