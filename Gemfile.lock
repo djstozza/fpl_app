@@ -95,6 +95,7 @@ GEM
       slop (~> 3.4)
     pry-rails (0.3.4)
       pry (>= 0.9.10)
+    puma (3.6.2)
     rack (1.6.5)
     rack-protection (1.5.3)
       rack
@@ -198,8 +199,10 @@ DEPENDENCIES
   jquery-rails
   pg (~> 0.15)
   pry-rails
+  puma
   rails (= 4.2.7.1)
   rails_12factor
+  redis
   sass-rails (~> 5.0)
   sdoc (~> 0.4.0)
   sidekiq
