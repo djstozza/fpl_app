@@ -1,7 +1,7 @@
 desc 'populate teams'
 
 namespace :data_seeding do
-  task populate_fixtures: :environment do
+  task populate_teams: :environment do
     HTTParty.get('https://fantasy.premierleague.com/drf/teams').each do |team|
       fpl_team = Team.find_or_create_by(id: team['id'])
       fpl_team.update(name: team['name'],
