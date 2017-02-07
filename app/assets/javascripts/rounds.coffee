@@ -34,6 +34,7 @@ $(document).ready ->
           makeFixtureActive(fixture.fixture.id)
           for keyStat in Object.keys(fixture.stats)
             keyStatStr = keyStat.replace('_', '-')
+            $(".js-#{keyStatStr}-tooltip").tooltip()
             for teamStat in Object.keys(fixture.stats[keyStat])
               teamStatStr = teamStat.replace('_', '-')
               stat_players_arr = []

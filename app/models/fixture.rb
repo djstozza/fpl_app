@@ -74,7 +74,7 @@ class Fixture < ActiveRecord::Base
     hash['away_team'] = away_team_arr
     player_fixture_histories.where.not("#{stat}": 0).each do |player_stat|
       arr = player_stat.was_home ? home_team_arr : away_team_arr
-      arr  << { player: player_stat.player.name, value: player_stat.public_send(stat) }
+      arr  << { player: player_stat.player.last_name, value: player_stat.public_send(stat) }
     end
     hash
   end

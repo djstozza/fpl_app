@@ -16,7 +16,7 @@
               a aria-controls="sharing-tab-#{fixture.id}" aria-expanded='false' data-parent=\
                 "#accordion-sharing-#{fixture.id}" data-toggle=\
                 'collapse' href="#sharing-tab-#{fixture.id}" role='button'
-                span #{fixture.home_team.name}&nbsp;
+                span #{fixture.home_team.short_name}&nbsp;
                 img[class="#{fixture.home_team.short_name.downcase}"]
                 span.js-fixture-desc
                   - if fixture.started
@@ -24,10 +24,10 @@
                   - else
                     |  #{fixture.adjusted_kickoff_time}&nbsp;
                 img[class="#{fixture.away_team.short_name.downcase}"]&nbsp;
-                span #{fixture.away_team.name}
+                span #{fixture.away_team.short_name}
             - else
               = content_tag(:div, nil, class: "js-pending-fixture-#{fixture.id}")
-                span #{fixture.home_team.name}&nbsp;
+                span #{fixture.home_team.short_name}&nbsp;
                 img[class="#{fixture.home_team.short_name.downcase}"]
                 span.js-fixture-desc
                   - if fixture.started
@@ -35,7 +35,7 @@
                   - else
                     |  #{fixture.adjusted_kickoff_time}&nbsp;
                 img[class="#{fixture.away_team.short_name.downcase}"]&nbsp;
-                span #{fixture.away_team.name}
+                span #{fixture.away_team.short_name}
           .panel-collapse.collapse aria-labelledby="accordion-sharing-#{fixture.id}" role=\
             'tabpanel' id="sharing-tab-#{fixture.id}"
             .panel-body
@@ -55,7 +55,8 @@
                   - fixture.stats.each do |stat|
                       tr
                         td
-                          b #{stat[0].humanize.capitalize}
+                          b class="js-#{stat[0].tr('_', '-')}-tooltip" title="#{stat[0].humanize.titleize}"
+                            | #{stat[0].split('_').map(&:first).join.upcase}
                         td class="js-#{stat[0].tr('_', '-')}-home-team-players"
                           - stat[1]['home_team'].each do |player_stat|
                             p #{player_stat[:player]}
