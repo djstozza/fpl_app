@@ -63,7 +63,7 @@ namespace :data_seeding do
         team_id: player['team']
       )
 
-      HTTParty.get("https://fantasy.premierleague.com/drf/element-summary/#{player.id}")['history_past']
+      HTTParty.get("https://fantasy.premierleague.com/drf/element-summary/#{fpl_player.id}")['history_past']
               .each do |history|
         fpl_player_fixture_history = PlayerPastHistory.find_or_create_by(id: history['id'])
         fpl_player_fixture_history.update(season_name: history['season_name'],
@@ -91,7 +91,7 @@ namespace :data_seeding do
                                           season: history['season'])
       end
 
-      HTTParty.get("https://fantasy.premierleague.com/drf/element-summary/#{player.id}")['history']
+      HTTParty.get("https://fantasy.premierleague.com/drf/element-summary/#{fpl_player.id}")['history']
               .each do |player_fixture_history|
         pfh = PlayerFixtureHistory.find_or_create_by(id: player_fixture_history['id']) if player_fixture_history
         pfh&.update(
