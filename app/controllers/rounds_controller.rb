@@ -13,7 +13,7 @@ class RoundsController < ApplicationController
   def show
     respond_to do |format|
       format.html
-      format.json { render json: @round.fixture_hash }
+      format.json { render json: @round.fixture_stats }
     end
   end
 
