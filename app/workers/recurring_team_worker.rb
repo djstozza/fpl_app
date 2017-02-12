@@ -34,11 +34,6 @@ class RecurringTeamWorker
                       strength: team['strength'],
                       position: team['position'],
                       played: team['played'],
-                      win: team['win'],
-                      loss: team['loss'],
-                      draw: team['draw'],
-                      points: team['points'],
-                      form: team['form'],
                       link_url: team['link_url'],
                       strength_overall_home: team['strength_overall_home'],
                       strength_overall_away: team['strength_overall_away'],
@@ -47,6 +42,23 @@ class RecurringTeamWorker
                       strength_defence_home: team['strength_defence_home'],
                       strength_defence_away: team['strength_defence_away'],
                       team_division: team['team_division'])
+    end
+
+    Team.all.each do |team|
+      team.update(wins: team.fixtures_won.count,
+                  losses: team.fixtures_lost.count,
+                  draws: team.fixtures_drawn.count,
+                  clean_sheets: team.clean_sheet_fixtures.count,
+                  goals_for: team.goals('team_h', 'team_a'),
+                  goals_against: team.goals('team_a', 'team_h'),
+                  goal_difference: (team.goals('team_h', 'team_a') - team.goals('team_a', 'team_h')),
+                  points: (team.fixtures_won.count * 3 + team.fixtures_drawn.count),
+                  played: team.fixtures.where(finished: true).count,
+                  form: team.current_form)
+    end
+
+    Team.all.each do |team|
+      team.update(position: (Team.ladder.index(team) + 1))
     end
   end
 end
