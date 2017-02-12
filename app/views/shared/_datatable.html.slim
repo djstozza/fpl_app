@@ -1,0 +1,9 @@
+.row: .col-sm-12: .box.bordered-box
+  .box-content.box-no-padding: .responsive-table
+    table.table.table-striped.table-bordered.table-hover.dt-responsive data-source=data_source_url id=table_id
+      thead
+        tr
+          - columns.each do |title, classes|
+            th role="columnheader" class=classes
+              b title="#{title}" = title.split(' ').map(&:first).join.upcase
+      tbody

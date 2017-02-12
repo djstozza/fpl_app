@@ -61,10 +61,6 @@ class Team < ActiveRecord::Base
     (home_fixtures_won + away_fixtures_won).sort_by(&:round_id)
   end
 
-  def wins
-    fixtures_won.count
-  end
-
   def away_fixtures_lost
     away_fixtures.where(home_vs_away_str('>'))
   end
@@ -85,10 +81,6 @@ class Team < ActiveRecord::Base
     (home_fixtures_lost + away_fixtures_lost).sort_by(&:round_id)
   end
 
-  def losses
-    fixtures_lost.count
-  end
-
   def away_fixtures_drawn
     away_fixtures.where(home_vs_away_str('='))
   end
@@ -107,10 +99,6 @@ class Team < ActiveRecord::Base
 
   def fixtures_drawn
     (home_fixtures_drawn + away_fixtures_drawn).sort_by(&:round_id)
-  end
-
-  def draws
-    fixtures_drawn.count
   end
 
   def away_clean_sheet_fixtures
@@ -138,31 +126,7 @@ class Team < ActiveRecord::Base
   end
 
   def current_form
-    results_array.last(5)
-  end
-
-  def away_scoreless_fixtures
-    away_fixtures.where(team_a_score: 0)
-  end
-
-  def away_scoreless_fixtures_count
-    away_fixtures.count
-  end
-
-  def home_scoreless_fixtures
-    home_fixtures.where(team_h_score: 0)
-  end
-
-  def home_scoreless_fixtures_count
-    home_scoreless_fixtures.count
-  end
-
-  def scoreless_fixtures
-    (home_scoreless_fixtures + away_scoreless_fixtures).sort_by(&:round_id)
-  end
-
-  def scorless_fixtures_count
-    scorless_fixtures.count
+    results_array.last(5).join
   end
 
   def biggest_win_streak
@@ -174,8 +138,8 @@ class Team < ActiveRecord::Base
 
   def biggest_losing_streak
     results_array.chunk { |result| result == 'L' }
-                 .map {|result, results| [result, results.length]}
-                 .delete_if{|group| group[0] == false}
+                 .map { |result, results| [result, results.length] }
+                 .delete_if { |group| group[0] == false }
                  .max[1]
   end
 
@@ -184,6 +148,21 @@ class Team < ActiveRecord::Base
                  .map { |result, results| [result, results.length] }
                  .delete_if { |group| group[0] == false }
                  .max[1]
+  end
+
+  def self.ladder
+    all.sort { |a, b| [b.points, b.goal_difference] <=> [a.points, a.goal_difference] }
+  end
+
+  def goals(team_status_1, team_status_2)
+    goals = 0
+    home_fixtures.where(finished: true).each do |fixture|
+      goals += fixture.public_send("#{team_status_1}_score")
+    end
+    away_fixtures.where(finished: true).each do |fixture|
+      goals += fixture.public_send("#{team_status_2}_score")
+    end
+    goals
   end
 
   private
@@ -205,7 +184,4 @@ class Team < ActiveRecord::Base
     end
     result_arr
   end
-
-
-
 end

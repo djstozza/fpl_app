@@ -1,0 +1,151 @@
+/*
+*= require datatables/dataTables.bootstrap
+*
+*optional add '=' enable
+* require datatables/extensions/AutoFill/autoFill.bootstrap
+* require datatables/extensions/Buttons/buttons.bootstrap
+* require datatables/extensions/ColReorder/colReorder.bootstrap
+* require datatables/extensions/FixedColumns/fixedColumns.bootstrap
+* require datatables/extensions/FixedHeader/fixedHeader.bootstrap
+* require datatables/extensions/KeyTable/keyTable.bootstrap
+* require datatables/extensions/Responsive/responsive.bootstrap
+* require datatables/extensions/RowReorder/rowReorder.bootstrap
+* require datatables/extensions/Scroller/scroller.bootstrap
+* require datatables/extensions/Select/select.bootstrap
+*/
+
+@mixin xs-only { @media(max-width: $screen-sm - 1) { @content; } }
+@mixin xs-only-land { @media (max-width: $screen-sm - 1) and (orientation: landscape) { @content; } }
+@mixin xs-only-port { @media (max-width: $screen-sm - 1) and (orientation: portrait) { @content; } }
+@mixin sm-only { @media (min-width: $screen-sm) and (max-width: $screen-sm-max) { @content; } }
+@mixin md-only { @media (min-width: $screen-md) and (max-width: $screen-md-max) { @content; } }
+@mixin lg-only { @media (min-width: $screen-lg) and (max-width: $screen-lg-max) { @content; } }
+
+@mixin sm-plus { @media (min-width: $screen-sm) { @content; } }
+@mixin md-plus { @media (min-width: $screen-md) { @content; } }
+@mixin lg-plus { @media (min-width: $screen-lg) { @content; } }
+
+@mixin sm-minus { @media (max-width: $screen-sm - 1) { @content; } }
+@mixin md-minus { @media (max-width: $screen-md - 1) { @content; } }
+@mixin lg-minus { @media (max-width: $screen-lg - 1) { @content; } }
+
+.responsive-table {
+  position: relative;
+  overflow: hidden;
+
+  table {
+    td {
+      position: relative;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+  }
+}
+
+.box-content.box-no-padding {
+  .table-striped {
+    th, td {
+      &:first-child { border-left:  none; }
+      &:last-child { border-right:  none; }
+    }
+  }
+}
+
+.dataTables_wrapper {
+  .datatables-top, .datatables-bottom {
+    padding: 5px;
+  }
+
+  @include sm-minus {
+    .datatables-top, .datatables-bottom {
+      text-align: center;
+      .dataTables_filter {
+        float: none;
+        text-align: center;
+        label {
+          float: none;
+        }
+      }
+      .dataTables_paginate {
+        text-align: center;
+        float: none;
+        margin-left: 0;
+        margin-right: 0;
+      }
+      .dataTables_length {
+        text-align: center;
+        display: inline-block;
+        float: none;
+      }
+    }
+  }
+
+  @include clearfix;
+
+  .dataTables_length {
+    margin: 13px 10px 5px 10px;
+    float: left;
+  }
+
+  .dataTables_filter {
+    margin: 10px 10px 5px 10px;
+    float: right;
+  }
+
+  .dataTables_info {
+    padding: 0;
+    margin: 4px 10px 10px 10px;
+  }
+
+  .dataTables_paginate {
+    margin-right: 10px;
+
+    .pagination {
+      margin: 0;
+    }
+  }
+
+  .filter_column {
+    input[type="text"] {
+      display: block;
+      width: 100%;
+      min-height: 30px;
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+    }
+  }
+
+  @mixin font-awesome-icon {
+    font-family: FontAwesome;
+    font-weight: normal;
+    font-style: normal;
+    text-decoration: inherit;
+    *margin-right: .3em;
+    @include opacity(.3);
+  }
+
+  .sorting {
+    &:after {
+      @include font-awesome-icon;
+      content: "\f0dc";
+      float: right;
+    }
+  }
+
+  .sorting_asc {
+    &:after {
+      @include font-awesome-icon;
+      content: "\f0de";
+      float: right;
+    }
+  }
+
+  .sorting_desc {
+    &:after {
+      @include font-awesome-icon;
+      content: "\f0dd";
+      float: right;
+    }
+  }
+}

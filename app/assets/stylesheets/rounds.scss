@@ -20,5 +20,9 @@
     margin-bottom: 5px;
     text-align: center;
   }
+}
 
+.tooltip.fade.top.in {
+  z-index: 100000;
+  display: inline-block;
 }

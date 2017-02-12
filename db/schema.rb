@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170126111025) do
+ActiveRecord::Schema.define(version: 20170210124248) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -206,11 +206,6 @@ ActiveRecord::Schema.define(version: 20170126111025) do
     t.integer  "strength"
     t.integer  "position"
     t.integer  "played"
-    t.integer  "win"
-    t.integer  "loss"
-    t.integer  "draw"
-    t.integer  "points"
-    t.integer  "form"
     t.integer  "link_url"
     t.integer  "strength_overall_home"
     t.integer  "strength_overall_away"
@@ -221,6 +216,15 @@ ActiveRecord::Schema.define(version: 20170126111025) do
     t.integer  "team_division"
     t.datetime "created_at",            null: false
     t.datetime "updated_at",            null: false
+    t.integer  "goals_for"
+    t.integer  "goals_against"
+    t.integer  "goal_difference"
+    t.integer  "clean_sheets"
+    t.integer  "wins"
+    t.integer  "losses"
+    t.integer  "draws"
+    t.integer  "points"
+    t.string   "form"
   end
 
 end

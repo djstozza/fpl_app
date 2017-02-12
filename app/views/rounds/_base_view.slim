@@ -5,71 +5,93 @@
       - @rounds.sort.each do |round|
         li[class="#{'active' if round == @round}", role='presentation']
           = link_to round.name, round
-.container: .row: .col-md-offset-3.col-md-6
-  - @round.fixture_stats_by_game_day[:fixture_groups].each do |fixture_group|
-      b #{fixture_group[:game_day]}
-      - fixture_group[:fixtures].each do |match|
-        .panel-group.fixture-group aria-multiselectable='true' role='tablist' id=\
-          "accordion-sharing-#{match[:fixture].id}"
-          .panel
-            .panel-heading role='tab' id="accordion-sharing-#{match[:fixture].id}"
-              - if match[:fixture].started
-                a aria-controls="sharing-tab-#{match[:fixture].id}" aria-expanded='false' data-parent=\
-                  "#accordion-sharing-#{match[:fixture].id}" data-toggle=\
-                  'collapse' href="#sharing-tab-#{match[:fixture].id}" role='button'
-                  span #{match[:fixture].home_team.short_name}&nbsp;
-                  img[class="#{match[:fixture].home_team.short_name.downcase}"]
-                  span.js-fixture-desc
-                    - if match[:fixture].started
-                      |  #{match[:fixture].team_h_score} - #{match[:fixture].team_a_score}&nbsp;
-                    - else
-                      |  #{match[:fixture].adjusted_kickoff_time}&nbsp;
-                  img[class="#{match[:fixture].away_team.short_name.downcase}"]&nbsp;
-                  span #{match[:fixture].away_team.short_name}
-              - else
-                = content_tag(:div, nil, class: "js-pending-fixture-#{match[:fixture].id}")
-                  span #{match[:fixture].home_team.short_name}&nbsp;
-                  img[class="#{match[:fixture].home_team.short_name.downcase}"]
-                  span.js-fixture-desc
-                    - if match[:fixture].started
-                      |  #{match[:fixture].team_h_score} - #{match[:fixture].team_a_score}&nbsp;
-                    - else
-                      |  #{match[:fixture].adjusted_kickoff_time}&nbsp;
-                  img[class="#{match[:fixture].away_team.short_name.downcase}"]&nbsp;
-                  span #{match[:fixture].away_team.short_name}
-            .panel-collapse.collapse aria-labelledby="accordion-sharing-#{match[:fixture].id}" role=\
-              'tabpanel' id="sharing-tab-#{match[:fixture].id}"
-              .panel-body
-                table.table.table-striped.table-bordered
-                  thead
-                    tr
-                      td
-                      td
-                        b #{match[:fixture].home_team.name}
-                      td
-                        b.js-home-team-score #{match[:fixture].team_h_score}
-                      td
-                        b #{match[:fixture].away_team.name}
-                      td
-                        b.js-away-team-score #{match[:fixture].team_a_score}
-                  tbody
-                    - match[:stats].each do |stat|
+.container
+  .row
+    .col-md-offset-3.col-md-6
+      - @round.fixture_stats_by_game_day[:fixture_groups].each do |fixture_group|
+          b #{fixture_group[:game_day]}
+          - fixture_group[:fixtures].each do |match|
+            .panel-group.fixture-group aria-multiselectable='true' role='tablist' id=\
+              "accordion-sharing-#{match[:fixture].id}"
+              .panel
+                .panel-heading role='tab' id="accordion-sharing-#{match[:fixture].id}"
+                  - if match[:fixture].started
+                    a aria-controls="sharing-tab-#{match[:fixture].id}" aria-expanded='false' data-parent=\
+                      "#accordion-sharing-#{match[:fixture].id}" data-toggle=\
+                      'collapse' href="#sharing-tab-#{match[:fixture].id}" role='button'
+                      span #{match[:fixture].home_team.short_name}&nbsp;
+                      img[class="#{match[:fixture].home_team.short_name.downcase}"]
+                      span.js-fixture-desc
+                        - if match[:fixture].started
+                          |  #{match[:fixture].team_h_score} - #{match[:fixture].team_a_score}&nbsp;
+                        - else
+                          |  #{match[:fixture].adjusted_kickoff_time}&nbsp;
+                      img[class="#{match[:fixture].away_team.short_name.downcase}"]&nbsp;
+                      span #{match[:fixture].away_team.short_name}
+                  - else
+                    = content_tag(:div, nil, class: "js-pending-fixture-#{match[:fixture].id}")
+                      span #{match[:fixture].home_team.short_name}&nbsp;
+                      img[class="#{match[:fixture].home_team.short_name.downcase}"]
+                      span.js-fixture-desc
+                        - if match[:fixture].started
+                          |  #{match[:fixture].team_h_score} - #{match[:fixture].team_a_score}&nbsp;
+                        - else
+                          |  #{match[:fixture].adjusted_kickoff_time}&nbsp;
+                      img[class="#{match[:fixture].away_team.short_name.downcase}"]&nbsp;
+                      span #{match[:fixture].away_team.short_name}
+                .panel-collapse.collapse aria-labelledby="accordion-sharing-#{match[:fixture].id}" role=\
+                  'tabpanel' id="sharing-tab-#{match[:fixture].id}"
+                  .panel-body
+                    table.table.table-striped.table-bordered
+                      thead
                         tr
                           td
-                            b class="js-#{stat[0].tr('_', '-')}-tooltip" title="#{stat[0].humanize.titleize}"
-                              | #{stat[0].split('_').map(&:first).join.upcase}
-                          td class="js-#{stat[0].tr('_', '-')}-home-team-players"
-                            - stat[1]['home_team'].each do |player_stat|
-                              p #{player_stat[:player]}
-                          td class="js-#{stat[0].tr('_', '-')}-home-team-values"
-                            - stat[1]['home_team'].each do |player_stat|
-                              p #{player_stat[:value]}
-                          td class="js-#{stat[0].tr('_', '-')}-away-team-players"
-                            - stat[1]['away_team'].each do |player_stat|
-                              p #{player_stat[:player]}
-                          td class="js-#{stat[0].tr('_', '-')}-away-team-values"
-                            - stat[1]['away_team'].each do |player_stat|
-                              p #{player_stat[:value]}
+                          td
+                            b #{match[:fixture].home_team.name}
+                          td
+                            b.js-home-team-score #{match[:fixture].team_h_score}
+                          td
+                            b #{match[:fixture].away_team.name}
+                          td
+                            b.js-away-team-score #{match[:fixture].team_a_score}
+                      tbody
+                        - match[:stats].each do |stat|
+                            tr
+                              td
+                                b class="js-#{stat[0].tr('_', '-')}-tooltip" title="#{stat[0].humanize.titleize}"
+                                  | #{stat[0].split('_').map(&:first).join.upcase}
+                              td class="js-#{stat[0].tr('_', '-')}-home-team-players"
+                                - stat[1]['home_team'].each do |player_stat|
+                                  p #{player_stat[:player]}
+                              td class="js-#{stat[0].tr('_', '-')}-home-team-values"
+                                - stat[1]['home_team'].each do |player_stat|
+                                  p #{player_stat[:value]}
+                              td class="js-#{stat[0].tr('_', '-')}-away-team-players"
+                                - stat[1]['away_team'].each do |player_stat|
+                                  p #{player_stat[:player]}
+                              td class="js-#{stat[0].tr('_', '-')}-away-team-values"
+                                - stat[1]['away_team'].each do |player_stat|
+                                  p #{player_stat[:value]}
+  .row
+    .col-md-12
+      = render partial: 'shared/datatable',
+                       locals: { table_id: 'team-ladder',
+                                 data_source_url: team_ladder_datatable_teams_url(format: 'json'),
+                                 columns: { 'Position' => 'sorting sorting-default-asc',
+                                            'Name' => 'sorting',
+                                            'Matches' => '',
+                                            'Wins' => 'sorting',
+                                            'Losses' => 'sorting',
+                                            'Draws' => 'sorting',
+                                            'Form' => '',
+                                            'Clean Sheets' => 'sorting',
+                                            'For' => 'sorting',
+                                            'Aagainst' => 'sorting',
+                                            'Goal Difference' => 'sorting',
+                                            'Points' => 'sorting' } }
+
+
+
 = content_for :inline_javascript_vars do
   javascript:
     window.fplVars.round_id = #{@round.id}

@@ -12,5 +12,7 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require datatables
 //= require bootstrap-sprockets
+//= ajax_datatables
 //= require_tree .
