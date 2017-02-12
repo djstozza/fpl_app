@@ -7,7 +7,6 @@ class AddScoringColumnsToTeams < ActiveRecord::Migration
     add_column :teams, :wins, :integer
     add_column :teams, :losses, :integer
     add_column :teams, :draws, :integer
-    add_column :teams, :points, :integer
     remove_column :teams, :draw, :integer
     remove_column :teams, :loss, :integer
     remove_column :teams, :win, :integer
@@ -40,7 +39,6 @@ class AddScoringColumnsToTeams < ActiveRecord::Migration
     remove_column :teams, :wins, :integer
     remove_column :teams, :losses, :integer
     remove_column :teams, :draws, :integer
-    remove_column :teams, :points, :integer
     add_column :teams, :draw, :integer
     add_column :teams, :loss, :integer
     add_column :teams, :win, :integer
