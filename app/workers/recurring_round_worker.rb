@@ -25,8 +25,8 @@ class RecurringRoundWorker
           player_fixture_history =
             HTTParty.get("https://fantasy.premierleague.com/drf/element-summary/#{player.id}")['history']
                     .find { |pfh| pfh['kickoff_time'] == fixture.kickoff_time }
-          if pfh['minutes'] > 0 || !pfh['minutes'].nil?
-            pfh = PlayerFixtureHistory.find_or_create_by(id: player_fixture_history['id']) if player_fixture_history
+          pfh = PlayerFixtureHistory.find_or_create_by(id: player_fixture_history['id'])
+          if player_fixture_history['minutes'] > 0 && !player_fixture_history['minutes'].nil?
             pfh&.update(
               team_h_score: player_fixture_history['team_h_score'],
               team_a_score: player_fixture_history['team_a_score'],
