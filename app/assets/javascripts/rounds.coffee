@@ -1,4 +1,5 @@
 $(document).ready ->
+  return unless $('body').hasClass('controller-rounds')
   # Adapted from https://gist.github.com/tim-reynolds/3019761
   centerItVariableWidth = (target, outer) ->
     out = $(outer)

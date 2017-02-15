@@ -1,0 +1,47 @@
+.container
+  .row: .col-md-12: h3 #{@team.name}
+  .row: .col-md-12
+    - Position.all.to_a.reverse.each do |position|
+        h4 #{position.plural_name}
+        = render partial: 'shared/datatable',
+                         locals: { table_id: "team-players-#{position.plural_name.downcase}",
+                                   data_source_url: team_player_datatable_teams_url(id: @team.id,
+                                                                                    position: position.singular_name,
+                                                                                    format: 'json'),
+                                   columns: { 'Name' => '',
+                                              'Minutes' => 'sorting',
+                                              'Goals Scored' => 'sorting',
+                                              'Assists' => 'sorting',
+                                              'Own Goals' => 'sorting',
+                                              'Yellow Cards' => 'sorting',
+                                              'Red Cards' => 'sorting',
+                                              'Penalties Saved' => 'sorting',
+                                              'Penalties Missed' => 'sorting',
+                                              'Clean Sheets' => 'sorting',
+                                              'Saves' => 'sorting',
+                                              'Bonus' => 'sorting',
+                                              'Dreamteam Count' => 'sorting',
+                                              'Points Per Game' => 'sorting',
+                                              'Total Points' => 'sorting sorting-default-desc' } }
+
+  .row: .col-md-12
+    h4 Team Table
+    = render partial: 'shared/datatable',
+                     locals: { table_id: 'team-ladder',
+                               data_source_url: team_ladder_datatable_teams_url(format: 'json'),
+                               columns: { 'Position' => 'sorting sorting-default-asc',
+                                          'Name' => 'sorting',
+                                          'Matches' => '',
+                                          'Wins' => 'sorting',
+                                          'Losses' => 'sorting',
+                                          'Draws' => 'sorting',
+                                          'Form' => '',
+                                          'Clean Sheets' => 'sorting',
+                                          'For' => 'sorting',
+                                          'Aagainst' => 'sorting',
+                                          'Goal Difference' => 'sorting',
+                                          'Points' => 'sorting' } }
+
+= content_for :inline_javascript_vars do
+  javascript:
+    window.fplVars.team_short_name = "#{@team.short_name}"

@@ -14,21 +14,6 @@
 * require datatables/extensions/Select/select.bootstrap
 */
 
-@mixin xs-only { @media(max-width: $screen-sm - 1) { @content; } }
-@mixin xs-only-land { @media (max-width: $screen-sm - 1) and (orientation: landscape) { @content; } }
-@mixin xs-only-port { @media (max-width: $screen-sm - 1) and (orientation: portrait) { @content; } }
-@mixin sm-only { @media (min-width: $screen-sm) and (max-width: $screen-sm-max) { @content; } }
-@mixin md-only { @media (min-width: $screen-md) and (max-width: $screen-md-max) { @content; } }
-@mixin lg-only { @media (min-width: $screen-lg) and (max-width: $screen-lg-max) { @content; } }
-
-@mixin sm-plus { @media (min-width: $screen-sm) { @content; } }
-@mixin md-plus { @media (min-width: $screen-md) { @content; } }
-@mixin lg-plus { @media (min-width: $screen-lg) { @content; } }
-
-@mixin sm-minus { @media (max-width: $screen-sm - 1) { @content; } }
-@mixin md-minus { @media (max-width: $screen-md - 1) { @content; } }
-@mixin lg-minus { @media (max-width: $screen-lg - 1) { @content; } }
-
 .responsive-table {
   position: relative;
   overflow: hidden;
@@ -116,15 +101,6 @@
     }
   }
 
-  @mixin font-awesome-icon {
-    font-family: FontAwesome;
-    font-weight: normal;
-    font-style: normal;
-    text-decoration: inherit;
-    *margin-right: .3em;
-    @include opacity(.3);
-  }
-
   .sorting {
     &:after {
       @include font-awesome-icon;
@@ -146,6 +122,15 @@
       @include font-awesome-icon;
       content: "\f0dd";
       float: right;
+    }
+  }
+}
+
+.table-hover {
+  .selected-row {
+    td {
+      background-color: $red;
+      color: $white;
     }
   }
 }

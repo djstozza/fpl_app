@@ -5,12 +5,10 @@ class TeamsDatatable < Datatable
     @records_total = Team.count
     @records_filtered = @records.count
 
-    team_ids = paginated_records.map(&:id)
-
     @process_record_lambda = -> (team) do
       [
         team.position,
-        team.short_name,
+        link_to(team.short_name, team),
         team.fixtures.where(finished: true).count,
         team.wins,
         team.losses,
@@ -26,8 +24,6 @@ class TeamsDatatable < Datatable
   end
 
   private
-
-
 
   def columns
     %w(position

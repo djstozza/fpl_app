@@ -19,6 +19,41 @@ jQuery ->
       filter: false
       headerCallback: (thead) ->
         $(thead).find('th b').tooltip(container: 'body')
+      fnRowCallback: (row) ->
+        if $(row).text().includes(window.fplVars.team_short_name)
+          $(row).addClass('selected-row')
+    }
+
+    'team-players-forwards': {
+      paginate: false
+      bInfo: false
+      filter: false
+      headerCallback: (thead) ->
+        $(thead).find('th b').tooltip(container: 'body')
+    }
+
+    'team-players-midfielders': {
+      paginate: false
+      bInfo: false
+      filter: false
+      headerCallback: (thead) ->
+        $(thead).find('th b').tooltip(container: 'body')
+    }
+
+    'team-players-defenders': {
+      paginate: false
+      bInfo: false
+      filter: false
+      headerCallback: (thead) ->
+        $(thead).find('th b').tooltip(container: 'body')
+    }
+
+    'team-players-goalkeepers': {
+      paginate: false
+      bInfo: false
+      filter: false
+      headerCallback: (thead) ->
+        $(thead).find('th b').tooltip(container: 'body')
     }
 
   for containerId, containerSettings of containerIdToSettings
