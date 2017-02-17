@@ -26,6 +26,11 @@ class TeamPlayersDatatable < Datatable
     end
   end
 
+  def per_page
+    @records_total
+  end
+
+
   private
 
   def columns

@@ -1,5 +1,5 @@
 class Datatable
-  delegate :params, :link_to, to: :@view
+  delegate :params, :link_to, :content_tag, to: :@view
 
   include Rails.application.routes.url_helpers
 
@@ -50,7 +50,7 @@ class Datatable
   end
 
   def per_page
-    20
+    10
   end
 
   def sort_direction

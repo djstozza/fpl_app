@@ -4,25 +4,42 @@
     - Position.all.to_a.reverse.each do |position|
         h4 #{position.plural_name}
         = render partial: 'shared/datatable',
-                         locals: { table_id: "team-players-#{position.plural_name.downcase}",
-                                   data_source_url: team_player_datatable_teams_url(id: @team.id,
-                                                                                    position: position.singular_name,
-                                                                                    format: 'json'),
-                                   columns: { 'Name' => '',
-                                              'Minutes' => 'sorting',
-                                              'Goals Scored' => 'sorting',
-                                              'Assists' => 'sorting',
-                                              'Own Goals' => 'sorting',
-                                              'Yellow Cards' => 'sorting',
-                                              'Red Cards' => 'sorting',
-                                              'Penalties Saved' => 'sorting',
-                                              'Penalties Missed' => 'sorting',
-                                              'Clean Sheets' => 'sorting',
-                                              'Saves' => 'sorting',
-                                              'Bonus' => 'sorting',
-                                              'Dreamteam Count' => 'sorting',
-                                              'Points Per Game' => 'sorting',
-                                              'Total Points' => 'sorting sorting-default-desc' } }
+                           locals: { \
+                             table_id: "team-players-#{position.plural_name.downcase}",
+                             data_source_url: team_player_datatable_teams_url(id: @team.id,
+                                                                              position: position.singular_name,
+                                                                              format: 'json'),
+                             columns: { \
+                               'Name' => '',
+                               'Minutes' => 'sorting',
+                               'Goals Scored' => "sorting #{check_incactive_col(position, 'goals_scored')}",
+                               'Assists' => "sorting #{check_incactive_col(position, 'assists')}",
+                               'Own Goals' =>  "sorting #{check_incactive_col(position, 'own_goals')}",
+                               'Yellow Cards' => "sorting #{check_incactive_col(position, 'yellow_cards')}",
+                               'Red Cards' => "sorting #{check_incactive_col(position, 'red_cards')}",
+                               'Penalties Saved' => "sorting #{check_incactive_col(position, 'penalties_saved')}",
+                               'Penalties Missed' => "sorting #{check_incactive_col(position, 'penalties_missed')}",
+                               'Clean Sheets' => "sorting #{'inactive' if position.singular_name == 'Forward'}",
+                               'Saves' => "sorting #{check_incactive_col(position, 'saves')}",
+                               'Bonus' => 'sorting',
+                               'Dreamteam Count' => 'sorting',
+                               'Points Per Game' => 'sorting',
+                               'Total Points' => 'sorting sorting-default-desc' \
+                             } \
+                           }
+  .row: .col-md-12
+    h4 Team Fixture Table
+    = render partial: 'shared/datatable',
+                      locals: { table_id: 'team-fixture',
+                                data_source_url: team_fixture_datatable_teams_url(format: 'json', id: @team.id),
+                                columns: { 'Round' => 'sorting sorting-default-asc',
+                                           'Kickoff Time' => 'sorting',
+                                           'Opponent' => '',
+                                           'Home / Away' => '',
+                                           'Result' => '',
+                                           'Score' => '',
+                                           'Difficulty' => '',
+                                           'Advantage' => '' } }
 
   .row: .col-md-12
     h4 Team Table

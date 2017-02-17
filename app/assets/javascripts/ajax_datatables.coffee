@@ -56,6 +56,19 @@ jQuery ->
         $(thead).find('th b').tooltip(container: 'body')
     }
 
+    'team-fixture': {
+      paginate: false
+      bInfo: false
+      filter: false
+      headerCallback: (thead) ->
+        $(thead).find('th b').tooltip(container: 'body')
+      fnRowCallback: (row) ->
+        $teamAdvantage = $(row).find('td .js-team-advantage')
+        $teamAdvantage.parent().addClass($teamAdvantage.attr('class'))
+        $teamDifficulty = $(row).find('td .js-opponent-difficulty')
+        $teamDifficulty.parent().addClass($teamDifficulty.attr('class'))
+    }
+
   for containerId, containerSettings of containerIdToSettings
     $container = $('#' + containerId)
     continue unless $container.length

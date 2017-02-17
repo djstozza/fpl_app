@@ -42,7 +42,7 @@ class Team < ActiveRecord::Base
   end
 
   def away_fixtures_won
-    away_fixtures.where(home_vs_away_str('<'))
+    away_fixtures.finished.where(home_vs_away_str('<'))
   end
 
   def away_wins
@@ -50,7 +50,7 @@ class Team < ActiveRecord::Base
   end
 
   def home_fixtures_won
-    home_fixtures.where(home_vs_away_str('>'))
+    home_fixtures.finished.where(home_vs_away_str('>'))
   end
 
   def home_wins
@@ -62,11 +62,11 @@ class Team < ActiveRecord::Base
   end
 
   def away_fixtures_lost
-    away_fixtures.where(home_vs_away_str('>'))
+    away_fixtures.finished.where(home_vs_away_str('>'))
   end
 
   def away_losses
-    away_fixtures_lost.count
+    away_fixtures_lost.finished.count
   end
 
   def home_fixtures_lost
@@ -82,7 +82,7 @@ class Team < ActiveRecord::Base
   end
 
   def away_fixtures_drawn
-    away_fixtures.where(home_vs_away_str('='))
+    away_fixtures.finished.where(home_vs_away_str('='))
   end
 
   def away_draws
@@ -90,7 +90,7 @@ class Team < ActiveRecord::Base
   end
 
   def home_fixtures_drawn
-    home_fixtures.where(home_vs_away_str('='))
+    home_fixtures.finished.where(home_vs_away_str('='))
   end
 
   def home_draws
@@ -102,7 +102,7 @@ class Team < ActiveRecord::Base
   end
 
   def away_clean_sheet_fixtures
-    away_fixtures.where(team_h_score: 0)
+    away_fixtures.finished.where(team_h_score: 0)
   end
 
   def away_clean_sheets
@@ -114,7 +114,7 @@ class Team < ActiveRecord::Base
   end
 
   def home_clean_sheets
-    home_clean_sheet_fixtures.count
+    home_clean_sheet_fixtures.finished.count
   end
 
   def clean_sheet_fixtures

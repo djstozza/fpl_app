@@ -7,6 +7,7 @@ Rails.application.routes.draw do
     collection do
       get 'team_ladder_datatable'
       get 'team_player_datatable'
+      get 'team_fixture_datatable'
     end
   end
 end

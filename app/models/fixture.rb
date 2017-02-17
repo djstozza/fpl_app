@@ -29,6 +29,7 @@ class Fixture < ActiveRecord::Base
   has_many :player_fixture_histories
 
   scope :active, -> { where(started: true).where(finished: false) }
+  scope :finished, -> { where(finished: true) }
 
   def stats
     key_stats_hash
