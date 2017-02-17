@@ -2,15 +2,15 @@ class TeamFixturesDatatable < Datatable
   def initialize(view_context, team)
     super(view_context)
     @team = team
-    @records = @team.fixtures.order(sorting)
+    @records = @team.fixtures.order(sorting).to_a.delete_if { |fixture| fixture.round_id == nil }
     @records_total = @team.fixtures.count
     @records_filtered = @records.count
     @process_record_lambda = -> (fixture) do
       [
         fixture.round_id,
         Time.parse(fixture.kickoff_time).strftime('%d/%m/%y %H:%M'),
-        (home_fixture(fixture) ? Team.find_by(id: fixture.team_a_id) :  Team.find_by(id: fixture.team_h_id)).short_name,
-        (fixture.team_h_id == @team.id ? 'Home' : 'Away'),
+        opponent_link(fixture),
+        (fixture.team_h_id == @team.id ? 'H' : 'A'),
         win_loss_or_draw(fixture),
         ("#{fixture.team_h_score} - #{fixture.team_a_score}" if fixture.finished),
         opponent_difficulty(fixture),
@@ -65,6 +65,15 @@ class TeamFixturesDatatable < Datatable
                  end
     content_tag(:div, nil,
                 class: "js-opponent-difficulty difficulty-o#{difficulty}")
+  end
+
+  def opponent_link(fixture)
+    opponent = if home_fixture(fixture)
+                 Team.find_by(id: fixture.team_a_id)
+               else
+                 Team.find_by(id: fixture.team_h_id)
+               end
+    link_to(opponent.short_name, team_path(opponent))
   end
 
   def win_loss_or_draw(fixture)
