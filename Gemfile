@@ -3,6 +3,7 @@ source 'https://rubygems.org'
 ruby '~> 2.3.0'
 gem 'puma'
 gem 'rails_12factor', group: :production
+gem 'heroku-deflater', group: :production
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.7.1'
 # Use postgresql as the database for Active Record
