@@ -29,6 +29,21 @@
                            }
   .row: .col-md-12
     h4 Team Fixture Table
+
+    table.table.table-bordered.table-striped.difficulty-advantage-key
+      tr
+        td colspan=4
+          b Team Advantage
+        td.even-advantage-td
+        td colspan=5
+          b.pull-right Opponent Difficulty/Advantage
+      tr
+        - (1..4).to_a.reverse.each do |i|
+          td class="difficulty-t#{i}"
+        td.difficulty-e
+        - (1..5).to_a.each do |i|
+          td class="difficulty-o#{i}"
+
     = render partial: 'shared/datatable',
                       locals: { table_id: 'team-fixture',
                                 data_source_url: team_fixture_datatable_teams_url(format: 'json', id: @team.id),

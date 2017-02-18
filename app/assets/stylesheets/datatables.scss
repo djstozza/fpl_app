@@ -174,3 +174,13 @@
 .difficulty-o5 {
   background-color: $dark-red
 }
+
+table.difficulty-advantage-key {
+  margin-bottom: 0;
+  tr {
+    td.even-advantage-td {
+      border-top-color: $white;
+      background-color: $white;
+    }
+  }
+}
