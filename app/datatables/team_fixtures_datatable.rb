@@ -2,7 +2,7 @@ class TeamFixturesDatatable < Datatable
   def initialize(view_context, team)
     super(view_context)
     @team = team
-    @records = @team.fixtures.order(sorting).to_a.delete_if { |fixture| fixture.round_id == nil }
+    @records = @team.fixtures.order(sorting)
     @records_total = @team.fixtures.count
     @records_filtered = @records.count
     @process_record_lambda = -> (fixture) do

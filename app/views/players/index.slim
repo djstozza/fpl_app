@@ -1,0 +1,16 @@
+.row: .col-md-12
+  h4 Dream Team
+  = render partial: 'shared/datatable',
+                     locals: { table_id: 'player-dreamteam',
+                               data_source_url: player_dreamteam_datatable_players_url(format: 'json'),
+                               columns: { 'Name' => 'sorting',
+                                          'Team' => 'sorting',
+                                          'Position' => 'sorting',
+                                          'Influence' => 'sorting',
+                                          'Creativity' => 'sorting',
+                                          'Threat' => 'sorting',
+                                          'Bonus' => 'sorting',
+                                          'Form' => 'sorting',
+                                          'Dreamteam Count' => 'sorting',
+                                          'Points Per Game' => 'sorting',
+                                          'Total Points' => 'sorting sorting-default-desc' } }

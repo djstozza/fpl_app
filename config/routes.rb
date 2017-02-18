@@ -3,6 +3,12 @@ Rails.application.routes.draw do
 
   resources :rounds, only: [:show, :index]
 
+  resources :players, only: [:show, :index] do
+    collection do
+      get 'player_dreamteam_datatable'
+    end
+  end
+
   resources :teams, only: [:show] do
     collection do
       get 'team_ladder_datatable'

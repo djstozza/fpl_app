@@ -69,6 +69,8 @@ class Player < ActiveRecord::Base
   has_many :player_fixture_histories
   has_many :player_past_histories, primary_key: 'code', foreign_key: 'player_code'
 
+  scope :position, -> { Position.find_by(id: position_id)  }
+
   def name
     "#{first_name} #{last_name}"
   end

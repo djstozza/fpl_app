@@ -69,6 +69,14 @@ jQuery ->
         $teamDifficulty.parent().addClass($teamDifficulty.attr('class'))
     }
 
+    'player-dreamteam': {
+      paginate: false
+      bInfo: false
+      filter: false
+      headerCallback: (thead) ->
+        $(thead).find('th b').tooltip(container: 'body')
+    }
+
   for containerId, containerSettings of containerIdToSettings
     $container = $('#' + containerId)
     continue unless $container.length
