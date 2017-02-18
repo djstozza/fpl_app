@@ -27,6 +27,7 @@ class Fixture < ActiveRecord::Base
   belongs_to :round, foreign_key: 'round_id'
   belongs_to :team
   has_many :player_fixture_histories
+  validates :round_id, presence: true
 
   scope :active, -> { where(started: true).where(finished: false) }
   scope :finished, -> { where(finished: true) }
