@@ -20,6 +20,10 @@ class PlayersController < ApplicationController
     render_datatable_json(PlayerDreamteamDatatable)
   end
 
+  def player_stats_datatable
+    render_datatable_json(PlayerStatDatatable, params[:stat])
+  end
+
   private
 
   # Use callbacks to share common setup or constraints between actions.

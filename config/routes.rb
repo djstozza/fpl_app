@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   resources :players, only: [:show, :index] do
     collection do
       get 'player_dreamteam_datatable'
+      get 'player_stats_datatable'
     end
   end
 

@@ -9,6 +9,8 @@ jQuery ->
     autoWidth: false
     destroy: true
     responsive: true
+    headerCallback: (thead) ->
+      $(thead).find('th b').tooltip(container: 'body')
 
   # Specific settings for each Datatable. The columns and default order are read from the markup, so vanilla Datatables
   # don't need any extra configuration.
@@ -17,8 +19,6 @@ jQuery ->
       paginate: false
       bInfo: false
       filter: false
-      headerCallback: (thead) ->
-        $(thead).find('th b').tooltip(container: 'body')
       fnRowCallback: (row) ->
         if $(row).text().includes(window.fplVars.team_short_name)
           $(row).addClass('selected-row')
@@ -28,40 +28,30 @@ jQuery ->
       paginate: false
       bInfo: false
       filter: false
-      headerCallback: (thead) ->
-        $(thead).find('th b').tooltip(container: 'body')
     }
 
     'team-players-midfielders': {
       paginate: false
       bInfo: false
       filter: false
-      headerCallback: (thead) ->
-        $(thead).find('th b').tooltip(container: 'body')
     }
 
     'team-players-defenders': {
       paginate: false
       bInfo: false
       filter: false
-      headerCallback: (thead) ->
-        $(thead).find('th b').tooltip(container: 'body')
     }
 
     'team-players-goalkeepers': {
       paginate: false
       bInfo: false
       filter: false
-      headerCallback: (thead) ->
-        $(thead).find('th b').tooltip(container: 'body')
     }
 
     'team-fixture': {
       paginate: false
       bInfo: false
       filter: false
-      headerCallback: (thead) ->
-        $(thead).find('th b').tooltip(container: 'body')
       fnRowCallback: (row) ->
         $teamAdvantage = $(row).find('td .js-team-advantage')
         $teamAdvantage.parent().addClass($teamAdvantage.attr('class'))
@@ -73,9 +63,15 @@ jQuery ->
       paginate: false
       bInfo: false
       filter: false
-      headerCallback: (thead) ->
-        $(thead).find('th b').tooltip(container: 'body')
     }
+
+    'player-stats-goals-scored': {}
+    'player-stats-assists': {}
+    'player-stats-key-passes': {}
+    'player-stats-winning-goals': {}
+    'player-stats-big-chances-created': {}
+    'player-stats-key-passes': {}
+    'player-stats-target-missed': {}
 
   for containerId, containerSettings of containerIdToSettings
     $container = $('#' + containerId)

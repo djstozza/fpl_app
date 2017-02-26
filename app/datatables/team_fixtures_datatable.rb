@@ -13,7 +13,6 @@ class TeamFixturesDatatable < Datatable
         (fixture.team_h_id == @team.id ? 'H' : 'A'),
         win_loss_or_draw(fixture),
         ("#{fixture.team_h_score} - #{fixture.team_a_score}" if fixture.finished),
-        opponent_difficulty(fixture),
         fixture_advantage(fixture)
       ]
     end
@@ -55,16 +54,6 @@ class TeamFixturesDatatable < Datatable
                      end
     content_tag(:div, nil,
                 class: "js-team-advantage difficulty-#{advantage_type}#{advantage.abs unless advantage == 0}")
-  end
-
-  def opponent_difficulty(fixture)
-    difficulty = if home_fixture(fixture)
-                   fixture.team_h_difficulty
-                 else
-                   fixture.team_a_difficulty
-                 end
-    content_tag(:div, nil,
-                class: "js-opponent-difficulty difficulty-o#{difficulty}")
   end
 
   def opponent_link(fixture)

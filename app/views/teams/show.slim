@@ -35,13 +35,13 @@
         td colspan=4
           b Team Advantage
         td.even-advantage-td
-        td colspan=5
-          b.pull-right Opponent Difficulty/Advantage
+        td colspan=4
+          b.pull-right Opponent Advantage
       tr
         - (1..4).to_a.reverse.each do |i|
           td class="difficulty-t#{i}"
         td.difficulty-e
-        - (1..5).to_a.each do |i|
+        - (1..4).to_a.each do |i|
           td class="difficulty-o#{i}"
 
     = render partial: 'shared/datatable',
@@ -53,7 +53,6 @@
                                            'Home / Away' => '',
                                            'Result' => '',
                                            'Score' => '',
-                                           'Difficulty' => '',
                                            'Advantage' => '' } }
 
   .row: .col-md-12
