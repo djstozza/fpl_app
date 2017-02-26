@@ -27,26 +27,28 @@ $(document).ready ->
 
   populateFixtureStats = ->
     $.getJSON "/rounds/#{window.fplVars.round_id}", (data) ->
-      for fixture, i in data.fixtures
-        if fixture.fixture.started
-          $('.js-fixture-desc').eq(i).html(" #{fixture.fixture.team_h_score} - #{fixture.fixture.team_a_score} ")
-          $('.js-away-team-score').eq(i).text(fixture.fixture.team_a_score)
-          $('.js-home-team-score').eq(i).text(fixture.fixture.team_h_score)
-          makeFixtureActive(fixture.fixture.id)
-          for keyStat in Object.keys(fixture.stats)
+      for match, i in data.fixtures
+        if match.fixture.started
+          homeTeamScore = match.fixture.team_h_score || 0
+          awayTeamScore = match.fixture.team_a_score || 0
+          $('.js-fixture-desc').eq(i).html(" #{homeTeamScore} - #{awayTeamScore} ")
+          $('.js-away-team-score').eq(i).text(awayTeamScore)
+          $('.js-home-team-score').eq(i).text(homeTeamScore)
+          makeFixtureActive(match.fixture.id)
+          for keyStat in Object.keys(match.stats)
             keyStatStr = keyStat.replace('_', '-')
             $(".js-#{keyStatStr}-tooltip").tooltip()
-            for teamStat in Object.keys(fixture.stats[keyStat])
+            for teamStat in Object.keys(match.stats[keyStat])
               teamStatStr = teamStat.replace('_', '-')
               stat_players_arr = []
               stat_values_arr = []
-              for stat in fixture.stats[keyStat][teamStat]
+              for stat in match.stats[keyStat][teamStat]
                 stat_players_arr.push("<p>#{stat.player}</p>")
                 stat_values_arr.push("<p>#{stat.value}</p>")
                 $(".js-#{keyStatStr}-#{teamStatStr}-players").eq(i).html(stat_players_arr)
                 $(".js-#{keyStatStr}-#{teamStatStr}-values").eq(i).html(stat_values_arr)
         else
-          $('.js-fixture-desc').eq(i).html(" #{fixture.kickoff_time} ")
+          $('.js-fixture-desc').eq(i).html(" #{match.kickoff_time} ")
 
   populateFixtureStats()
   setInterval((-> populateFixtureStats()), 180000)
