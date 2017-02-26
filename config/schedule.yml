@@ -15,7 +15,7 @@ RecurringPositionWorker:
   class: 'RecurringPositionWorker'
 
 RecurringRoundWorker:
-  cron: '* */6 * * *'
+  cron: '0 */6 * * *'
   class: 'RecurringRoundWorker'
 
 RecurringTeamWorker:
