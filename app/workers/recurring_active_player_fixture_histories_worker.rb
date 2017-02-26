@@ -78,6 +78,11 @@ class RecurringActivePlayerFixtureHistoriesWorker
             dribbles: player_fixture_history['dribbles'],
             opponent_team_id: player_fixture_history['opponent_team']
           )
+
+          player_stats_arr.each do |stat|
+            player.update(stat =>  player.player_fixture_histories
+                                         .inject(0) { |sum, fix_hist| sum + fix_hist.public_send(stat) })
+          end
         end
       end
     end
@@ -88,8 +93,21 @@ class RecurringActivePlayerFixtureHistoriesWorker
   def team_arr
     ['home_team', 'away_team']
   end
-end
 
-Sidekiq::Cron::Job.create(name: 'RecurringActivePlayerFixtureHistoriesWorker - every 3min between 11pm and 9am',
-                          cron: '00-59/3 0-9,23 * * * *',
-                          class: 'RecurringActivePlayerFixtureHistoriesWorker')
+  def player_stats_arr
+    %w(open_play_crosses
+       big_chances_created
+       clearances_blocks_interceptions
+       recoveries
+       key_passes
+       tackles
+       winning_goals
+       dribbles
+       fouls
+       errors_leading_to_goal
+       big_chances_missed
+       offside
+       attempted_passes
+       target_missed)
+  end
+end

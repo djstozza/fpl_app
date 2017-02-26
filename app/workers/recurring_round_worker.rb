@@ -86,7 +86,3 @@ class RecurringRoundWorker
     ['home_team', 'away_team']
   end
 end
-
-Sidekiq::Cron::Job.create(name: 'RecurringRoundWorker - every 12 hours',
-                          cron: '* */12 * * * *',
-                          class: 'RecurringRoundWorker')

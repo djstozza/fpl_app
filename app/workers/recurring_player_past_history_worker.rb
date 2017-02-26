@@ -37,7 +37,3 @@ class RecurringPlayerPastHistoryWorker
     end
   end
 end
-
-Sidekiq::Cron::Job.create(name: 'RecurringPlayerPastHistoryWorker - every Friday at 12pm',
-                          cron: '00 12 * * 5 *',
-                          class: 'RecurringPlayerPastHistoryWorker')

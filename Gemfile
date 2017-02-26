@@ -40,6 +40,7 @@ gem 'jquery-datatables'
 
 gem 'sidekiq'
 gem "sidekiq-cron", "~> 0.4.0"
+gem 'rufus-scheduler', '3.2.2'
 gem 'httparty'
 
 group :development, :test do
