@@ -1,5 +1,5 @@
 RecurringActivePlayerFixtureHistoriesWorker:
-  cron: '*/3 0-9,23 * * *'
+  cron: '*/3 11-23 * * *'
   class: 'RecurringActivePlayerFixtureHistoriesWorker'
 
 RecurringPlayerPastHistoryWorker:
@@ -7,7 +7,7 @@ RecurringPlayerPastHistoryWorker:
   class: 'RecurringPlayerPastHistoryWorker'
 
 RecurringPlayerWorker:
-  cron: '*/3 0-9,23 * * *'
+  cron: '*/3 11-23 * * *'
   class: 'RecurringPlayerWorker'
 
 RecurringPositionWorker:
@@ -19,5 +19,5 @@ RecurringRoundWorker:
   class: 'RecurringRoundWorker'
 
 RecurringTeamWorker:
-  cron: '00-59/3 0-9,23 * * *'
+  cron: '*/3 11-23 * * *'
   class: 'RecurringTeamWorker'
