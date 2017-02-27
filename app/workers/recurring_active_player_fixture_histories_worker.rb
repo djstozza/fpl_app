@@ -32,8 +32,9 @@ class RecurringActivePlayerFixtureHistoriesWorker
           player_fixture_history =
             HTTParty.get("https://fantasy.premierleague.com/drf/element-summary/#{player.id}")['history']
                     .find { |pfh| pfh['kickoff_time'] == fixture.kickoff_time && pfh['minutes'] > 0 }
-          pfh = PlayerFixtureHistory.find_or_create_by(id: player_fixture_history['id']) if player_fixture_history
-          pfh&.update(
+          next unless player_fixture_history && player_fixture_history['minutes'] > 0
+          pfh = PlayerFixtureHistory.find_or_create_by(id: player_fixture_history['id'])
+          pfh.update(
             team_h_score: player_fixture_history['team_h_score'],
             team_a_score: player_fixture_history['team_a_score'],
             was_home: player_fixture_history['was_home'],
