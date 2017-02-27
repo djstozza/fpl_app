@@ -16,7 +16,7 @@
 }
 
 .panel-group {
-  &.fixture-group {
+  &.fixture-group, &.data-group {
     margin-bottom: 5px;
     text-align: center;
   }

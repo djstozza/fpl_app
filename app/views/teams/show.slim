@@ -1,77 +1,96 @@
 .container
   .row: .col-md-12: h3 #{@team.name}
   .row: .col-md-12
-    - Position.all.to_a.reverse.each do |position|
-        h4 #{position.plural_name}
-        = render partial: 'shared/datatable',
-                           locals: { \
-                             table_id: "team-players-#{position.plural_name.downcase}",
-                             data_source_url: team_player_datatable_teams_url(id: @team.id,
-                                                                              position: position.singular_name,
-                                                                              format: 'json'),
-                             columns: { \
-                               'Name' => '',
-                               'Minutes' => 'sorting',
-                               'Goals Scored' => "sorting #{check_incactive_col(position, 'goals_scored')}",
-                               'Assists' => "sorting #{check_incactive_col(position, 'assists')}",
-                               'Own Goals' =>  "sorting #{check_incactive_col(position, 'own_goals')}",
-                               'Yellow Cards' => "sorting #{check_incactive_col(position, 'yellow_cards')}",
-                               'Red Cards' => "sorting #{check_incactive_col(position, 'red_cards')}",
-                               'Penalties Saved' => "sorting #{check_incactive_col(position, 'penalties_saved')}",
-                               'Penalties Missed' => "sorting #{check_incactive_col(position, 'penalties_missed')}",
-                               'Clean Sheets' => "sorting #{'inactive' if position.singular_name == 'Forward'}",
-                               'Saves' => "sorting #{check_incactive_col(position, 'saves')}",
-                               'Bonus' => 'sorting',
-                               'Dreamteam Count' => 'sorting',
-                               'Points Per Game' => 'sorting',
-                               'Total Points' => 'sorting sorting-default-desc' \
-                             } \
-                           }
+    #team-players-accordion.panel-group.data-group aria-multiselectable='true' role='tablist'
+      .panel
+        #team-players-heading.panel-heading role='tab'
+          a aria-controls="team-players-collapse" aria-expanded='false' data-parent=\
+            '#team-players-heading' data-toggle='collapse' href="#team-players-collapse" role='button'
+            h4 Players
+        #team-players-collapse.panel-collapse.collapse aria-labelledby="team-players-heading" role='tabpanel'
+          - Position.all.to_a.reverse.each do |position|
+              h4 #{position.plural_name}
+              = render partial: 'shared/datatable',
+                                 locals: { \
+                                   table_id: "team-players-#{position.plural_name.downcase}",
+                                   data_source_url: team_player_datatable_teams_url(id: @team.id,
+                                                                                    position: position.singular_name,
+                                                                                    format: 'json'),
+                                   columns: { \
+                                     'Name' => '',
+                                     'Minutes' => 'sorting',
+                                     'Goals Scored' => "sorting #{check_incactive_col(position, 'goals_scored')}",
+                                     'Assists' => "sorting #{check_incactive_col(position, 'assists')}",
+                                     'Own Goals' =>  "sorting #{check_incactive_col(position, 'own_goals')}",
+                                     'Yellow Cards' => "sorting #{check_incactive_col(position, 'yellow_cards')}",
+                                     'Red Cards' => "sorting #{check_incactive_col(position, 'red_cards')}",
+                                     'Penalties Saved' => "sorting #{check_incactive_col(position, 'penalties_saved')}",
+                                     'Penalties Missed' => "sorting " \
+                                                           "#{check_incactive_col(position, 'penalties_missed')}",
+                                     'Clean Sheets' => "sorting #{'inactive' if position.singular_name == 'Forward'}",
+                                     'Saves' => "sorting #{check_incactive_col(position, 'saves')}",
+                                     'Bonus' => 'sorting',
+                                     'Dreamteam Count' => 'sorting',
+                                     'Points Per Game' => 'sorting',
+                                     'Total Points' => 'sorting sorting-default-desc' \
+                                   } \
+                                 }
   .row: .col-md-12
-    h4 Team Fixture Table
+    #team-fixture-accordion.panel-group.data-group aria-multiselectable='true' role='tablist'
+      .panel
+        #team-fixture-heading.panel-heading role='tab'
+          a aria-controls="team-fixture-collapse" aria-expanded='false' data-parent=\
+            '#team-fixture-heading' data-toggle='collapse' href="#team-fixture-collapse" role='button'
+            h4 Fixtures
+        #team-fixture-collapse.panel-collapse.collapse aria-labelledby="team-fixture-heading" role='tabpanel'
+          table.table.table-bordered.table-striped.difficulty-advantage-key
+            tr
+              td colspan=4
+                b.pull-left Team Advantage
+              td.even-advantage-td
+              td colspan=4
+                b.pull-right Opponent Advantage
+            tr
+              - (1..4).to_a.reverse.each do |i|
+                td class="difficulty-t#{i}"
+              td.difficulty-e
+              - (1..4).to_a.each do |i|
+                td class="difficulty-o#{i}"
 
-    table.table.table-bordered.table-striped.difficulty-advantage-key
-      tr
-        td colspan=4
-          b Team Advantage
-        td.even-advantage-td
-        td colspan=4
-          b.pull-right Opponent Advantage
-      tr
-        - (1..4).to_a.reverse.each do |i|
-          td class="difficulty-t#{i}"
-        td.difficulty-e
-        - (1..4).to_a.each do |i|
-          td class="difficulty-o#{i}"
-
-    = render partial: 'shared/datatable',
-                      locals: { table_id: 'team-fixture',
-                                data_source_url: team_fixture_datatable_teams_url(format: 'json', id: @team.id),
-                                columns: { 'Round' => 'sorting sorting-default-asc',
-                                           'Kickoff Time' => 'sorting',
-                                           'Opponent' => '',
-                                           'Home / Away' => '',
-                                           'Result' => '',
-                                           'Score' => '',
-                                           'Advantage' => '' } }
+          = render partial: 'shared/datatable',
+                            locals: { table_id: 'team-fixture',
+                                      data_source_url: team_fixture_datatable_teams_url(format: 'json', id: @team.id),
+                                      columns: { 'Round' => 'sorting sorting-default-asc',
+                                                 'Kickoff Time' => 'sorting',
+                                                 'Opponent' => '',
+                                                 'Home / Away' => '',
+                                                 'Result' => '',
+                                                 'Score' => '',
+                                                 'Advantage' => '' } }
 
   .row: .col-md-12
-    h4 Team Table
-    = render partial: 'shared/datatable',
-                     locals: { table_id: 'team-ladder',
-                               data_source_url: team_ladder_datatable_teams_url(format: 'json'),
-                               columns: { 'Position' => 'sorting sorting-default-asc',
-                                          'Name' => 'sorting',
-                                          'Matches' => '',
-                                          'Wins' => 'sorting',
-                                          'Losses' => 'sorting',
-                                          'Draws' => 'sorting',
-                                          'Form' => '',
-                                          'Clean Sheets' => 'sorting',
-                                          'For' => 'sorting',
-                                          'Aagainst' => 'sorting',
-                                          'Goal Difference' => 'sorting',
-                                          'Points' => 'sorting' } }
+    #team-ladder-accordion.panel-group.data-group aria-multiselectable='true' role='tablist'
+      .panel
+        #team-ladder-heading.panel-heading role='tab'
+          a aria-controls="team-ladder-collapse" aria-expanded='false' data-parent='#team-ladder-heading' data-toggle=\
+            'collapse' href="#team-ladder-collapse" role='button'
+            h4 Ladder
+        #team-ladder-collapse.panel-collapse.collapse aria-labelledby="team-ladder-heading" role='tabpanel'
+          = render partial: 'shared/datatable',
+                           locals: { table_id: 'team-ladder',
+                                     data_source_url: team_ladder_datatable_teams_url(format: 'json'),
+                                     columns: { 'Position' => 'sorting sorting-default-asc',
+                                                'Name' => 'sorting',
+                                                'Matches' => '',
+                                                'Wins' => 'sorting',
+                                                'Losses' => 'sorting',
+                                                'Draws' => 'sorting',
+                                                'Form' => '',
+                                                'Clean Sheets' => 'sorting',
+                                                'For' => 'sorting',
+                                                'Aagainst' => 'sorting',
+                                                'Goal Difference' => 'sorting',
+                                                'Points' => 'sorting' } }
 
 = content_for :inline_javascript_vars do
   javascript:

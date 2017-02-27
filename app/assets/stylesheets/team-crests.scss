@@ -1,13 +1,3 @@
-@mixin base-crest($width, $height) {
-  background-image: url('https://ismdj.scdn5.secure.raxcdn.com/static/libsass/plfpl/dist/pulselive/i/' +
-                        'sprites/badges-50-sprite@x2.png');
-  width: 100px;
-  height: 100px;
-  background-position: $width $height;
-  zoom: 40%;
-  border: none;
-}
-
 .ars { @include base-crest(-200px, -100px); }
 .bou { @include base-crest(0px, -500px); }
 .bur { @include base-crest(-600px, -400px); }

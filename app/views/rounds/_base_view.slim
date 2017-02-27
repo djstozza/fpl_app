@@ -10,7 +10,7 @@
         b #{fixture_group[:game_day]}
         - fixture_group[:fixtures].each do |match|
           .panel-group.fixture-group aria-multiselectable='true' role='tablist' id=\
-            "accordion-sharing-#{match[:fixture].id}"
+            "accordion-sharing-group-#{match[:fixture].id}"
             .panel
               .panel-heading role='tab' id="accordion-sharing-#{match[:fixture].id}"
                 - if match[:fixture].started
@@ -71,21 +71,28 @@
                               - stat[1]['away_team'].each do |player_stat|
                                 p #{player_stat[:value]}
   .row: .col-md-12
-    = render partial: 'shared/datatable',
-                     locals: { table_id: 'team-ladder',
-                               data_source_url: team_ladder_datatable_teams_url(format: 'json'),
-                               columns: { 'Position' => 'sorting sorting-default-asc',
-                                          'Name' => 'sorting',
-                                          'Matches' => '',
-                                          'Wins' => 'sorting',
-                                          'Losses' => 'sorting',
-                                          'Draws' => 'sorting',
-                                          'Form' => '',
-                                          'Clean Sheets' => 'sorting',
-                                          'For' => 'sorting',
-                                          'Aagainst' => 'sorting',
-                                          'Goal Difference' => 'sorting',
-                                          'Points' => 'sorting' } }
+    #team-ladder-accordion.panel-group.data-group aria-multiselectable='true' role='tablist'
+      .panel
+        #team-ladder-heading.panel-heading role='tab'
+          a aria-controls="team-ladder-collapse" aria-expanded='false' data-parent='#team-ladder-heading' data-toggle=\
+            'collapse' href="#team-ladder-collapse" role='button'
+            h4 Ladder
+        #team-ladder-collapse.panel-collapse.collapse aria-labelledby="team-ladder-heading" role='tabpanel'
+          = render partial: 'shared/datatable',
+                           locals: { table_id: 'team-ladder',
+                                     data_source_url: team_ladder_datatable_teams_url(format: 'json'),
+                                     columns: { 'Position' => 'sorting sorting-default-asc',
+                                                'Name' => 'sorting',
+                                                'Matches' => '',
+                                                'Wins' => 'sorting',
+                                                'Losses' => 'sorting',
+                                                'Draws' => 'sorting',
+                                                'Form' => '',
+                                                'Clean Sheets' => 'sorting',
+                                                'For' => 'sorting',
+                                                'Aagainst' => 'sorting',
+                                                'Goal Difference' => 'sorting',
+                                                'Points' => 'sorting' } }
 
 
 
