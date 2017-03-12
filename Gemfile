@@ -39,7 +39,6 @@ gem 'jquery-datatables'
 # gem 'capistrano-rails', group: :development
 
 gem 'sidekiq'
-gem "sidekiq-cron", "~> 0.4.0"
 gem 'sidekiq-scheduler'
 gem 'rufus-scheduler', '3.2.2'
 gem 'httparty'
