@@ -1,5 +1,6 @@
 require 'sidekiq'
 require 'sidekiq-scheduler'
+require 'httparty'
 
 class RecurringTeamWorker
   include HTTParty

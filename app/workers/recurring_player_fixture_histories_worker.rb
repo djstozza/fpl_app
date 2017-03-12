@@ -1,7 +1,7 @@
 require 'sidekiq'
 require 'sidekiq-scheduler'
 
-class RecurringCurrentRoundPlayerFixtureHistoriesWorker
+class RecurringPlayerFixtureHistoriesWorker
   include HTTParty
   include Sidekiq::Worker
   sidekiq_options retry: 2

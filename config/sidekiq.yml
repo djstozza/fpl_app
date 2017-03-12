@@ -1,30 +1,24 @@
 :schedule:
   RecurringRoundWorker:
     cron: '0 */6 * * *'
-    class: 'RecurringTeamWorker'
     description: 'Update round stats every 6 hours'
 
   RecurringFixtureWorker:
       cron: '*/3 11-23 * * *'
-      class: 'RecurrigFixtureWorker'
       description: 'Update fixture stats every 3 minutes between 11am and 11pm UTC'
 
   RecurringTeamWorker:
     cron: '*/3 11-23 * * *'
-    class: 'RecurringTeamWorker'
     description: 'Update team stats ever 3 minutes between 11am and 11pm UTC'
 
   RecurringPlayerWorker:
     cron: '*/3 11-23 * * *'
-    class: 'RecurringPlayerWorker'
     description: 'Update player stats every 3 minutes between 11am and 11pm UTC'
 
-  RecurringCurrentRoundPlayerFixtureHistoriesWorker:
+  RecurringPlayerFixtureHistoriesWorker:
     cron: '*/3 11-23 * * *'
-    class: 'RecurringCurrentRoundPlayerFixtureHistoriesWorker'
-    description: 'Update the current round's player fixture history stats every 3 minuts between 11am and 11pm UTC'
+    description: 'Update player stats every 3 minutes between 11am and 11pm UTC'
 
   RecurringPositionWorker:
     cron: '00 9 * * 5'
-    class: 'RecurringPositionWorker'
     description: 'Update player positions every 9am UTC on Friday'
