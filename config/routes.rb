@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   require 'sidekiq/web'
   require 'sidekiq/cron/web'
+  require 'sidekiq-scheduler/web'
   mount Sidekiq::Web => '/sidekiq'
 
   root to: 'rounds#index'

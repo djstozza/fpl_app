@@ -20,6 +20,8 @@ class Round < ActiveRecord::Base
   has_many :fixtures
   has_many :player_fixture_histories
 
+  scope :current, -> { find_by(is_current: true) }
+
   def fixture_arr
     fixtures.sort_by(&:kickoff_time).group_by { |fixture| fixture.kickoff_time.to_time.strftime('%A %-d %B %Y') }
   end

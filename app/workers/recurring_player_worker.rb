@@ -1,4 +1,5 @@
 require 'sidekiq'
+require 'sidekiq-scheduler'
 
 class RecurringPlayerWorker
   include HTTParty
