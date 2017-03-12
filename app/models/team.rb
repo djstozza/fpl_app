@@ -173,7 +173,7 @@ class Team < ActiveRecord::Base
 
   def results_array
     result_arr = []
-    fixtures.where(finished: true).each do |fixture|
+    fixtures.where(finished: true).order(:round_id).each do |fixture|
       if fixtures_won.include?(fixture)
         result_arr << 'W'
       elsif fixtures_lost.include?(fixture)
