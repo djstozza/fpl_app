@@ -7,6 +7,10 @@ class RoundPresenter < BasePresenter
     @round.id
   end
 
+  def data_checked
+    @round.data_checked
+  end
+
   def round_short_name
     "GW#{@round.id}"
   end

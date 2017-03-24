@@ -14,7 +14,7 @@ class ApplicationController < ActionController::Base
   end
 
   def set_timezone
-    return Time.zone = 'UTC' if request.location.country.blank? || request.location.city.blank?
-    Time.zone = "#{request.location.country}/#{request.location.city}"
+    return Time.zone = 'UTC' if request.location.ip == '::1'
+    Time.zone = Timezone.lookup(request.location.latitude, request.location.longitude).name
   end
 end
