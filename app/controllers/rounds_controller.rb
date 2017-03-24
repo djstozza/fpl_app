@@ -5,12 +5,13 @@ class RoundsController < ApplicationController
   # GET /rounds
   # GET /rounds.json
   def index
-    @round = RoundPresenter.new(round: Round.find_by(is_current: true))
+    @round_presenter = RoundPresenter.new(round: Round.find_by(is_current: true))
   end
 
   # GET /rounds/1
   # GET /rounds/1.json
   def show
+    @round_presenter = RoundPresenter.new(round: @round)
     respond_to do |format|
       format.html
       format.json { render json: @round.fixture_stats }
@@ -20,7 +21,7 @@ class RoundsController < ApplicationController
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_round
-    @round = RoundPresenter.new(round: Round.find(params[:id]))
+    @round = Round.find(params[:id])
   end
 
   def set_rounds

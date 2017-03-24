@@ -16,5 +16,6 @@ class ApplicationController < ActionController::Base
   def set_timezone
     return Time.zone = 'UTC' if Rails.env.development?
     Time.zone = Timezone.lookup(request.location.latitude, request.location.longitude).name
+    print "HELOOOOO #{Time.zone} #{request.location.latitude} #{request.location.longitude}"
   end
 end
