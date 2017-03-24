@@ -5,7 +5,7 @@ class RoundsController < ApplicationController
   # GET /rounds
   # GET /rounds.json
   def index
-    @round = Round.find_by(is_current: true)
+    @round = RoundPresenter.new(round: Round.find_by(is_current: true))
   end
 
   # GET /rounds/1
