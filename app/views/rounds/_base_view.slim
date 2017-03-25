@@ -34,7 +34,7 @@
                       - if match[:fixture].started
                         |  #{match[:fixture].team_h_score} - #{match[:fixture].team_a_score}&nbsp;
                       - else
-                        |  #{match[:fixture].adjusted_kickoff_time}&nbsp;
+                        |  #{match[:kickoff_time]}&nbsp;
                     img[class="#{match[:fixture].away_team.short_name.downcase}"]&nbsp;
                     span #{match[:fixture].away_team.short_name}
               .panel-collapse.collapse aria-labelledby="accordion-sharing-#{match[:fixture].id}" role=\

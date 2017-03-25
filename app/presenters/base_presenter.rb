@@ -7,4 +7,7 @@ class BasePresenter < SimpleDelegator
   def h
     @view
   end
+
+  def as_json(*)
+  end
 end

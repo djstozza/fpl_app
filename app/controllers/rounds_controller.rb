@@ -14,7 +14,7 @@ class RoundsController < ApplicationController
     @round_presenter = RoundPresenter.new(round: @round)
     respond_to do |format|
       format.html
-      format.json { render json: @round.fixture_stats }
+      format.json { render json: @round_presenter.fixture_stats_to_json }
     end
   end
 

@@ -44,10 +44,6 @@ class Fixture < ActiveRecord::Base
     Team.find_by(id: team_a_id)
   end
 
-  def adjusted_kickoff_time
-    kickoff_time.to_time.strftime('%H:%M')
-  end
-
   private
 
   def key_stats_hash

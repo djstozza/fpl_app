@@ -15,6 +15,14 @@ class RoundPresenter < BasePresenter
     "GW#{@round.id}"
   end
 
+  def fixtures
+    @round.fixtures
+  end
+
+  def fixture_stats_to_json(*)
+    fixture_stats.to_json
+  end
+
   def fixture_stats
     cached_or_unchached_fixture_hash
   end
@@ -46,7 +54,7 @@ class RoundPresenter < BasePresenter
   def base_fixture_hash(fixture)
     {
       fixture: fixture,
-      kickoff_time: fixture.adjusted_kickoff_time,
+      kickoff_time: Time.zone.at(fixture.kickoff_time).strftime('%H:%M'),
       home_team: fixture.home_team,
       away_team: fixture.away_team,
       stats: fixture.stats
@@ -56,7 +64,7 @@ class RoundPresenter < BasePresenter
 
   def fixture_hash
     {
-      round: self,
+      round: @round,
       fixtures: fixtures.sort_by(&:kickoff_time)
                         .map do |fixture|
           base_fixture_hash(fixture)
