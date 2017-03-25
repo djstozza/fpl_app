@@ -12,7 +12,7 @@ class RoundPresenter < BasePresenter
   end
 
   def round_short_name
-    "GW#{@round.id}"
+    "GW#{id}"
   end
 
   def fixtures
