@@ -23,8 +23,7 @@
 }
 
 @mixin base-crest($width, $height) {
-  background-image: url('https://ismdj.scdn5.secure.raxcdn.com/static/libsass/plfpl/dist/pulselive/i/' +
-                        'sprites/badges-50-sprite@x2.png');
+  background-image: url('badges-sprite');
   width: 100px;
   height: 100px;
   background-position: $width $height;
