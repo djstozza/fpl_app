@@ -23,10 +23,10 @@
 }
 
 @mixin base-crest($width, $height) {
-  background-image: url('badges-sprite');
+  object-fit: none;
   width: 100px;
   height: 100px;
-  background-position: $width $height;
+  object-position: $width $height;
   zoom: 40%;
   border: none;
 }

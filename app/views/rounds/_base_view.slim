@@ -18,25 +18,25 @@
                     "#accordion-sharing-#{match[:fixture].id}" data-toggle=\
                     'collapse' href="#sharing-tab-#{match[:fixture].id}" role='button'
                     span #{match[:fixture].home_team.short_name}&nbsp;
-                    img[class="#{match[:fixture].home_team.short_name.downcase}"]
+                    = image_tag('badges-sprite', class: match[:fixture].home_team.short_name.downcase)
                     span.js-fixture-desc
                       - if match[:fixture].started
                         |  #{match[:fixture].team_h_score} - #{match[:fixture].team_a_score}&nbsp;
                       - else
                         |  #{match[:fixture].adjusted_kickoff_time}&nbsp;
-                    img[class="#{match[:fixture].away_team.short_name.downcase}"]&nbsp;
-                    span #{match[:fixture].away_team.short_name}
+                    = image_tag('badges-sprite', class: match[:fixture].away_team.short_name.downcase)
+                    span &nbsp;#{match[:fixture].away_team.short_name}
                 - else
                   = content_tag(:div, nil, class: "js-pending-fixture-#{match[:fixture].id}")
                     span #{match[:fixture].home_team.short_name}&nbsp;
-                    img[class="#{match[:fixture].home_team.short_name.downcase}"]
+                    = image_tag('badges-sprite', class: match[:fixture].home_team.short_name.downcase)
                     span.js-fixture-desc
                       - if match[:fixture].started
                         |  #{match[:fixture].team_h_score} - #{match[:fixture].team_a_score}&nbsp;
                       - else
                         |  #{match[:kickoff_time]}&nbsp;
-                    img[class="#{match[:fixture].away_team.short_name.downcase}"]&nbsp;
-                    span #{match[:fixture].away_team.short_name}
+                    = image_tag('badges-sprite', class: match[:fixture].away_team.short_name.downcase)
+                    span &nbsp;#{match[:fixture].away_team.short_name}
               .panel-collapse.collapse aria-labelledby="accordion-sharing-#{match[:fixture].id}" role=\
                 'tabpanel' id="sharing-tab-#{match[:fixture].id}"
                 .panel-body
