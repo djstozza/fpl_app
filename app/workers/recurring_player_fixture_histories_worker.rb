@@ -7,9 +7,10 @@ class RecurringPlayerFixtureHistoriesWorker
   sidekiq_options retry: 2
 
   def perform
+    round_id = Round.current.id
     Player.all.each do |player|
       pfh = HTTParty.get("https://fantasy.premierleague.com/drf/element-summary/#{player.id}")['history']
-                    .find { |pfh| pfh['round'] == Round.current.id && pfh['minutes'] > 0 }
+                    .find { |pfh| pfh['round'] == round_id && pfh['minutes'] > 0 }
       next unless pfh
 
       player_fixture_history = PlayerFixtureHistory.find_or_create_by(id: pfh['id'])
