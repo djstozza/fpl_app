@@ -8,7 +8,7 @@ class TeamFixturesDatatable < Datatable
     @process_record_lambda = -> (fixture) do
       [
         fixture.round_id,
-        Time.parse(fixture.kickoff_time).strftime('%d/%m/%y %H:%M'),
+        fixture.kickoff_time.strftime('%d/%m/%y %H:%M'),
         opponent_link(fixture),
         (fixture.team_h_id == @team.id ? 'H' : 'A'),
         win_loss_or_draw(fixture),
