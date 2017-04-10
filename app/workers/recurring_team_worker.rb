@@ -27,16 +27,17 @@ class RecurringTeamWorker
     end
 
     Team.all.each do |team|
-      team.update(wins: team.fixtures_won.count,
-                  losses: team.fixtures_lost.count,
-                  draws: team.fixtures_drawn.count,
-                  clean_sheets: team.clean_sheet_fixtures.count,
-                  goals_for: team.goals('team_h', 'team_a'),
-                  goals_against: team.goals('team_a', 'team_h'),
-                  goal_difference: (team.goals('team_h', 'team_a') - team.goals('team_a', 'team_h')),
-                  points: (team.fixtures_won.count * 3 + team.fixtures_drawn.count),
-                  played: team.fixtures.where(finished: true).count,
-                  form: team.current_form)
+      team_decorator = TeamDecorator.new(team)
+      team.update(wins: team_decorator.fixtures_won.count,
+                  losses: team_decorator.fixtures_lost.count,
+                  draws: team_decorator.fixtures_drawn.count,
+                  clean_sheets: team_decorator.clean_sheet_fixtures.count,
+                  goals_for: team_decorator.goals('team_h', 'team_a'),
+                  goals_against: team_decorator.goals('team_a', 'team_h'),
+                  goal_difference: (team_decorator.goals('team_h', 'team_a') - team.goals('team_a', 'team_h')),
+                  points: (team_decorator.fixtures_won.count * 3 + team.fixtures_drawn.count),
+                  played: team_decorator.fixtures.where(finished: true).count,
+                  form: team_decorator.current_form)
     end
 
     Team.all.each do |team|
