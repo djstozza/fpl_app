@@ -132,7 +132,7 @@ class TeamDecorator < SimpleDelegator
                  .max[1]
   end
 
-  def position
+  def find_position
     ladder.index(__getobj__) + 1
   end
 
