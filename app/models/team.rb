@@ -9,11 +9,6 @@
 #  strength              :integer
 #  position              :integer
 #  played                :integer
-#  win                   :integer
-#  loss                  :integer
-#  draw                  :integer
-#  points                :integer
-#  form                  :integer
 #  link_url              :integer
 #  strength_overall_home :integer
 #  strength_overall_away :integer
@@ -24,6 +19,15 @@
 #  team_division         :integer
 #  created_at            :datetime         not null
 #  updated_at            :datetime         not null
+#  goals_for             :integer
+#  goals_against         :integer
+#  goal_difference       :integer
+#  clean_sheets          :integer
+#  wins                  :integer
+#  losses                :integer
+#  draws                 :integer
+#  points                :integer
+#  form                  :string
 #
 
 class Team < ActiveRecord::Base

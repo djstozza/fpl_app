@@ -1,4 +1,5 @@
 class TeamDecorator < SimpleDelegator
+
   def fixtures
     Fixture.where('team_a_id = :id OR team_h_id = :id', id: id)
   end
@@ -131,6 +132,10 @@ class TeamDecorator < SimpleDelegator
                  .max[1]
   end
 
+  def position
+    ladder.index(__getobj__) + 1
+  end
+
 
   private
 
@@ -150,5 +155,9 @@ class TeamDecorator < SimpleDelegator
       end
     end
     result_arr
+  end
+
+  def ladder
+    Team.all.sort { |a, b| [b.points, b.goal_difference] <=> [a.points, a.goal_difference] }
   end
 end
