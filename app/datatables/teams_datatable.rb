@@ -6,19 +6,20 @@ class TeamsDatatable < Datatable
     @records_filtered = @records.count
 
     @process_record_lambda = -> (team) do
+      team_decorator = TeamDecorator.new(team)
       [
-        team.position,
-        link_to(team.short_name, team),
-        team.fixtures.where(finished: true).count,
-        team.wins,
-        team.losses,
-        team.draws,
-        team.current_form,
-        team.clean_sheets,
-        team.goals_for,
-        team.goals_against,
-        team.goal_difference,
-        team.points
+        team_decorator.position,
+        link_to(team_decorator.short_name, team),
+        team_decorator.fixtures.where(finished: true).count,
+        team_decorator.wins,
+        team_decorator.losses,
+        team_decorator.draws,
+        team_decorator.current_form,
+        team_decorator.clean_sheets,
+        team_decorator.goals_for,
+        team_decorator.goals_against,
+        team_decorator.goal_difference,
+        team_decorator.points
       ]
     end
   end

@@ -1,5 +1,5 @@
 .container
-  .row: .col-md-12: h3 #{@team.name}
+  .row: .col-md-12: h3 #{@team_decorator.name}
   .row: .col-md-12
     #team-players-accordion.panel-group.data-group aria-multiselectable='true' role='tablist'
       .panel
@@ -13,22 +13,22 @@
               = render partial: 'shared/datatable',
                                  locals: { \
                                    table_id: "team-players-#{position.plural_name.downcase}",
-                                   data_source_url: team_player_datatable_teams_url(id: @team.id,
+                                   data_source_url: team_player_datatable_teams_url(id: @team_decorator.id,
                                                                                     position: position.singular_name,
                                                                                     format: 'json'),
                                    columns: { \
                                      'Name' => '',
                                      'Minutes' => 'sorting',
-                                     'Goals Scored' => "sorting #{check_incactive_col(position, 'goals_scored')}",
-                                     'Assists' => "sorting #{check_incactive_col(position, 'assists')}",
-                                     'Own Goals' =>  "sorting #{check_incactive_col(position, 'own_goals')}",
-                                     'Yellow Cards' => "sorting #{check_incactive_col(position, 'yellow_cards')}",
-                                     'Red Cards' => "sorting #{check_incactive_col(position, 'red_cards')}",
-                                     'Penalties Saved' => "sorting #{check_incactive_col(position, 'penalties_saved')}",
+                                     'Goals Scored' => "sorting #{check_inactive_col(position, 'goals_scored')}",
+                                     'Assists' => "sorting #{check_inactive_col(position, 'assists')}",
+                                     'Own Goals' =>  "sorting #{check_inactive_col(position, 'own_goals')}",
+                                     'Yellow Cards' => "sorting #{check_inactive_col(position, 'yellow_cards')}",
+                                     'Red Cards' => "sorting #{check_inactive_col(position, 'red_cards')}",
+                                     'Penalties Saved' => "sorting #{check_inactive_col(position, 'penalties_saved')}",
                                      'Penalties Missed' => "sorting " \
-                                                           "#{check_incactive_col(position, 'penalties_missed')}",
+                                                           "#{check_inactive_col(position, 'penalties_missed')}",
                                      'Clean Sheets' => "sorting #{'inactive' if position.singular_name == 'Forward'}",
-                                     'Saves' => "sorting #{check_incactive_col(position, 'saves')}",
+                                     'Saves' => "sorting #{check_inactive_col(position, 'saves')}",
                                      'Bonus' => 'sorting',
                                      'Dreamteam Count' => 'sorting',
                                      'Points Per Game' => 'sorting',
@@ -59,7 +59,7 @@
 
           = render partial: 'shared/datatable',
                             locals: { table_id: 'team-fixture',
-                                      data_source_url: team_fixture_datatable_teams_url(format: 'json', id: @team.id),
+                                      data_source_url: team_fixture_datatable_teams_url(format: 'json', id: @team_decorator.id),
                                       columns: { 'Round' => 'sorting sorting-default-asc',
                                                  'Kickoff Time' => 'sorting',
                                                  'Opponent' => '',
@@ -94,4 +94,4 @@
 
 = content_for :inline_javascript_vars do
   javascript:
-    window.fplVars.team_short_name = "#{@team.short_name}"
+    window.fplVars.team_short_name = "#{@team_decorator.short_name}"

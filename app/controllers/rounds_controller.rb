@@ -5,16 +5,16 @@ class RoundsController < ApplicationController
   # GET /rounds
   # GET /rounds.json
   def index
-    @round_presenter = RoundPresenter.new(round: Round.find_by(is_current: true))
+    @round_decorator = RoundDecorator.new(Round.find_by(is_current: true))
   end
 
   # GET /rounds/1
   # GET /rounds/1.json
   def show
-    @round_presenter = RoundPresenter.new(round: @round)
+    @round_decorator = RoundDecorator.new(@round)
     respond_to do |format|
       format.html
-      format.json { render json: @round_presenter.fixture_stats_to_json }
+      format.json { render json: @round_decorator.fixture_stats }
     end
   end
 

@@ -2,11 +2,11 @@
   .row: .col-sm-12
     ul.nav.nav-tabs.js-scrollable-nav role='tablist'
       - @rounds.sort.each do |round|
-        li[class="#{'active' if round.id == @round_presenter.id}", role='presentation']
+        li[class="#{'active' if round.id == @round_decorator.id}", role='presentation']
           = link_to round.name, round
 .container
   .row: .col-md-offset-3.col-md-6
-    - @round_presenter.fixture_stats_by_game_day[:fixture_groups].each do |fixture_group|
+    - @round_decorator.fixture_stats_by_game_day[:fixture_groups].each do |fixture_group|
         b #{fixture_group[:game_day]}
         - fixture_group[:fixtures].each do |match|
           .panel-group.fixture-group aria-multiselectable='true' role='tablist' id=\
@@ -98,4 +98,4 @@
 
 = content_for :inline_javascript_vars do
   javascript:
-    window.fplVars.round_id = #{@round_presenter.id}
+    window.fplVars.round_id = #{@round_decorator.id}

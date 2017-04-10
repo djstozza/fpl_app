@@ -1,26 +1,6 @@
-class RoundPresenter < BasePresenter
-  def initialize(round:)
-    @round = round
-  end
-
-  def id
-    @round.id
-  end
-
-  def data_checked
-    @round.data_checked
-  end
-
+class RoundDecorator < SimpleDelegator
   def round_short_name
     "GW#{id}"
-  end
-
-  def fixtures
-    @round.fixtures
-  end
-
-  def fixture_stats_to_json(*)
-    fixture_stats.to_json
   end
 
   def fixture_stats
@@ -34,9 +14,8 @@ class RoundPresenter < BasePresenter
   private
 
   def fixture_arr
-    @round.fixtures
-          .sort_by(&:kickoff_time)
-          .group_by { |fixture| Time.zone.at(fixture.kickoff_time).strftime('%A %-d %B %Y') }
+    fixtures.sort_by(&:kickoff_time)
+            .group_by { |fixture| Time.zone.at(fixture.kickoff_time).strftime('%A %-d %B %Y') }
   end
 
   def cached_or_unchached_fixture_hash
@@ -44,8 +23,8 @@ class RoundPresenter < BasePresenter
   end
 
   def cache_or_uncached_fixture_stats_by_game_day
-    if @round.data_checked
-      Rails.cache.fetch("round/#{@round.id}/fixture_stats_by_game_day") { fixture_hash_by_game_day }
+    if data_checked
+      Rails.cache.fetch("round/#{id}/fixture_stats_by_game_day") { fixture_hash_by_game_day }
     else
       fixture_hash_by_game_day
     end
@@ -64,7 +43,7 @@ class RoundPresenter < BasePresenter
 
   def fixture_hash
     {
-      round: @round,
+      round: self,
       fixtures: fixtures.sort_by(&:kickoff_time)
                         .map do |fixture|
           base_fixture_hash(fixture)

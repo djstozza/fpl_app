@@ -11,16 +11,16 @@ class TeamsController < ApplicationController
   end
 
   def team_player_datatable
-    render_datatable_json(TeamPlayersDatatable, @team, Position.find_by(singular_name: params[:position]))
+    render_datatable_json(TeamPlayersDatatable, @team_decorator, Position.find_by(singular_name: params[:position]))
   end
 
   def team_fixture_datatable
-    render_datatable_json(TeamFixturesDatatable, @team)
+    render_datatable_json(TeamFixturesDatatable, @team_decorator)
   end
 
   private
 
   def set_team
-    @team = Team.find(params[:id])
+    @team_decorator = TeamDecorator.new(Team.find(params[:id]))
   end
 end
