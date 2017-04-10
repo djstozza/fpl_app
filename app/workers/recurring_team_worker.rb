@@ -41,4 +41,5 @@ class RecurringTeamWorker
         position: team_decorator.find_position
       )
     end
+  end
 end
