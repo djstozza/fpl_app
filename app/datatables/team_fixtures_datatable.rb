@@ -1,7 +1,7 @@
 class TeamFixturesDatatable < Datatable
   def initialize(view_context, team)
     super(view_context)
-    @team = team
+    @team_decorator = TeamDecorator.new(team)
     @records = @team.fixtures.order(sorting)
     @records_total = @team.fixtures.count
     @records_filtered = @records.count
@@ -10,7 +10,7 @@ class TeamFixturesDatatable < Datatable
         fixture.round_id,
         fixture.kickoff_time.strftime('%d/%m/%y %H:%M'),
         opponent_link(fixture),
-        (fixture.team_h_id == @team.id ? 'H' : 'A'),
+        (fixture.team_h_id == @team_decorator.id ? 'H' : 'A'),
         win_loss_or_draw(fixture),
         ("#{fixture.team_h_score} - #{fixture.team_a_score}" if fixture.finished),
         fixture_advantage(fixture)
@@ -36,7 +36,7 @@ class TeamFixturesDatatable < Datatable
   end
 
   def home_fixture(fixture)
-    @team.home_fixtures.include?(fixture)
+    @team_decorator.home_fixtures.include?(fixture)
   end
 
   def fixture_advantage(fixture)
@@ -66,11 +66,11 @@ class TeamFixturesDatatable < Datatable
   end
 
   def win_loss_or_draw(fixture)
-    if @team.fixtures_won.include?(fixture)
+    if @team_decorator.fixtures_won.include?(fixture)
       'W'
-    elsif @team.fixtures_lost.include?(fixture)
+    elsif @team_decorator.fixtures_lost.include?(fixture)
       'L'
-    elsif @team.fixtures_drawn.include?(fixture)
+    elsif @team_decorator.fixtures_drawn.include?(fixture)
       'D'
     end
   end
