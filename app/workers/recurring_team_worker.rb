@@ -35,7 +35,7 @@ class RecurringTeamWorker
         goals_for: team_decorator.goal_calculator('team_h', 'team_a'),
         goals_against: team_decorator.goal_calculator('team_a', 'team_h'),
         goal_difference: (team_decorator.goals_for - team_decorator.goals_against),
-        points: (team_decorator.fixtures_won.count * 3 + team.fixtures_drawn.count),
+        points: (team_decorator.fixtures_won.count * 3 + team_decorator.fixtures_drawn.count),
         played: team_decorator.fixtures.where(finished: true).count,
         form: team_decorator.current_form,
         position: team_decorator.find_position
