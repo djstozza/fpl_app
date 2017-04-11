@@ -2,8 +2,8 @@ class TeamFixturesDatatable < Datatable
   def initialize(view_context, team)
     super(view_context)
     @team_decorator = TeamDecorator.new(team)
-    @records = @team.fixtures.order(sorting)
-    @records_total = @team.fixtures.count
+    @records = @team_decorator.fixtures.order(sorting)
+    @records_total = @team_decorator.fixtures.count
     @records_filtered = @records.count
     @process_record_lambda = -> (fixture) do
       [
