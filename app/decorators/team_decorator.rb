@@ -136,6 +136,17 @@ class TeamDecorator < SimpleDelegator
     ladder.index(__getobj__) + 1
   end
 
+  def goal_calculator(team_status_1, team_status_2)
+    goals = 0
+    home_fixtures.where(finished: true).each do |fixture|
+      goals += fixture.public_send("#{team_status_1}_score")
+    end
+    away_fixtures.where(finished: true).each do |fixture|
+      goals += fixture.public_send("#{team_status_2}_score")
+    end
+    goals
+  end
+
 
   private
 
