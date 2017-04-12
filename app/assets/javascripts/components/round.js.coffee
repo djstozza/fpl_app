@@ -51,7 +51,7 @@
                             className: match.home_team.short_name.toLowerCase()
                             src: '/assets/badges-sprite.jpg'
                             alt: 'Badge sprite'
-                          React.DOM.span, null, "#{match.kickoff_time} "
+                          React.DOM.span, null, " #{match.kickoff_time} "
                           React.DOM.img
                             className: match.away_team.short_name.toLowerCase()
                             src: '/assets/badges-sprite.jpg'
