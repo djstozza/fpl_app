@@ -1,9 +1,5 @@
-.container
-  .row: .col-sm-12
-    ul.nav.nav-tabs.js-scrollable-nav role='tablist'
-      - @rounds.sort.each do |round|
-        li[class="#{'active' if round.id == @round_decorator.id}", role='presentation']
-          = link_to round.name, round
+= react_component 'Rounds', { data: { rounds: @rounds.sort, round: @round_decorator } }
+
 .container
   .row: .col-md-offset-3.col-md-6
     - @round_decorator.fixture_stats_by_game_day[:fixture_groups].each do |fixture_group|

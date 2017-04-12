@@ -15,4 +15,7 @@
 //= require datatables
 //= require bootstrap-sprockets
 //= ajax_datatables
+//= require react
+//= require react_ujs
+//= require components
 //= require_tree .
