@@ -7,15 +7,13 @@ class ApplicationController < ActionController::Base
 
   private
 
+  def set_timezone
+    Time.zone = cookies[:timezone]
+  end
+
   def render_datatable_json(datatable_class, *args)
     respond_to do |format|
       format.json { render json: datatable_class.new(view_context, *args) }
     end
-  end
-
-  def set_timezone
-    Time.zone = Timezone.lookup(request.location.latitude, request.location.longitude).name
-  rescue Timezone::Error::Google
-    Time.zone = 'UTC'
   end
 end

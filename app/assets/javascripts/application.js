@@ -14,6 +14,8 @@
 //= require jquery_ujs
 //= require datatables
 //= require bootstrap-sprockets
+//= require jstz
+//= timezone-finder
 //= ajax_datatables
 //= require react
 //= require react_ujs
