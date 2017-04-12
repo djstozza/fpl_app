@@ -14,7 +14,6 @@ class RoundsController < ApplicationController
     @round_decorator = RoundDecorator.new(@round)
     respond_to do |format|
       format.html
-      format.json { render json: @round_decorator.fixture_stats }
     end
   end
 

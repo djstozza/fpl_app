@@ -35,6 +35,8 @@ class FixtureDecorator < SimpleDelegator
     hash = {}
     home_team_arr = []
     away_team_arr = []
+    hash['initials'] = stat.split('_').map(&:first).join.upcase
+    hash['name'] = stat.humanize.titleize
     hash['home_team'] = home_team_arr
     hash['away_team'] = away_team_arr
     player_fixture_histories.where.not("#{stat}": 0).each do |player_stat|
