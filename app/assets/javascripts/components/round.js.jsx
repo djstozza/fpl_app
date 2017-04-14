@@ -6,6 +6,28 @@ var Round = React.createClass({
     }
   },
 
+  componentDidMount: function () {
+    var self = this;
+    setInterval(function () {
+      self.fetchData()
+    }, 180000);
+  },
+
+  fetchData: function () {
+    var self = this
+    $.ajax({
+      type: 'get',
+      url: '/rounds/' + this.props.data.round_id,
+      dataType: 'json',
+      success: function (data) {
+        self.setState({
+          roundId: data.round_id,
+          fixtureGroups: data.fixtures.fixture_groups
+        })
+      }
+    })
+  },
+
   fixtureGroups: function (fixtureGroups) {
     var self = this;
     return (
