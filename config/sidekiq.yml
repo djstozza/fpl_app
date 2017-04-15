@@ -1,7 +1,7 @@
 :schedule:
   RecurringRoundWorker:
-    cron: '0 */6 * * *'
-    description: 'Update round stats every 6 hours'
+    cron: '0 */3 * * *'
+    description: 'Update round stats every 3 hours'
 
   RecurringFixtureWorker:
       cron: '*/3 11-23 * * *'
