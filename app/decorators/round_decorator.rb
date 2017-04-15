@@ -3,10 +3,6 @@ class RoundDecorator < SimpleDelegator
     "GW#{id}"
   end
 
-  def fixture_stats
-    cached_or_unchached_fixture_hash
-  end
-
   def fixture_stats_by_game_day
     cache_or_uncached_fixture_stats_by_game_day
   end
@@ -18,15 +14,12 @@ class RoundDecorator < SimpleDelegator
             .group_by { |fixture| Time.zone.at(fixture.kickoff_time).strftime('%A %-d %B %Y') }
   end
 
-  def cached_or_unchached_fixture_hash
-    data_checked ? Rails.cache.fetch("round/#{id}/fixtures") { fixture_hash } : fixture_hash
-  end
-
   def cache_or_uncached_fixture_stats_by_game_day
-    if data_checked
-      Rails.cache.fetch("round/#{id}/fixture_stats_by_game_day") { fixture_hash_by_game_day }
-    else
+    if is_current
       fixture_hash_by_game_day
+    else
+      Rails.cache.fetch("round/#{id}/fixture_stats_by_game_day") { fixture_hash_by_game_day }
+
     end
   end
 
