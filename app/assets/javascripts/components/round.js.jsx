@@ -10,7 +10,7 @@ var Round = React.createClass({
 
   componentDidMount: function () {
     var self = this;
-    if (self.state.Iscurrent && !self.state.dataChecked) {
+    if (self.state.isCurrent && !self.state.dataChecked) {
       setInterval(function () {
         self.fetchData()
       }, 60000);
