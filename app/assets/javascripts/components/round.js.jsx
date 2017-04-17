@@ -1,35 +1,38 @@
 var Round = React.createClass({
   getInitialState: function() {
     return {
-        roundId: this.props.data.round_id,
-        isCurrent: this.props.data.is_current,
-        dataChecked: this.props.data.data_checked,
-        fixtureGroups: this.props.data.fixtures.fixture_groups
+        roundId: this.props.round.id,
+        isCurrent: this.props.round.is_current,
+        dataChecked: this.props.round.data_checked,
+        fixtureGroups: this.props.fixtures.fixture_groups
     }
   },
 
-  componentDidMount: function () {
+  componentDidMount: function(){
     var self = this;
     if (self.state.isCurrent && !self.state.dataChecked) {
       setInterval(function () {
-        self.fetchData()
-      }, 60000);
+        self.dataSource();
+      }, 10000);
     }
   },
 
-  fetchData: function () {
-    var self = this
-    $.ajax({
-      type: 'get',
-      url: '/rounds/' + this.state.roundId,
-      dataType: 'json',
-      success: function (data) {
+  dataSource: function(props) {
+    var self = this;
+    $.getJSON(
+      '/rounds/' + this.state.roundId,
+      function (data) {
         self.setState({
           roundId: data.round.id,
+          isCurrent: data.round.is_current,
+          dataChecked: data.round.data_checked,
           fixtureGroups: data.fixtures.fixture_groups
         })
-      }
-    })
+    });
+  },
+
+  shouldComponentUpdate: function (nextProps, nextState) {
+    return nextState !== this.state
   },
 
   fixtureGroups: function (fixtureGroups) {
