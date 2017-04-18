@@ -1,15 +1,8 @@
 var FixtureGroup = React.createClass({
-  getInitialState: function () {
-    return {
-      gameDay: this.props.gameDay,
-      fixtures: this.props.fixtures
-    }
-  },
-
   matches: function () {
     var self = this;
     return (
-      self.state.fixtures.map(function (match) {
+      self.props.fixtures.map(function (match) {
         return (
           < Match key={'match-' + match.fixture.id} match={match} />
         )
@@ -21,7 +14,7 @@ var FixtureGroup = React.createClass({
     var self = this;
     return(
       <div>
-        <b>{this.state.gameDay}</b>
+        <b>{this.props.gameDay}</b>
         <div>{self.matches()}</div>
       </div>
     )

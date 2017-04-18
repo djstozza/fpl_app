@@ -1,25 +1,15 @@
 var MatchPanelTitle = React.createClass({
-  getInitialState: function () {
-    return {
-      fixture: this.props.match.fixture,
-      homeTeam: this.props.match.homeTeam,
-      awayTeam: this.props.match.awayTeam,
-      kickoffTime: this.props.match.kickoffTime,
-      stats: this.props.match.stats
-    }
-  },
-
   matchPanelTitleText: function () {
     var self = this;
-    var fixture = this.state.fixture;
-    var homeTeamShortName = this.state.homeTeam.short_name;
-    var awayTeamShortName = this.state.awayTeam.short_name;
-    var imgSrc = '/assets/badges-sprite.jpg';
+    var fixture = this.props.match.fixture;
+    var homeTeamShortName = this.props.match.home_team.short_name;
+    var awayTeamShortName = this.props.match.away_team.short_name;
+    var imgSrc = '/assets/badges-sprite.jpeg';
     var matchScore = function () {
       if (fixture.started) {
         return (fixture.team_h_score + ' - ' + fixture.team_a_score);
       } else {
-        return (self.state.kickoffTime);
+        return (self.props.match.kickoff_time);
       }
     }
 
@@ -35,8 +25,8 @@ var MatchPanelTitle = React.createClass({
   },
 
   render: function () {
-    var fixtureId = this.state.fixture.id;
-    if (this.state.fixture.started) {
+    var fixtureId = this.props.match.fixture.id;
+    if (this.props.match.fixture.started) {
       return (
         <a aria-controls={'sharing-tab-' + fixtureId} aria-expanded='false' data-toggle='collapse' role='button'
           data-parent={'#accordion-sharing-' + fixtureId} href={'#sharing-tab-' + fixtureId}>

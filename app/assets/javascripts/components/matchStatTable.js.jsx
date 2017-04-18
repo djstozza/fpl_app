@@ -1,20 +1,10 @@
 var MatchStatTable = React.createClass({
-  getInitialState: function () {
-    return {
-      fixture: this.props.match.fixture,
-      homeTeam: this.props.match.homeTeam,
-      awayTeam: this.props.match.awayTeam,
-      kickoffTime: this.props.match.kickoffTime,
-      stats: this.props.match.stats
-    }
-  },
-
   matchStats: function () {
     var self = this;
     return (
-      Object.values(this.state.stats).map(function (statValue) {
+      Object.values(this.props.match.stats).map(function (statValue) {
         return(
-          <tr key={'match-' + self.state.fixture.id + statValue.initials}>
+          <tr key={'match-' + self.props.match.fixture.id + statValue.initials}>
             <td><b className='js-tooltip' title={statValue.name}>{statValue.initials}</b></td>
             {self.statEntries(Object.values(statValue.home_team))}
             {self.statEntries(Object.values(statValue.away_team))}
@@ -49,10 +39,10 @@ var MatchStatTable = React.createClass({
 
   render: function () {
     var self = this;
-    var fixture = this.state.fixture;
+    var fixture = this.props.match.fixture;
     var fixtureId = fixture.id;
-    var homeTeam = this.state.homeTeam;
-    var awayTeam = this.state.awayTeam;
+    var homeTeam = this.props.match.home_team;
+    var awayTeam = this.props.match.away_team;
     return (
       <div className='panel-collapse collapse' aria-labelledby={'accordion-sharing-' + fixtureId}
         role='tabpanel' id={'sharing-tab-' + fixtureId}>
