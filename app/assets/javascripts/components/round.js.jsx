@@ -1,5 +1,6 @@
 var Round = React.createClass({
   getInitialState: function() {
+    console.log(this.props.fixtures.fixture_groups);
     return {
       roundId: this.props.round.id,
       isCurrent: this.props.round.is_current,

@@ -1,13 +1,15 @@
 var MatchStatTable = React.createClass({
   matchStats: function () {
     var self = this;
+    matchStats = this.props.match.stats;
     return (
-      Object.values(this.props.match.stats).map(function (statValue) {
+      Object.keys(matchStats).map(function (key) {
+        console.log(matchStats[key]);
         return(
-          <tr key={'match-' + self.props.match.fixture.id + statValue.initials}>
-            <td><b className='js-tooltip' title={statValue.name}>{statValue.initials}</b></td>
-            {self.statEntries(Object.values(statValue.home_team))}
-            {self.statEntries(Object.values(statValue.away_team))}
+          <tr key={'match-' + self.props.match.fixture.id + matchStats[key].initials}>
+            <td><b className='js-tooltip' title={matchStats[key].name}>{matchStats[key].initials}</b></td>
+            {self.statEntries(matchStats[key].home_team)}
+            {self.statEntries(matchStats[key].away_team)}
           </tr>
         )
       })
