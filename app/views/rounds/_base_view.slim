@@ -1,6 +1,7 @@
 = react_component 'Rounds', { data: { rounds: @rounds.sort, round_id: @round_decorator.id } }
 = react_component 'Round', { round: @round_decorator, fixtures: @round_decorator.fixture_stats_by_game_day }
-  .row: .col-md-12
+
+.container:  .row: .col-md-12
     #team-ladder-accordion.panel-group.data-group aria-multiselectable='true' role='tablist'
       .panel
         #team-ladder-heading.panel-heading role='tab'
