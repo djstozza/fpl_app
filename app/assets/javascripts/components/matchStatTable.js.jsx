@@ -4,7 +4,6 @@ var MatchStatTable = React.createClass({
     matchStats = this.props.match.stats;
     return (
       Object.keys(matchStats).map(function (key) {
-        console.log(matchStats[key]);
         return(
           <tr key={'match-' + self.props.match.fixture.id + matchStats[key].initials}>
             <td><b className='js-tooltip' title={matchStats[key].name}>{matchStats[key].initials}</b></td>
