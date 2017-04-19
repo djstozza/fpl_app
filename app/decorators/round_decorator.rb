@@ -3,8 +3,8 @@ class RoundDecorator < SimpleDelegator
     "GW#{id}"
   end
 
-  def fixture_stats_by_game_day
-    cache_or_uncached_fixture_stats_by_game_day
+  def fixture_stats
+    cache_or_uncached_fixture_stats
   end
 
   private
@@ -14,7 +14,7 @@ class RoundDecorator < SimpleDelegator
             .group_by { |fixture| Time.zone.at(fixture.kickoff_time).strftime('%A %-d %B %Y') }
   end
 
-  def cache_or_uncached_fixture_stats_by_game_day
+  def cache_or_uncached_fixture_stats
     if is_current && !data_checked
       fixture_hash_by_game_day
     else
