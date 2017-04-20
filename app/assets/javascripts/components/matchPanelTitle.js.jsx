@@ -4,7 +4,6 @@ var MatchPanelTitle = React.createClass({
     var fixture = this.props.match.fixture;
     var homeTeamShortName = this.props.match.home_team.short_name;
     var awayTeamShortName = this.props.match.away_team.short_name;
-    var imgSrc = '/assets/badges-sprite.jpeg';
     var matchScore = function () {
       if (fixture.started) {
         return (fixture.team_h_score + ' - ' + fixture.team_a_score);
@@ -16,9 +15,9 @@ var MatchPanelTitle = React.createClass({
     return (
       <div>
         <span>{homeTeamShortName} </span>
-        <img className={homeTeamShortName.toLowerCase()} src={imgSrc}/>
+        { imageTag('badges-sprite', { className: homeTeamShortName.toLowerCase() }) }
         <span> {matchScore()} </span>
-        <img className={awayTeamShortName.toLowerCase()} src={imgSrc}/>
+        { imageTag('badges-sprite', { className: awayTeamShortName.toLowerCase() }) }
         <span> {awayTeamShortName}</span>
       </div>
     );
