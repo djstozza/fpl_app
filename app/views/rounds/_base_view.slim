@@ -1,5 +1,6 @@
 = react_component 'Rounds',
-                  { rounds: @rounds.sort, round: @round_decorator,  fixtures: @round_decorator.fixture_stats }
+                  { rounds: @rounds.sort, round: @round_decorator,  fixtures: @round_decorator.fixture_stats },
+                  { prerender: true }
 
 .container:  .row: .col-md-12
     #team-ladder-accordion.panel-group.data-group aria-multiselectable='true' role='tablist'
