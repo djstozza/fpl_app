@@ -30,6 +30,6 @@
 #  form                  :string
 #
 
-class Team < ActiveRecord::Base
+class Team < ApplicationRecord
   has_many :players
 end

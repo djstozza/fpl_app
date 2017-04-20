@@ -38,7 +38,7 @@ class Datatable
           @records.page(page).per_page(per_page)
         else
           range_start = (page - 1) * per_page
-          @records.slice(range_start..range_start + per_page - 1)
+          @records.to_a.slice(range_start..range_start + per_page - 1)
         end
       else
         @records

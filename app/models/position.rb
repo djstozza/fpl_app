@@ -11,6 +11,6 @@
 #  updated_at          :datetime         not null
 #
 
-class Position < ActiveRecord::Base
+class Position < ApplicationRecord
   has_many :players
 end

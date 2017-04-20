@@ -4,7 +4,6 @@
 #
 #  id                        :integer          not null, primary key
 #  name                      :string
-#  deadline_time             :string
 #  finished                  :boolean
 #  data_checked              :boolean
 #  deadline_time_epoch       :integer
@@ -14,9 +13,10 @@
 #  is_next                   :boolean
 #  created_at                :datetime         not null
 #  updated_at                :datetime         not null
+#  deadline_time             :datetime
 #
 
-class Round < ActiveRecord::Base
+class Round < ApplicationRecord
   has_many :fixtures
   has_many :player_fixture_histories
 

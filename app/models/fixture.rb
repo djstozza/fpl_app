@@ -3,8 +3,8 @@
 # Table name: fixtures
 #
 #  id                     :integer          not null, primary key
-#  kickoff_time           :string
-#  deadline_time          :string
+#  kickoff_time           :datetime
+#  deadline_time          :datetime
 #  team_h_difficulty      :integer
 #  team_a_difficulty      :integer
 #  code                   :integer
@@ -21,9 +21,10 @@
 #  round_day              :integer
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
+#  stats                  :json
 #
 
-class Fixture < ActiveRecord::Base
+class Fixture < ApplicationRecord
   belongs_to :round
   belongs_to :team
   validates :round_id, presence: true

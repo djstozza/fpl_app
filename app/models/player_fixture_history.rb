@@ -51,7 +51,7 @@
 #  updated_at                      :datetime         not null
 #
 
-class PlayerFixtureHistory < ActiveRecord::Base
+class PlayerFixtureHistory < ApplicationRecord
   belongs_to :player
   belongs_to :round
   belongs_to :fixture

@@ -31,6 +31,6 @@
 #  updated_at       :datetime         not null
 #
 
-class PlayerPastHistory < ActiveRecord::Base
+class PlayerPastHistory < ApplicationRecord
   belongs_to :player
 end
