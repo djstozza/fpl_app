@@ -7,14 +7,13 @@ class RecurringPlayerFixtureHistoriesWorker
   sidekiq_options retry: 2
 
   def perform
-    round_id = Round.current.id
     Player.all.each do |player|
-      pfh = HTTParty.get("https://fantasy.premierleague.com/drf/element-summary/#{player.id}")['history']
-                    .find { |pfh| pfh['round'] == round_id && pfh['minutes'] > 0 }
-      next unless pfh
+      pfhs = HTTParty.get("https://fantasy.premierleague.com/drf/element-summary/#{player.id}")['history']
+                     .select { |pfh| pfh['minutes'] > 0 }
+      next unless pfhs
 
       player_stats_arr.each do |stat|
-        player.update(stat =>  pfh.inject(0) { |sum, fix_hist| sum + fix_hist[stat] })
+        player.update(stat =>  pfhs.inject(0) { |sum, pfh| sum + pfh[stat] })
       end
     end
   end
