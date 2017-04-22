@@ -22,13 +22,13 @@ class RoundDecorator < SimpleDelegator
     end
   end
 
-  def base_fixture_hash(fixture_decorator)
+  def base_fixture_hash(fixture)
     {
-      fixture: fixture_decorator,
-      kickoff_time: Time.zone.at(fixture_decorator.kickoff_time).strftime('%H:%M'),
-      home_team: fixture_decorator.home_team,
-      away_team: fixture_decorator.away_team,
-      stats: fixture_decorator.stats
+      fixture: fixture,
+      kickoff_time: Time.zone.at(fixture.kickoff_time).strftime('%H:%M'),
+      home_team: fixture.home_team,
+      away_team: fixture.away_team,
+      stats: fixture.stats
     }
   end
 
@@ -38,7 +38,7 @@ class RoundDecorator < SimpleDelegator
       round: self,
       fixtures: fixtures.sort_by(&:kickoff_time)
                         .map do |fixture|
-          base_fixture_hash(FixtureDecorator.new(fixture))
+          base_fixture_hash(fixture)
       end
     }
   end
@@ -49,7 +49,7 @@ class RoundDecorator < SimpleDelegator
         {
           game_day: fixture_group[0],
           fixtures: fixture_group[1].map do |fixture|
-            base_fixture_hash(FixtureDecorator.new(fixture))
+            base_fixture_hash(fixture)
           end
         }
       end

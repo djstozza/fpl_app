@@ -26,7 +26,8 @@
 
 class Fixture < ApplicationRecord
   belongs_to :round
-  belongs_to :team
+  belongs_to :home_team, class_name: 'Team', foreign_key: :team_h_id
+  belongs_to :away_team, class_name: 'Team', foreign_key: :team_a_id
   validates :round_id, presence: true
 
   scope :active, -> { where(started: true).where(finished: false) }
