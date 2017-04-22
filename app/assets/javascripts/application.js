@@ -12,6 +12,7 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require jquery-cookie
 //= require datatables
 //= require bootstrap-sprockets
 //= require jstz

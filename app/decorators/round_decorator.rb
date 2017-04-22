@@ -32,17 +32,6 @@ class RoundDecorator < SimpleDelegator
     }
   end
 
-
-  def fixture_hash
-    {
-      round: self,
-      fixtures: fixtures.sort_by(&:kickoff_time)
-                        .map do |fixture|
-          base_fixture_hash(fixture)
-      end
-    }
-  end
-
   def fixture_hash_by_game_day
     {
       fixture_groups: fixture_arr.map do |fixture_group|
