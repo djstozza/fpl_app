@@ -80,8 +80,6 @@
 class Player < ApplicationRecord
   belongs_to :position
   belongs_to :team
-  has_many :player_fixture_histories
-  has_many :player_past_histories, primary_key: 'code', foreign_key: 'player_code'
 
   scope :position, -> { Position.find_by(id: position_id)  }
 

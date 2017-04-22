@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170421234734) do
+ActiveRecord::Schema.define(version: 20170422040359) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -37,84 +37,6 @@ ActiveRecord::Schema.define(version: 20170421234734) do
     t.integer  "team_a_id"
     t.index ["team_a_id"], name: "index_fixtures_on_team_a_id", using: :btree
     t.index ["team_h_id"], name: "index_fixtures_on_team_h_id", using: :btree
-  end
-
-  create_table "player_fixture_histories", force: :cascade do |t|
-    t.string   "kickoff_time"
-    t.integer  "team_h_score"
-    t.integer  "team_a_score"
-    t.boolean  "was_home"
-    t.integer  "round_id"
-    t.integer  "total_points"
-    t.integer  "value"
-    t.integer  "minutes"
-    t.integer  "goals_scored"
-    t.integer  "assists"
-    t.integer  "clean_sheets"
-    t.integer  "goals_conceded"
-    t.integer  "own_goals"
-    t.integer  "penalties_saved"
-    t.integer  "penalties_missed"
-    t.integer  "yellow_cards"
-    t.integer  "red_cards"
-    t.integer  "saves"
-    t.integer  "bonus"
-    t.integer  "influence"
-    t.decimal  "creativity"
-    t.decimal  "threat"
-    t.decimal  "ict_index"
-    t.decimal  "ea_index"
-    t.integer  "open_play_crosses"
-    t.integer  "big_chances_created"
-    t.integer  "clearances_blocks_interceptions"
-    t.integer  "recoveries"
-    t.integer  "key_passes"
-    t.integer  "tackles"
-    t.integer  "winning_goals"
-    t.integer  "attempted_passes"
-    t.integer  "penalties_conceded"
-    t.integer  "big_chances_missed"
-    t.integer  "errors_leading_to_goal"
-    t.integer  "errors_leading_to_goal_attempt"
-    t.integer  "tackled"
-    t.integer  "offside"
-    t.integer  "target_missed"
-    t.integer  "fouls"
-    t.integer  "dribbles"
-    t.integer  "player_id"
-    t.integer  "fixture_id"
-    t.integer  "opponent_team_id"
-    t.datetime "created_at",                      null: false
-    t.datetime "updated_at",                      null: false
-  end
-
-  create_table "player_past_histories", force: :cascade do |t|
-    t.string   "season_name"
-    t.integer  "player_code"
-    t.integer  "start_cost"
-    t.integer  "end_cost"
-    t.integer  "total_points"
-    t.integer  "minutes"
-    t.integer  "goals_scored"
-    t.integer  "assists"
-    t.integer  "clean_sheets"
-    t.integer  "goals_conceded"
-    t.integer  "own_goals"
-    t.integer  "penalties_saved"
-    t.integer  "penalties_missed"
-    t.integer  "yellow_cards"
-    t.integer  "red_cards"
-    t.integer  "saves"
-    t.integer  "bonus"
-    t.integer  "bps"
-    t.decimal  "influence"
-    t.decimal  "creativity"
-    t.decimal  "threat"
-    t.decimal  "ict_index"
-    t.integer  "ea_index"
-    t.integer  "season"
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
   end
 
   create_table "players", force: :cascade do |t|
