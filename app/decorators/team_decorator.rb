@@ -1,23 +1,15 @@
 class TeamDecorator < SimpleDelegator
 
   def fixtures
-    Fixture.where('team_a_id = :id OR team_h_id = :id', id: id)
-  end
-
-  def home_fixtures
-    Fixture.where(team_h_id: id).order(round_id: :asc)
-  end
-
-  def away_fixtures
-    Fixture.where(team_a_id: id).order(round_id: :asc)
+    home_fixtures.or(away_fixtures).order(:round_id)
   end
 
   def goals(team_status_1, team_status_2)
     goals = 0
-    home_fixtures.where(finished: true).each do |fixture|
+    home_fixtures.finished.each do |fixture|
       goals += fixture.public_send("#{team_status_1}_score")
     end
-    away_fixtures.where(finished: true).each do |fixture|
+    away_fixtures.finished.each do |fixture|
       goals += fixture.public_send("#{team_status_2}_score")
     end
     goals
@@ -138,10 +130,10 @@ class TeamDecorator < SimpleDelegator
 
   def goal_calculator(team_status_1, team_status_2)
     goals = 0
-    home_fixtures.where(finished: true).each do |fixture|
+    home_fixtures.finished.each do |fixture|
       goals += fixture.public_send("#{team_status_1}_score")
     end
-    away_fixtures.where(finished: true).each do |fixture|
+    away_fixtures.finished.each do |fixture|
       goals += fixture.public_send("#{team_status_2}_score")
     end
     goals
@@ -156,7 +148,7 @@ class TeamDecorator < SimpleDelegator
 
   def results_array
     result_arr = []
-    fixtures.where(finished: true).order(:round_id).each do |fixture|
+    fixtures.finished.order(:round_id).each do |fixture|
       if fixtures_won.include?(fixture)
         result_arr << 'W'
       elsif fixtures_lost.include?(fixture)

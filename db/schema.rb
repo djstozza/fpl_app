@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170418140126) do
+ActiveRecord::Schema.define(version: 20170421234734) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,8 +25,6 @@ ActiveRecord::Schema.define(version: 20170418140126) do
     t.integer  "team_a_score"
     t.integer  "round_id"
     t.integer  "minutes"
-    t.integer  "team_a_id"
-    t.integer  "team_h_id"
     t.boolean  "started"
     t.boolean  "finished"
     t.boolean  "provisional_start_time"
@@ -35,6 +33,10 @@ ActiveRecord::Schema.define(version: 20170418140126) do
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
     t.json     "stats"
+    t.integer  "team_h_id"
+    t.integer  "team_a_id"
+    t.index ["team_a_id"], name: "index_fixtures_on_team_a_id", using: :btree
+    t.index ["team_h_id"], name: "index_fixtures_on_team_h_id", using: :btree
   end
 
   create_table "player_fixture_histories", force: :cascade do |t|
@@ -201,6 +203,7 @@ ActiveRecord::Schema.define(version: 20170418140126) do
 
   create_table "rounds", force: :cascade do |t|
     t.string   "name"
+    t.datetime "deadline_time"
     t.boolean  "finished"
     t.boolean  "data_checked"
     t.integer  "deadline_time_epoch"
@@ -210,7 +213,6 @@ ActiveRecord::Schema.define(version: 20170418140126) do
     t.boolean  "is_next"
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
-    t.datetime "deadline_time"
   end
 
   create_table "teams", force: :cascade do |t|
@@ -220,6 +222,7 @@ ActiveRecord::Schema.define(version: 20170418140126) do
     t.integer  "strength"
     t.integer  "position"
     t.integer  "played"
+    t.integer  "points"
     t.integer  "link_url"
     t.integer  "strength_overall_home"
     t.integer  "strength_overall_away"
@@ -237,8 +240,9 @@ ActiveRecord::Schema.define(version: 20170418140126) do
     t.integer  "wins"
     t.integer  "losses"
     t.integer  "draws"
-    t.integer  "points"
     t.string   "form"
   end
 
+  add_foreign_key "fixtures", "teams", column: "team_a_id"
+  add_foreign_key "fixtures", "teams", column: "team_h_id"
 end

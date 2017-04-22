@@ -32,4 +32,6 @@
 
 class Team < ApplicationRecord
   has_many :players
+  has_many :home_fixtures, class_name: 'Fixture', foreign_key: :team_h_id
+  has_many :away_fixtures, class_name: 'Fixture', foreign_key: :team_a_id
 end
