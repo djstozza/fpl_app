@@ -13,23 +13,7 @@ class AddScoringColumnsToTeams < ActiveRecord::Migration
     remove_column :teams, :form, :decimal
     add_column :teams, :form, :string
 
-    Team.all.each do |team|
-      team_decorator = TeamDecorator.new(team)
-      team.update(wins: team_decorator.fixtures_won.count,
-                  losses: team_decorator.fixtures_lost.count,
-                  draws: team_decorator.fixtures_drawn.count,
-                  clean_sheets: team_decorator.clean_sheet_fixtures.count,
-                  goals_for: team_decorator.goal_calculator('team_h', 'team_a'),
-                  goals_against: team_decorator.goal_calculator('team_a', 'team_h'),
-                  goal_difference: (team_decorator.goals_for - team_decorator.goals_against),
-                  points: (team_decorator.fixtures_won.count * 3 + team_decorator.fixtures_drawn.count),
-                  played: team_decorator.fixtures.where(finished: true).count,
-                  form: team_decorator.current_form)
-    end
-
-    Team.all.each do |team|
-      team.update(position: (Team.ladder.index(team) + 1))
-    end
+    TeamsService.new.update_team_stats
   end
 
   def down

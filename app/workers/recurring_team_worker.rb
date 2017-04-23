@@ -9,6 +9,8 @@ class RecurringTeamWorker
   sidekiq_options retry: 2
 
   def perform
-    Rake::Task['data_seeding:populate_teams'].invoke
+    teams_service = TeamsService.new
+    teams_service.update_teams
+    teams_service.update_team_stats
   end
 end
