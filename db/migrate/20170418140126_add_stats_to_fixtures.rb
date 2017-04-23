@@ -3,7 +3,7 @@ class AddStatsToFixtures < ActiveRecord::Migration
     reversible do |dir|
       dir.up do
         add_column :fixtures, :stats, :json
-        Rake::Task['data_seeding:populate_fixture_stats'].invoke
+        FixturesService.new.update_fixtures
       end
 
       dir.down do

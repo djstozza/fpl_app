@@ -16,6 +16,6 @@ class AddTeamReferencesToFixtures < ActiveRecord::Migration[5.0]
       end
     end
 
-    Rake::Task['data_seeding:populate_fixtures'].invoke
+    FixturesService.new.update_fixtures
   end
 end

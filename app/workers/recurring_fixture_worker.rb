@@ -9,7 +9,6 @@ class RecurringFixtureWorker
   sidekiq_options retry: 2
 
   def perform
-    Rake::Task['data_seeding:populate_fixtures'].invoke
-    Rake::Task['data_seeding:populate_fixture_stats'].invoke
+    FixturesService.new.update_fixtures
   end
 end
