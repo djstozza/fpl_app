@@ -80,7 +80,7 @@
 class Player < ApplicationRecord
   belongs_to :position
   belongs_to :team
-
+  has_and_belongs_to_many :fpl_teams
   scope :position, -> { Position.find_by(id: position_id)  }
 
   def name
