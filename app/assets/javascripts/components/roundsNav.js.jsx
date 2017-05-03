@@ -1,13 +1,13 @@
-var RoundsNav = React.createClass({
-  selectRoundClick: function (roundTabClass, roundId) {
+class RoundsNav extends React.Component {
+  selectRoundClick (roundTabClass, roundId) {
     document.querySelector('li.active').classList.remove('active');
     document.querySelector('li.' + roundTabClass).classList.add('active');
     this.centerItVariableWidth('li.active', '.js-scrollable-nav');
     this.dataSource(roundId);
-  },
+  }
 
   // Adapted from https://gist.github.com/tim-reynolds/3019761
-  centerItVariableWidth: function (target, outer){
+  centerItVariableWidth (target, outer) {
     var out = document.querySelector(outer);
     var tar = document.querySelector(target);
     var x = out.clientWidth;
@@ -20,17 +20,17 @@ var RoundsNav = React.createClass({
       q += this.outerWidth(m[i]);
     }
     out.scrollLeft = (Math.max(0, q - (x - y)/2));
-  },
+  }
 
-  outerWidth: function (el) {
+  outerWidth (el) {
     var width = el.offsetWidth;
     var style = getComputedStyle(el);
 
     width += parseInt(style.marginLeft) + parseInt(style.marginRight);
     return width;
-  },
+  }
 
-  indexInParent: function (node) {
+  indexInParent (node) {
     var children = node.parentNode.childNodes;
     var num = 0;
     for (var i=0; i < children.length; i++) {
@@ -38,18 +38,17 @@ var RoundsNav = React.createClass({
       if (children[i].nodeType == 1) num++;
     }
     return -1;
-  },
+  }
 
-  dataSource: function (roundId) {
+  dataSource (roundId) {
     this.props.onChange(roundId);
-  },
+  }
 
-  componentDidMount: function () {
+  componentDidMount () {
     this.centerItVariableWidth('li.active', '.js-scrollable-nav');
-  },
+  }
 
-
-  render: function () {
+  render () {
     var self = this;
     var roundId = this.props.round.id;
     var roundList = this.props.rounds.map(function (round) {
@@ -82,4 +81,4 @@ var RoundsNav = React.createClass({
       </div>
     )
   }
-});
+}

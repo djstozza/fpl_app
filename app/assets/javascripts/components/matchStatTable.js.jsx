@@ -1,5 +1,5 @@
-var MatchStatTable = React.createClass({
-  matchStats: function () {
+class MatchStatTable extends React.Component {
+  matchStats () {
     var self = this;
     matchStats = this.props.match.stats;
     return (
@@ -13,9 +13,9 @@ var MatchStatTable = React.createClass({
         )
       })
     );
-  },
+  }
 
-  statEntries: function(statEntry) {
+  statEntries (statEntry) {
     return [
       <td>
         {
@@ -36,9 +36,9 @@ var MatchStatTable = React.createClass({
         )}
       </td>
     ]
-  },
+  }
 
-  render: function () {
+  render () {
     var self = this;
     var fixture = this.props.match.fixture;
     var fixtureId = fixture.id;
@@ -66,4 +66,4 @@ var MatchStatTable = React.createClass({
       </div>
     )
   }
-});
+}

@@ -1,5 +1,5 @@
-var Round = React.createClass({
-  render: function () {
+class Round extends React.Component {
+  render () {
     return (
       <div className='container'>
         <div className='row'>
@@ -10,4 +10,4 @@ var Round = React.createClass({
       </div>
     );
   }
-});
+}

@@ -1,5 +1,5 @@
-var FixtureGroups = React.createClass({
-  render: function () {
+class FixtureGroups extends React.Component {
+  render () {
     var self = this;
     return (
       <div>
@@ -13,4 +13,4 @@ var FixtureGroups = React.createClass({
       </div>
     );
   }
-});
+}

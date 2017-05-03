@@ -1,5 +1,5 @@
-var MatchPanelTitle = React.createClass({
-  matchPanelTitleText: function () {
+class  MatchPanelTitle extends React.Component {
+  matchPanelTitleText () {
     var self = this;
     var fixture = this.props.match.fixture;
     var homeTeamShortName = this.props.match.home_team.short_name;
@@ -22,9 +22,9 @@ var MatchPanelTitle = React.createClass({
         <span> {awayTeamShortName}</span>
       </div>
     );
-  },
+  }
 
-  render: function () {
+  render () {
     var fixtureId = this.props.match.fixture.id;
     if (this.props.match.fixture.started) {
       return (
@@ -39,4 +39,4 @@ var MatchPanelTitle = React.createClass({
       );
     }
   }
-});
+}
