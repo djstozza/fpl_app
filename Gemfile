@@ -5,6 +5,7 @@ gem 'puma'
 gem 'rails_12factor', group: :production
 gem 'heroku-deflater', group: :production
 gem 'devise'
+gem 'webpacker'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '>= 5.0.0.rc2', '< 5.1'
 # Use postgresql as the database for Active Record

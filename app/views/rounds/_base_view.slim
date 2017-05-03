@@ -1,27 +1,28 @@
-= react_component 'Rounds',
-                  { rounds: @rounds.sort, round: @round_decorator,  fixtures: @round_decorator.fixture_stats },
-                  { prerender: true }
+/ = react_component 'Rounds',
+/                   { rounds: @rounds.sort, round: @round_decorator,  fixtures: @round_decorator.fixture_stats },
+/                   { prerender: true }
 
-.container:  .row: .col-md-12
-    #team-ladder-accordion.panel-group.data-group aria-multiselectable='true' role='tablist'
-      .panel
-        #team-ladder-heading.panel-heading role='tab'
-          a aria-controls="team-ladder-collapse" aria-expanded='false' data-parent='#team-ladder-heading' data-toggle=\
-            'collapse' href="#team-ladder-collapse" role='button'
-            h4 Ladder
-        #team-ladder-collapse.panel-collapse.collapse aria-labelledby="team-ladder-heading" role='tabpanel'
-          = render partial: 'shared/datatable',
-                           locals: { table_id: 'team-ladder',
-                                     data_source_url: team_ladder_datatable_teams_url(format: 'json'),
-                                     columns: { 'Position' => 'sorting sorting-default-asc',
-                                                'Name' => 'sorting',
-                                                'Matches' => '',
-                                                'Wins' => 'sorting',
-                                                'Losses' => 'sorting',
-                                                'Draws' => 'sorting',
-                                                'Form' => '',
-                                                'Clean Sheets' => 'sorting',
-                                                'For' => 'sorting',
-                                                'Aagainst' => 'sorting',
-                                                'Goal Difference' => 'sorting',
-                                                'Points' => 'sorting' } }
+/ .container:  .row: .col-md-12
+/     #team-ladder-accordion.panel-group.data-group aria-multiselectable='true' role='tablist'
+/       .panel
+/         #team-ladder-heading.panel-heading role='tab'
+/           a aria-controls="team-ladder-collapse" aria-expanded='false' data-parent='#team-ladder-heading' data-toggle=\
+/             'collapse' href="#team-ladder-collapse" role='button'
+/             h4 Ladder
+/         #team-ladder-collapse.panel-collapse.collapse aria-labelledby="team-ladder-heading" role='tabpanel'
+/           = render partial: 'shared/datatable',
+/                            locals: { table_id: 'team-ladder',
+/                                      data_source_url: team_ladder_datatable_teams_url(format: 'json'),
+/                                      columns: { 'Position' => 'sorting sorting-default-asc',
+/                                                 'Name' => 'sorting',
+/                                                 'Matches' => '',
+/                                                 'Wins' => 'sorting',
+/                                                 'Losses' => 'sorting',
+/                                                 'Draws' => 'sorting',
+/                                                 'Form' => '',
+/                                                 'Clean Sheets' => 'sorting',
+/                                                 'For' => 'sorting',
+/                                                 'Aagainst' => 'sorting',
+/                                                 'Goal Difference' => 'sorting',
+/                                                 'Points' => 'sorting' } }
+= javascript_pack_tag 'rounds'

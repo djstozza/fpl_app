@@ -12,3 +12,5 @@
 !/log/.keep
 /tmp
 config/application.yml
+/public/packs
+/node_modules

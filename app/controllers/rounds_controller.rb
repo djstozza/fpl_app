@@ -6,6 +6,10 @@ class RoundsController < ApplicationController
   # GET /rounds.json
   def index
     @round_decorator = RoundDecorator.new(Round.find_by(is_current: true))
+    respond_to do |format|
+      format.html
+      format.json { render json: { round: @round_decorator, fixtures: @round_decorator.fixture_stats, rounds: @rounds.sort } }
+    end
   end
 
   # GET /rounds/1

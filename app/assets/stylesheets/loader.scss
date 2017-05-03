@@ -1,0 +1,15 @@
+.loader {
+  background-image: image-url("soccer-ball.jpg");
+  width: 400px;
+  height: 400px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  margin: auto;
+  text-align: center;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
