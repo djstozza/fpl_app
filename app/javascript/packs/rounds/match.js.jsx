@@ -1,4 +1,8 @@
-class Match extends React.Component {
+import React from 'react';
+import MatchPanelTitle from './match_panel_title.js.jsx';
+import MatchStatTable from './match_stat_table.js.jsx';
+
+export default class Match extends React.Component {
   matchTable () {
     var fixture = this.props.match.fixture;
     if (fixture.started) {

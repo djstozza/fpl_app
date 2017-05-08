@@ -1,4 +1,7 @@
-class Round extends React.Component {
+import React from 'react';
+import FixtureGroups from './fixture_groups.js.jsx';
+
+export default class Round extends React.Component {
   render () {
     return (
       <div className='container'>

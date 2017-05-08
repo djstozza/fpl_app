@@ -1,4 +1,6 @@
-class  MatchPanelTitle extends React.Component {
+import React from 'react';
+
+export default class  MatchPanelTitle extends React.Component {
   matchPanelTitleText () {
     var self = this;
     var fixture = this.props.match.fixture;

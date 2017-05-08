@@ -1,4 +1,7 @@
-class FixtureGroups extends React.Component {
+import React from 'react'
+import FixtureGroup from './fixture_group.js.jsx';
+
+export default class FixtureGroups extends React.Component {
   render () {
     var self = this;
     return (

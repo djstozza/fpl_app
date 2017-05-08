@@ -1,7 +1,9 @@
-class MatchStatTable extends React.Component {
+import React from 'react';
+
+export default class MatchStatTable extends React.Component {
   matchStats () {
     var self = this;
-    matchStats = this.props.match.stats;
+    var matchStats = this.props.match.stats;
     return (
       Object.keys(matchStats).map(function (key) {
         return(

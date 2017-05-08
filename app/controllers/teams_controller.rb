@@ -7,7 +7,13 @@ class TeamsController < ApplicationController
   end
 
   def team_ladder_datatable
-    render_datatable_json(TeamsDatatable)
+    respond_to do |format|
+      format.json do
+        render json: Team.all
+                         .order(:position)
+                         .each { |team| TeamDecorator.new(team) }
+      end
+    end
   end
 
   def team_player_datatable
@@ -15,7 +21,11 @@ class TeamsController < ApplicationController
   end
 
   def team_fixture_datatable
-    render_datatable_json(TeamFixturesDatatable, @team_decorator)
+    respond_to do |format|
+      format.json do
+        render json: { team: @team_decorator, fixtures: @team_decorator.fixture_hash }
+      end
+    end
   end
 
   private

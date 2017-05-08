@@ -1,4 +1,6 @@
-class RoundsNav extends React.Component {
+import React from 'react';
+
+export default class RoundsNav extends React.Component {
   selectRoundClick (roundTabClass, roundId) {
     document.querySelector('li.active').classList.remove('active');
     document.querySelector('li.' + roundTabClass).classList.add('active');

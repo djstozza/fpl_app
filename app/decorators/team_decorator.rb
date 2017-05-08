@@ -1,4 +1,5 @@
 class TeamDecorator < SimpleDelegator
+  include ::ActionView::Helpers::TagHelper
 
   def fixtures
     home_fixtures.or(away_fixtures).order(:round_id)
@@ -139,6 +140,27 @@ class TeamDecorator < SimpleDelegator
     goals
   end
 
+  def fixture_hash
+    arr = []
+    fixtures.each do |fixture|
+      home_fixture = home_fixtures.include?(fixture)
+      opponent = home_fixture ? fixture.away_team : fixture.home_team
+      advantage = advantage(fixture, home_fixture)
+      arr << {
+        round_id: fixture.round_id,
+        kickoff_time: fixture.kickoff_time.strftime('%d/%m/%y %H:%M'),
+        opponent_id: opponent.id,
+        opponent_short_name: opponent.short_name,
+        leg: home_fixture ? 'H' : 'A',
+        result: win_loss_or_draw(fixture),
+        score: "#{fixture.team_h_score} - #{fixture.team_a_score}",
+        advantage: advantage,
+        fixture_advantage: fixture_advantage(advantage)
+      }
+    end
+    arr
+  end
+
 
   private
 
@@ -160,7 +182,40 @@ class TeamDecorator < SimpleDelegator
     result_arr
   end
 
+  def win_loss_or_draw(fixture)
+    if fixtures_won.include?(fixture)
+      'W'
+    elsif fixtures_lost.include?(fixture)
+      'L'
+    elsif fixtures_drawn.include?(fixture)
+      'D'
+    else
+      '-'
+    end
+  end
+
+  def advantage(fixture, home_fixture)
+    if home_fixture
+      fixture.team_a_difficulty - fixture.team_h_difficulty
+     else
+       fixture.team_h_difficulty - fixture.team_a_difficulty
+     end
+  end
+
+  def fixture_advantage(advantage)
+    advantage_type = if advantage < 0
+                       'o'
+                     elsif advantage == 0
+                       'e'
+                     else
+                       't'
+                     end
+    "difficulty-#{advantage_type}#{advantage.abs unless advantage == 0}"
+  end
+
   def ladder
-    Team.all.sort { |a, b| [b.points, b.goal_difference] <=> [a.points, a.goal_difference] }
+    Team.all.sort do |a, b|
+      [b.points, b.goal_difference] <=> [a.points, a.goal_difference]
+    end
   end
 end

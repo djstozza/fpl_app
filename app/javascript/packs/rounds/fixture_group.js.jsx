@@ -1,4 +1,7 @@
-class FixtureGroup extends React.Component {
+import React from 'react'
+import Match from './match.js.jsx';
+
+export default class FixtureGroup extends React.Component {
   matches () {
     var self = this;
     return (

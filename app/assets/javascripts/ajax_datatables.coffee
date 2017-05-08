@@ -15,14 +15,14 @@ jQuery ->
   # Specific settings for each Datatable. The columns and default order are read from the markup, so vanilla Datatables
   # don't need any extra configuration.
   containerIdToSettings =
-    'team-ladder': {
-      paginate: false
-      bInfo: false
-      filter: false
-      fnRowCallback: (row) ->
-        if $(row).text().includes(window.fplVars.team_short_name)
-          $(row).addClass('selected-row')
-    }
+    # 'team-ladder': {
+    #   paginate: false
+    #   bInfo: false
+    #   filter: false
+    #   fnRowCallback: (row) ->
+    #     if $(row).text().includes(window.fplVars.team_short_name)
+    #       $(row).addClass('selected-row')
+    # }
 
     'team-players-forwards': {
       paginate: false
@@ -48,16 +48,16 @@ jQuery ->
       filter: false
     }
 
-    'team-fixture': {
-      paginate: false
-      bInfo: false
-      filter: false
-      fnRowCallback: (row) ->
-        $teamAdvantage = $(row).find('td .js-team-advantage')
-        $teamAdvantage.parent().addClass($teamAdvantage.attr('class'))
-        $teamDifficulty = $(row).find('td .js-opponent-difficulty')
-        $teamDifficulty.parent().addClass($teamDifficulty.attr('class'))
-    }
+    # 'team-fixture': {
+    #   paginate: false
+    #   bInfo: false
+    #   filter: false
+    #   fnRowCallback: (row) ->
+    #     $teamAdvantage = $(row).find('td .js-team-advantage')
+    #     $teamAdvantage.parent().addClass($teamAdvantage.attr('class'))
+    #     $teamDifficulty = $(row).find('td .js-opponent-difficulty')
+    #     $teamDifficulty.parent().addClass($teamDifficulty.attr('class'))
+    # }
 
     'player-dreamteam': {
       paginate: false

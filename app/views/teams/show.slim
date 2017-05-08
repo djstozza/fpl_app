@@ -44,29 +44,29 @@
             h4 Fixtures
         #team-fixture-collapse.panel-collapse.collapse aria-labelledby="team-fixture-heading" role='tabpanel'
           table.table.table-bordered.table-striped.difficulty-advantage-key
-            tr
-              td colspan=4
-                b.pull-left Team Advantage
-              td.even-advantage-td
-              td colspan=4
-                b.pull-right Opponent Advantage
-            tr
-              - (1..4).to_a.reverse.each do |i|
-                td class="difficulty-t#{i}"
-              td.difficulty-e
-              - (1..4).to_a.each do |i|
-                td class="difficulty-o#{i}"
-
-          = render partial: 'shared/datatable',
-                            locals: { table_id: 'team-fixture',
-                                      data_source_url: team_fixture_datatable_teams_url(format: 'json', id: @team_decorator.id),
-                                      columns: { 'Round' => 'sorting sorting-default-asc',
-                                                 'Kickoff Time' => 'sorting',
-                                                 'Opponent' => '',
-                                                 'Home / Away' => '',
-                                                 'Result' => '',
-                                                 'Score' => '',
-                                                 'Advantage' => '' } }
+            / tr
+            /   td colspan=4
+            /     b.pull-left Team Advantage
+            /   td.even-advantage-td
+            /   td colspan=4
+            /     b.pull-right Opponent Advantage
+            / tr
+            /   - (1..4).to_a.reverse.each do |i|
+            /     td class="difficulty-t#{i}"
+            /   td.difficulty-e
+            /   - (1..4).to_a.each do |i|
+            /     td class="difficulty-o#{i}"
+            #team-fixture
+          / = render partial: 'shared/datatable',
+          /                   locals: { table_id: 'team-fixture',
+          /                             data_source_url: team_fixture_datatable_teams_url(format: 'json', id: @team_decorator.id),
+          /                             columns: { 'Round' => 'sorting sorting-default-asc',
+          /                                        'Kickoff Time' => 'sorting',
+          /                                        'Opponent' => '',
+          /                                        'Home / Away' => '',
+          /                                        'Result' => '',
+          /                                        'Score' => '',
+          /                                        'Advantage' => '' } }
 
   .row: .col-md-12
     #team-ladder-accordion.panel-group.data-group aria-multiselectable='true' role='tablist'
@@ -76,22 +76,9 @@
             'collapse' href="#team-ladder-collapse" role='button'
             h4 Ladder
         #team-ladder-collapse.panel-collapse.collapse aria-labelledby="team-ladder-heading" role='tabpanel'
-          = render partial: 'shared/datatable',
-                           locals: { table_id: 'team-ladder',
-                                     data_source_url: team_ladder_datatable_teams_url(format: 'json'),
-                                     columns: { 'Position' => 'sorting sorting-default-asc',
-                                                'Name' => 'sorting',
-                                                'Matches' => '',
-                                                'Wins' => 'sorting',
-                                                'Losses' => 'sorting',
-                                                'Draws' => 'sorting',
-                                                'Form' => '',
-                                                'Clean Sheets' => 'sorting',
-                                                'For' => 'sorting',
-                                                'Aagainst' => 'sorting',
-                                                'Goal Difference' => 'sorting',
-                                                'Points' => 'sorting' } }
+          #team-ladder
 
 = content_for :inline_javascript_vars do
   javascript:
+    window.fplVars.team_id = "#{@team_decorator.id}"
     window.fplVars.team_short_name = "#{@team_decorator.short_name}"

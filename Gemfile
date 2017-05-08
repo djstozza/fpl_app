@@ -39,7 +39,6 @@ gem 'jquery-datatables'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
-gem 'react-rails'
 gem 'sidekiq'
 gem 'sidekiq-scheduler'
 gem 'rufus-scheduler', '3.2.2'

@@ -1,22 +1,20 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import axios from 'axios';
+import RoundsNav from './roundsNav.js.jsx';
+import Round from './round.js.jsx';
 
 class Rounds extends  React.Component {
-  constructor () {
-    super()
+  constructor (props) {
+    super(props)
+    this.state = {
+      rounds: props.rounds,
+      fixtures: props.fixtures,
+      round: props.round
+    }
     this.dataSource = this.dataSource.bind(this)
   }
 
-  componentWillMount () {
-    axios.get('/rounds.json').then(res => {
-      this.setState({
-        rounds: res.data.rounds,
-        fixtures: res.data.fixtures,
-        round: res.data.round
-      });
-    });
-  }
 
   dataSource (roundId) {
     var roundId = roundId || this.state.round.id;
@@ -43,22 +41,32 @@ class Rounds extends  React.Component {
   }
 
   render () {
-    if (this.state == null) {
-      return (
-        <div className='loader'/>
-      )
-    } else {
     return (
       <div className='container'>
         < RoundsNav rounds={this.state.rounds} round={this.state.round} onChange={this.dataSource}/>
         < Round round={this.state.round} fixtures={this.state.fixtures} />
       </div>
-    )}
+    )
   }
 }
 
 
-ReactDOM.render(
-  <Rounds />,
-  document.body.appendChild(document.createElement('div')),
-)
+axios.get('/rounds.json').then(res => {
+  Rounds.defaultProps = {
+    rounds: res.data.rounds,
+    fixtures: res.data.fixtures,
+    round: res.data.round
+  }
+
+  Rounds.propTypes = {
+    rounds: React.PropTypes.array,
+    fixtures: React.PropTypes.object,
+    round: React.PropTypes.object
+  }
+  if (document.getElementById('rounds')) {
+    ReactDOM.render(
+      <Rounds />,
+      document.getElementById('rounds')
+    )
+  }
+});
