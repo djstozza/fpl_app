@@ -3,7 +3,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
-import {Table, Column, Cell} from 'fixed-data-table';
+import {Table, Column, Cell} from 'fixed-data-table-2';
 import DataListWrapper from './common/data_list_wrapper.js.jsx';
 import MyTextCell from './common/text_cell.js.jsx';
 import MyLinkCell from './common/link_cell.js.jsx';

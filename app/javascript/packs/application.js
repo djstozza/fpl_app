@@ -10,5 +10,5 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import axios from 'axios';
 import Rounds from './rounds/rounds.js.jsx';
-import TeamLadder from './tables/team_ladder.js.jsx';
+import ContextExample from './tables/team_ladder.js.jsx';
 import TeamFixture from './tables/team_fixture.js.jsx';

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Table, Column, Cell} from 'fixed-data-table';
+import {Table, Column, Cell} from 'fixed-data-table-2';
 
 var SortTypes = {
   ASC: 'ASC',

@@ -3,7 +3,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
-import {Table, Column, Cell} from 'fixed-data-table';
+import {Table, Column, Cell} from 'fixed-data-table-2';
 import DataListWrapper from './common/data_list_wrapper.js.jsx';
 import MyTextCell from './common/text_cell.js.jsx';
 import MyLinkCell from './common/link_cell.js.jsx';
@@ -229,21 +229,22 @@ class TeamFixture extends React.Component {
   }
 }
 
+if (document.getElementById('team-fixture')) {
+  axios.get('/teams/team_fixture_datatable.json?id=' + window.fplVars.team_id).then(res => {
 
-axios.get('/teams/team_fixture_datatable.json?id=' + window.fplVars.team_id).then(res => {
-  TeamFixture.defaultProps = {
-    team: res.data.team,
-    fixtures: res.data.fixtures
-  }
+    TeamFixture.defaultProps = {
+      team: res.data.team,
+      fixtures: res.data.fixtures
+    }
 
-  TeamFixture.propTypes = {
-    team: React.PropTypes.object,
-    fixtures: React.PropTypes.array
-  }
-  if (document.getElementById('team-fixture')) {
+    TeamFixture.propTypes = {
+      team: React.PropTypes.object,
+      fixtures: React.PropTypes.array
+    }
+
     ReactDOM.render(
       <TeamFixture />,
       document.getElementById('team-fixture')
     )
-  }
-});
+  });
+}
