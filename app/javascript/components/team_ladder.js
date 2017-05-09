@@ -1,13 +1,13 @@
-"use strict";
-
 import React from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
 import {Table, Column, Cell} from 'fixed-data-table-2';
-import DataListWrapper from './common/data_list_wrapper.js.jsx';
-import MyTextCell from './common/text_cell.js.jsx';
-import MyLinkCell from './common/link_cell.js.jsx';
-import SortHeaderCell from './common/sort_header_cell.js.jsx';
+import DataListWrapper from '../packs/tables/common/data_list_wrapper.js.jsx';
+import MyTextCell from '../packs/tables/common/text_cell.js.jsx';
+import MyLinkCell from '../packs/tables/common/link_cell.js.jsx';
+import SortHeaderCell from '../packs/tables/common/sort_header_cell.js.jsx';
+const Dimensions = require('react-dimensions');
+import ReactTooltip from 'react-tooltip'
 
 var SortTypes = {
   ASC: 'ASC',
@@ -18,17 +18,17 @@ function reverseSortDirection(sortDir) {
   return sortDir === SortTypes.DESC ? SortTypes.ASC : SortTypes.DESC;
 }
 
-class TeamLadder extends React.Component {
+export default class TeamLadder extends React.Component {
   constructor(props) {
     super(props);
-
-    var size = props.data.length;
+    console.log(props);
+    var size = props.rows.length;
     this._defaultSortIndexes = [];
     for (var index = 0; index < size; index++) {
       this._defaultSortIndexes.push(index);
     }
 
-    this._dataList = new DataListWrapper(this._defaultSortIndexes, props.data);
+    this._dataList = new DataListWrapper(this._defaultSortIndexes, props.rows);
     this.state = {
       filteredDataList: this._dataList,
       colSortDirs: {},
@@ -86,14 +86,13 @@ class TeamLadder extends React.Component {
     });
   }
 
-
   render() {
     return (
       <Table
         rowsCount={this.state.filteredDataList.getSize()}
         rowHeight={30}
         headerHeight={60}
-        width={780}
+        width={this.props.containerWidth}
         height={32 + ((this.state.filteredDataList.getSize() + 1) * 30)}>
         <Column
           columnKey='position'
@@ -105,11 +104,7 @@ class TeamLadder extends React.Component {
               Pos
             </SortHeaderCell>
           }
-          cell={
-            <MyTextCell
-              data={this.state.filteredDataList}
-            />
-          }
+          cell={<MyTextCell data={this.state.filteredDataList} />}
           width={55}
           flexGrow={1}
         />
@@ -123,13 +118,7 @@ class TeamLadder extends React.Component {
               Name
             </SortHeaderCell>
           }
-          cell={
-            <MyLinkCell
-              data={this.state.filteredDataList}
-              id='id'
-              url='/teams/'
-            />
-          }
+          cell={<MyLinkCell data={this.state.filteredDataList} id='id' url='/teams/' />}
           width={130}
           flexGrow={1}
         />
@@ -143,11 +132,7 @@ class TeamLadder extends React.Component {
               M
             </SortHeaderCell>
           }
-          cell={
-            <MyTextCell
-              data={this.state.filteredDataList}
-            />
-          }
+          cell={<MyTextCell data={this.state.filteredDataList} />}
           width={55}
           flexGrow={1}
         />
@@ -161,11 +146,7 @@ class TeamLadder extends React.Component {
               W
             </SortHeaderCell>
           }
-          cell={
-            <MyTextCell
-              data={this.state.filteredDataList}
-            />
-          }
+          cell={<MyTextCell data={this.state.filteredDataList} />}
           width={55}
           flexGrow={1}
         />
@@ -180,10 +161,7 @@ class TeamLadder extends React.Component {
             </SortHeaderCell>
           }
           cell={
-            <MyTextCell
-              data={this.state.filteredDataList}
-            />
-          }
+            <MyTextCell data={this.state.filteredDataList} />}
           width={55}
           flexGrow={1}
         />
@@ -197,10 +175,7 @@ class TeamLadder extends React.Component {
               D
             </SortHeaderCell>
           }
-          cell={
-            <MyTextCell
-              data={this.state.filteredDataList}
-            />
+          cell={<MyTextCell data={this.state.filteredDataList} />
           }
           width={55}
           flexGrow={1}
@@ -215,11 +190,7 @@ class TeamLadder extends React.Component {
               F
             </SortHeaderCell>
           }
-          cell={
-            <MyTextCell
-              data={this.state.filteredDataList}
-            />
-          }
+          cell={<MyTextCell data={this.state.filteredDataList} />}
           width={100}
           flexGrow={1}
         />
@@ -233,12 +204,7 @@ class TeamLadder extends React.Component {
               CS
             </SortHeaderCell>
           }
-          cell={
-            <MyTextCell
-              data={this.state.filteredDataList}
-              field="clean_sheets"
-            />
-          }
+          cell={<MyTextCell data={this.state.filteredDataList} />}
           width={55}
           flexGrow={1}
         />
@@ -252,11 +218,7 @@ class TeamLadder extends React.Component {
               GF
             </SortHeaderCell>
           }
-          cell={
-            <MyTextCell
-              data={this.state.filteredDataList}
-            />
-          }
+          cell={<MyTextCell data={this.state.filteredDataList} />}
           width={55}
         />
         <Column
@@ -269,11 +231,7 @@ class TeamLadder extends React.Component {
               GA
             </SortHeaderCell>
           }
-          cell={
-            <MyTextCell
-              data={this.state.filteredDataList}
-            />
-          }
+          cell={<MyTextCell data={this.state.filteredDataList} />}
           width={55}
           flexGrow={1}
         />
@@ -287,11 +245,7 @@ class TeamLadder extends React.Component {
               GD
             </SortHeaderCell>
           }
-          cell={
-            <MyTextCell
-              data={this.state.filteredDataList}
-            />
-          }
+          cell={<MyTextCell data={this.state.filteredDataList} />}
           width={55}
           flexGrow={1}
         />
@@ -305,11 +259,7 @@ class TeamLadder extends React.Component {
               Pts
             </SortHeaderCell>
           }
-          cell={
-            <MyTextCell
-              data={this.state.filteredDataList}
-            />
-          }
+          cell={<MyTextCell data={this.state.filteredDataList} />}
           width={55}
           flexGrow={1}
         />
@@ -319,17 +269,17 @@ class TeamLadder extends React.Component {
 }
 
 
-axios.get('/teams/team_ladder_datatable.json').then(res => {
-  TeamLadder.defaultProps = {
-    data: res.data
-  }
 
-  TeamLadder.propTypes = {
-    data: React.PropTypes.array
-  }
+TeamLadder.propTypes = {
+  rows: React.PropTypes.array
+};
 
-  ReactDOM.render(
-    <TeamLadder />,
-    document.getElementById('team-ladder')
-  )
-});
+module.exports = Dimensions({
+  getHeight: function(element) {
+    return window.innerHeight - 200;
+  },
+  getWidth: function(element) {
+    var widthOffset = window.innerWidth < 680 ? 0 : 240;
+    return window.innerWidth - widthOffset;
+  }
+})(TeamLadder);

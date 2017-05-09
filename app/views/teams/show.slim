@@ -76,7 +76,8 @@
             'collapse' href="#team-ladder-collapse" role='button'
             h4 Ladder
         #team-ladder-collapse.panel-collapse.collapse aria-labelledby="team-ladder-heading" role='tabpanel'
-          #team-ladder
+
+          = react_component 'team_ladder', rows: Team.all.order(:position), prerendt: true
 
 = content_for :inline_javascript_vars do
   javascript:

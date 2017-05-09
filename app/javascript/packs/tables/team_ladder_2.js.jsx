@@ -3,12 +3,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Table, Column, Cell } from 'fixed-data-table-2';
-import { DataCtxt, AddFilter, FakeObjectDataListStore,  examplePropTypes } from 'fixed-data-table-2';
-var Blah = require('fixed-data-table-2');
-console.log(Blah);
+
+
+import {DataCtxt, AddFilter} from '../../../../node_modules/fixed-data-table-2/examples/helpers/HOC'
+import examplePropTypes from '../../../../node_modules/fixed-data-table-2/examples/helpers/examplePropTypes'
 console.log( new FakeObjectDataListStore(100));
 
-
+const FilterablePagingTable = AddFilter(DataCtxt(Table));
 
 class PagedData {
   constructor(size = 2000) {

@@ -7,11 +7,10 @@ class TeamsController < ApplicationController
   end
 
   def team_ladder_datatable
+    @teams = Team.all.order(:position).each { |team| TeamDecorator.new(team) }
     respond_to do |format|
       format.json do
-        render json: Team.all
-                         .order(:position)
-                         .each { |team| TeamDecorator.new(team) }
+        render json: @teams
       end
     end
   end
