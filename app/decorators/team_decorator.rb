@@ -150,7 +150,7 @@ class TeamDecorator < SimpleDelegator
         round_id: fixture.round_id,
         kickoff_time: fixture.kickoff_time.strftime('%d/%m/%y %H:%M'),
         opponent_id: opponent.id,
-        opponent_short_name: opponent.short_name,
+        opponent: opponent.name,
         leg: home_fixture ? 'H' : 'A',
         result: win_loss_or_draw(fixture),
         score: "#{fixture.team_h_score} - #{fixture.team_a_score}",

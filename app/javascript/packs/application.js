@@ -9,7 +9,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import axios from 'axios';
-import TeamFixture from './tables/team_fixture.js.jsx';
+// import TeamFixture from './tables/team_fixture.js.jsx';
 // Support component names relative to this directory:
 var componentRequireContext = require.context("components", true)
 var ReactRailsUJS = require("react_ujs")

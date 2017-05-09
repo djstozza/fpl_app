@@ -9,6 +9,7 @@ import MyTextCell from './common/text_cell.js.jsx';
 import MyLinkCell from './common/link_cell.js.jsx';
 import SortHeaderCell from './common/sort_header_cell.js.jsx';
 import ColourCell from './common/colour_cell.js.jsx';
+import ReactTooltip from 'react-tooltip';
 
 var SortTypes = {
   ASC: 'ASC',
@@ -35,8 +36,6 @@ class TeamFixture extends React.Component {
       filteredDataList: this._dataList,
       colSortDirs: {},
     };
-
-    console.log(this.state);
 
     this._onFilterChange = this._onFilterChange.bind(this);
     this._onSortChange = this._onSortChange.bind(this);

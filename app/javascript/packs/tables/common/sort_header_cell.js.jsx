@@ -1,7 +1,6 @@
 import React from 'react';
 import {Table, Column, Cell} from 'fixed-data-table-2';
 import ReactTooltip from 'react-tooltip';
-import Humanize from 'humanize-plus';
 
 var SortTypes = {
   ASC: 'ASC',
@@ -20,17 +19,20 @@ export default class SortHeaderCell extends React.Component {
   }
 
   render() {
-    var {sortDir, children} = this.props;
+    var {sortDir, children, tooltip} = this.props;
     console.log(this.props);
     return (
       <Cell>
         <div>
-        <a data-tip={Humanize.capitalizeAll(this.props.columnKey.replace('_', ' '))} onClick={this._onSortChange}>
+        <a
+          onClick={this._onSortChange}
+          data-tip={tooltip}
+          onMouseEnter={() => { ReactTooltip.show(); }}
+          onMouseLeave={() => { ReactTooltip.hide(); }}>
           {children} {sortDir ? (sortDir === SortTypes.DESC ? '↓' : '↑') : ''}
         </a>
         <br/>
         <input className={this.props.columnKey + ' filter'} style={{width:90+'%'}} onChange={this._onFilterChange}/>
-        <ReactTooltip />
         </div>
       </Cell>
 

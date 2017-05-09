@@ -6,8 +6,9 @@ import DataListWrapper from '../packs/tables/common/data_list_wrapper.js.jsx';
 import MyTextCell from '../packs/tables/common/text_cell.js.jsx';
 import MyLinkCell from '../packs/tables/common/link_cell.js.jsx';
 import SortHeaderCell from '../packs/tables/common/sort_header_cell.js.jsx';
+import ColourCell from '../packs/tables/common/colour_cell.js.jsx';
 const Dimensions = require('react-dimensions');
-import ReactTooltip from 'react-tooltip'
+import ReactTooltip from 'react-tooltip';
 
 var SortTypes = {
   ASC: 'ASC',
@@ -18,18 +19,19 @@ function reverseSortDirection(sortDir) {
   return sortDir === SortTypes.DESC ? SortTypes.ASC : SortTypes.DESC;
 }
 
-export default class TeamLadder extends React.Component {
+export default class TeamFixture extends React.Component {
   constructor(props) {
     super(props);
-
-    var size = props.rows.length;
+    console.log(props);
+    var size = props.fixtures.length;
     this._defaultSortIndexes = [];
     for (var index = 0; index < size; index++) {
       this._defaultSortIndexes.push(index);
     }
 
-    this._dataList = new DataListWrapper(this._defaultSortIndexes, props.rows);
+    this._dataList = new DataListWrapper(this._defaultSortIndexes, props.fixtures);
     this.state = {
+      team: props.team,
       filteredDataList: this._dataList,
       colSortDirs: {},
     };
@@ -86,6 +88,7 @@ export default class TeamLadder extends React.Component {
     });
   }
 
+
   render() {
     return (
       <div>
@@ -96,106 +99,33 @@ export default class TeamLadder extends React.Component {
           width={this.props.containerWidth}
           height={32 + ((this.state.filteredDataList.getSize() + 1) * 30)}>
           <Column
-            columnKey='position'
+            columnKey='round_id'
             header={
               <SortHeaderCell
                 onSortChange={this._onSortChange}
                 onFilterChange={this._onFilterChange}
-                sortDir={this.state.colSortDirs.position}
-                tooltip='Position'>
-                P
-              </SortHeaderCell>
-            }
-            cell={<MyTextCell data={this.state.filteredDataList} />}
-            width={55}
-            flexGrow={1}
-          />
-          <Column
-            columnKey='name'
-            header={
-              <SortHeaderCell
-                onSortChange={this._onSortChange}
-                onFilterChange={this._onFilterChange}
-                sortDir={this.state.colSortDirs.name}
-                tooltip='Name'>
-                N
-              </SortHeaderCell>
-            }
-            cell={<MyLinkCell data={this.state.filteredDataList} id='id' url='/teams/' />}
-            width={130}
-            flexGrow={1}
-          />
-          <Column
-            columnKey='played'
-            header={
-              <SortHeaderCell
-                onSortChange={this._onSortChange}
-                onFilterChange={this._onFilterChange}
-                sortDir={this.state.colSortDirs.played}
-                tooltip='Matches'>
-                M
-              </SortHeaderCell>
-            }
-            cell={<MyTextCell data={this.state.filteredDataList} />}
-            width={55}
-            flexGrow={1}
-          />
-          <Column
-            columnKey='wins'
-            header={
-              <SortHeaderCell
-                onSortChange={this._onSortChange}
-                onFilterChange={this._onFilterChange}
-                sortDir={this.state.colSortDirs.wins}
-                tooltip='Wins'>
-                W
-              </SortHeaderCell>
-            }
-            cell={<MyTextCell data={this.state.filteredDataList} />}
-            width={55}
-            flexGrow={1}
-          />
-          <Column
-            columnKey='losses'
-            header={
-              <SortHeaderCell
-                onSortChange={this._onSortChange}
-                onFilterChange={this._onFilterChange}
-                sortDir={this.state.colSortDirs.losses}
-                tooltip='Losses'>
-                L
+                sortDir={this.state.colSortDirs.round_id}
+                tooltip='Round'>
+                R
               </SortHeaderCell>
             }
             cell={
-              <MyTextCell data={this.state.filteredDataList} />}
-            width={55}
-            flexGrow={1}
-          />
-          <Column
-            columnKey='draws'
-            header={
-              <SortHeaderCell
-                onSortChange={this._onSortChange}
-                onFilterChange={this._onFilterChange}
-                sortDir={this.state.colSortDirs.draws}
-                tooltip='Draws'>
-                D
-              </SortHeaderCell>
-            }
-            cell={<MyTextCell data={this.state.filteredDataList} />
+              <MyTextCell
+                data={this.state.filteredDataList}
+              />
             }
             width={55}
             flexGrow={1}
           />
           <Column
-            columnKey='form'
+            columnKey='kickoff_time'
             header={
               <SortHeaderCell
                 onSortChange={this._onSortChange}
                 onFilterChange={this._onFilterChange}
-                sortDir={this.state.colSortDirs.form}
-                tooltip='Form'>
-                F
+                sortDir={this.state.colSortDirs.kickoff_time}
+                tooltip='Kickoff Time'>
+                KT
               </SortHeaderCell>
             }
             cell={<MyTextCell data={this.state.filteredDataList} />}
@@ -203,89 +133,113 @@ export default class TeamLadder extends React.Component {
             flexGrow={1}
           />
           <Column
-            columnKey='clean_sheets'
+            columnKey='opponent'
             header={
               <SortHeaderCell
                 onSortChange={this._onSortChange}
                 onFilterChange={this._onFilterChange}
-                sortDir={this.state.colSortDirs.clean_sheets}>
-                CS
+                sortDir={this.state.colSortDirs.opponent}
+                tooltip='Opponent'>
+                O
               </SortHeaderCell>
             }
-            cell={<MyTextCell data={this.state.filteredDataList} />}
+            cell={
+              <MyLinkCell
+                data={this.state.filteredDataList}
+                url='/teams/'
+                id='opponent_id'
+              />
+            }
+            width={100}
+            flexGrow={1}
+          />
+          <Column
+            columnKey='result'
+            header={
+              <SortHeaderCell
+                onSortChange={this._onSortChange}
+                onFilterChange={this._onFilterChange}
+                sortDir={this.state.colSortDirs.result}
+                tooltip='Result'>
+                R
+              </SortHeaderCell>
+            }
+            cell={
+              <MyTextCell
+                data={this.state.filteredDataList}
+              />
+            }
             width={55}
             flexGrow={1}
           />
           <Column
-            columnKey='goals_for'
+            columnKey='leg'
             header={
               <SortHeaderCell
                 onSortChange={this._onSortChange}
                 onFilterChange={this._onFilterChange}
-                sortDir={this.state.colSortDirs.goals_for}
-                tooltip='Goals For'>
-                GF
+                sortDir={this.state.colSortDirs.leg}
+                tooltip='Home/Away'>
+                H/A
               </SortHeaderCell>
             }
-            cell={<MyTextCell data={this.state.filteredDataList} />}
-            width={55}
-          />
-          <Column
-            columnKey='goals_against'
-            header={
-              <SortHeaderCell
-                onSortChange={this._onSortChange}
-                onFilterChange={this._onFilterChange}
-                sortDir={this.state.colSortDirs.goals_against}
-                tooltip='Goals Against'>
-                GA
-              </SortHeaderCell>
+            cell={
+              <MyTextCell
+                data={this.state.filteredDataList}
+              />
             }
-            cell={<MyTextCell data={this.state.filteredDataList} />}
             width={55}
             flexGrow={1}
           />
           <Column
-            columnKey='goal_difference'
+            columnKey='score'
             header={
               <SortHeaderCell
                 onSortChange={this._onSortChange}
                 onFilterChange={this._onFilterChange}
-                sortDir={this.state.colSortDirs.goal_difference}
-                tooltip='Goal Difference'>
-                GD
+                sortDir={this.state.colSortDirs.score}
+                tooltip='Score'>
+                S
               </SortHeaderCell>
             }
-            cell={<MyTextCell data={this.state.filteredDataList} />}
+            cell={
+              <MyTextCell
+                data={this.state.filteredDataList}
+              />
+            }
             width={55}
             flexGrow={1}
           />
           <Column
-            columnKey='points'
+            columnKey='advantage'
             header={
               <SortHeaderCell
                 onSortChange={this._onSortChange}
                 onFilterChange={this._onFilterChange}
-                sortDir={this.state.colSortDirs.points}
-                tooltip='Points'>
-                P
+                sortDir={this.state.colSortDirs.advantage}
+                tooltip='Advantage'>
+                A
               </SortHeaderCell>
             }
-            cell={<MyTextCell data={this.state.filteredDataList} />}
+            cell={
+              <ColourCell
+                data={this.state.filteredDataList}
+                selector='fixture_advantage'
+              />
+            }
             width={55}
             flexGrow={1}
           />
         </Table>
-        <ReactTooltip />
+      <ReactTooltip />
       </div>
     );
   }
 }
 
-
-
-TeamLadder.propTypes = {
-  rows: React.PropTypes.array
+TeamFixture.propTypes = {
+  rows: React.PropTypes.array,
+  team: React.PropTypes.object
 };
 
 module.exports = Dimensions({
@@ -296,4 +250,4 @@ module.exports = Dimensions({
     var widthOffset = window.innerWidth < 680 ? 0 : 240;
     return window.innerWidth - widthOffset;
   }
-})(TeamLadder);
+})(TeamFixture);
