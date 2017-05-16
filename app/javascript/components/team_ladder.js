@@ -7,7 +7,7 @@ import MyTextCell from '../packs/tables/common/text_cell.js.jsx';
 import MyLinkCell from '../packs/tables/common/link_cell.js.jsx';
 import SortHeaderCell from '../packs/tables/common/sort_header_cell.js.jsx';
 const Dimensions = require('react-dimensions');
-import ReactTooltip from 'react-tooltip'
+import ReactTooltip from 'react-tooltip';
 
 var SortTypes = {
   ASC: 'ASC',
@@ -94,7 +94,7 @@ export default class TeamLadder extends React.Component {
           rowHeight={30}
           headerHeight={60}
           width={this.props.containerWidth}
-          height={32 + ((this.state.filteredDataList.getSize() + 1) * 30)}>
+          height={47 + ((this.state.filteredDataList.getSize() + 1) * 30)}>
           <Column
             columnKey='position'
             header={
@@ -111,18 +111,18 @@ export default class TeamLadder extends React.Component {
             flexGrow={1}
           />
           <Column
-            columnKey='name'
+            columnKey='short_name'
             header={
               <SortHeaderCell
                 onSortChange={this._onSortChange}
                 onFilterChange={this._onFilterChange}
-                sortDir={this.state.colSortDirs.name}
+                sortDir={this.state.colSortDirs.short_name}
                 tooltip='Name'>
                 N
               </SortHeaderCell>
             }
             cell={<MyLinkCell data={this.state.filteredDataList} id='id' url='/teams/' />}
-            width={130}
+            width={55}
             flexGrow={1}
           />
           <Column
@@ -288,12 +288,4 @@ TeamLadder.propTypes = {
   rows: React.PropTypes.array
 };
 
-module.exports = Dimensions({
-  getHeight: function(element) {
-    return window.innerHeight - 200;
-  },
-  getWidth: function(element) {
-    var widthOffset = window.innerWidth < 680 ? 0 : 240;
-    return window.innerWidth - widthOffset;
-  }
-})(TeamLadder);
+module.exports = Dimensions()(TeamLadder);

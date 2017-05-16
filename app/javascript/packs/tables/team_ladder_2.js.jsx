@@ -7,7 +7,6 @@ import { Table, Column, Cell } from 'fixed-data-table-2';
 
 import {DataCtxt, AddFilter} from '../../../../node_modules/fixed-data-table-2/examples/helpers/HOC'
 import examplePropTypes from '../../../../node_modules/fixed-data-table-2/examples/helpers/examplePropTypes'
-console.log( new FakeObjectDataListStore(100));
 
 const FilterablePagingTable = AddFilter(DataCtxt(Table));
 

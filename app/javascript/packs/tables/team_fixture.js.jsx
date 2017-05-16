@@ -23,7 +23,6 @@ function reverseSortDirection(sortDir) {
 class TeamFixture extends React.Component {
   constructor(props) {
     super(props);
-    console.log(props);
     var size = props.fixtures.length;
     this._defaultSortIndexes = [];
     for (var index = 0; index < size; index++) {

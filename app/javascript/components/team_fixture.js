@@ -22,7 +22,6 @@ function reverseSortDirection(sortDir) {
 export default class TeamFixture extends React.Component {
   constructor(props) {
     super(props);
-    console.log(props);
     var size = props.fixtures.length;
     this._defaultSortIndexes = [];
     for (var index = 0; index < size; index++) {
@@ -97,7 +96,7 @@ export default class TeamFixture extends React.Component {
           rowHeight={30}
           headerHeight={60}
           width={this.props.containerWidth}
-          height={32 + ((this.state.filteredDataList.getSize() + 1) * 30)}>
+          height={47 + ((this.state.filteredDataList.getSize() + 1) * 30)}>
           <Column
             columnKey='round_id'
             header={
@@ -231,7 +230,7 @@ export default class TeamFixture extends React.Component {
             flexGrow={1}
           />
         </Table>
-      <ReactTooltip />
+        <ReactTooltip />
       </div>
     );
   }
@@ -242,12 +241,4 @@ TeamFixture.propTypes = {
   team: React.PropTypes.object
 };
 
-module.exports = Dimensions({
-  getHeight: function(element) {
-    return window.innerHeight - 200;
-  },
-  getWidth: function(element) {
-    var widthOffset = window.innerWidth < 680 ? 0 : 240;
-    return window.innerWidth - widthOffset;
-  }
-})(TeamFixture);
+module.exports = Dimensions()(TeamFixture);

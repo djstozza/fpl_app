@@ -35,11 +35,29 @@
                                      'Total Points' => 'sorting sorting-default-desc' \
                                    } \
                                  }
-  .row: .col-md-12
-
-    h4 Fixtures
-
-    = react_component 'team_fixture', team: @team_decorator, fixtures: @fixture_hash, prerender: true
+  / .row: .col-md-12
+  /   #team-fixture-accordion.panel-group.data-group aria-multiselectable='true' role='tablist'
+  /     .panel
+  /       #team-fixture-heading.panel-heading role='tab'
+  /         a aria-controls="team-fixture-collapse" aria-expanded='false' data-parent=\
+  /           '#team-fixture-heading' data-toggle='collapse' href="#team-fixture-collapse" role='button'
+  /           h4 Fixtures
+  /       #team-fixture-collapse.panel-collapse.collapse aria-labelledby="team-fixture-heading" role='tabpanel'
+  /         table.table.table-bordered.table-striped.difficulty-advantage-key
+            / tr
+            /   td colspan=4
+            /     b.pull-left Team Advantage
+            /   td.even-advantage-td
+            /   td colspan=4
+            /     b.pull-right Opponent Advantage
+            / tr
+            /   - (1..4).to_a.reverse.each do |i|
+            /     td class="difficulty-t#{i}"
+            /   td.difficulty-e
+            /   - (1..4).to_a.each do |i|
+            /     td class="difficulty-o#{i}"
+  h3 Fixtures
+  = react_component 'team_fixture', team: @team_decorator, fixtures: @fixture_hash, prerender: true
           / = render partial: 'shared/datatable',
           /                   locals: { table_id: 'team-fixture',
           /                             data_source_url: team_fixture_datatable_teams_url(format: 'json', id: @team_decorator.id),
@@ -51,11 +69,16 @@
           /                                        'Score' => '',
           /                                        'Advantage' => '' } }
 
-  .row: .col-md-12
-
-    h4 Ladder
-
-    = react_component 'team_ladder', rows: Team.all.order(:position), prerender: true
+  / .row: .col-md-12
+  /   #team-ladder-accordion.panel-group.data-group aria-multiselectable='true' role='tablist'
+  /     .panel
+  /       #team-ladder-heading.panel-heading role='tab'
+  /         a aria-controls="team-ladder-collapse" aria-expanded='false' data-parent='#team-ladder-heading' data-toggle=\
+  /           'collapse' href="#team-ladder-collapse" role='button'
+  /           h4 Ladder
+  /       #team-ladder-collapse.panel-collapse.collapse aria-labelledby="team-ladder-heading" role='tabpanel'
+  h3 Ladder
+  = react_component 'team_ladder', rows: Team.all.order(:position), prerender: true
 
 = content_for :inline_javascript_vars do
   javascript:

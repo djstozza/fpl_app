@@ -20,7 +20,6 @@ export default class SortHeaderCell extends React.Component {
 
   render() {
     var {sortDir, children, tooltip} = this.props;
-    console.log(this.props);
     return (
       <Cell>
         <div>
