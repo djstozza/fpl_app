@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 export default class MatchStatTable extends React.Component {
   matchStats () {
@@ -54,9 +55,9 @@ export default class MatchStatTable extends React.Component {
             <thead>
               <tr>
                 <td/>
-                <td><a href={`/teams/${homeTeam.id}`}><b>{homeTeam.name}</b></a></td>
+                <td><Link to={`/teams/${homeTeam.id}`}><b>{homeTeam.name}</b></Link></td>
                 <td><b>{fixture.team_h_score}</b></td>
-                <td><a href={`/teams/${awayTeam.id}`}><b>{awayTeam.name}</b></a></td>
+                <td><Link to={`/teams/${awayTeam.id}`}><b>{awayTeam.name}</b></Link></td>
                 <td><b>{fixture.team_a_score}</b></td>
               </tr>
             </thead>

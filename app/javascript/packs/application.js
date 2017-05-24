@@ -9,14 +9,20 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
+import createHistory from 'history/createBrowserHistory'
+import { Route } from 'react-router'
 import { createStore, applyMiddleware } from 'redux';
+import { ConnectedRouter, routerReducer, routerMiddleware, push } from 'react-router-redux'
+import Rounds from '../containers/rounds.js';
+import Team from '../containers/team.js'
+
 import thunk from 'redux-thunk';
 import reducers from '../reducers';
 import axios from 'axios';
-import Rounds from '../containers/rounds.js';
-import TeamLadder from '../containers/team_ladder.js';
 // Support component names relative to this directory:
 
+const history = createHistory()
+const middleware = routerMiddleware(history)
 const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
 const store = createStoreWithMiddleware(reducers);
 
@@ -32,10 +38,12 @@ export default class App extends Component {
   render () {
     return (
       <Provider store={store}>
-        <div className='container'>
-          <Rounds />
-          <TeamLadder />
-        </div>
+        <ConnectedRouter history={history}>
+           <div>
+            <Route exact path="/" component={Rounds}/>
+            <Route path='/teams/:id' component={Team} />
+           </div>
+        </ConnectedRouter>
       </Provider>
     )
   }

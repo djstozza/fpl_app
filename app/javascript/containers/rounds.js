@@ -3,18 +3,15 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Provider } from 'react-redux';
 import fetchRounds from '../actions/action_fetch_rounds.js';
+import fetchTeams from '../actions/action_fetch_teams.js'
 import axios from 'axios';
 import RoundsNav from '../components/rounds/rounds_nav.js';
 import Round from '../components/rounds/round.js';
+import TeamLadder from '../components/teams/team_ladder.js';
 
 class Rounds extends Component {
   constructor(props) {
     super(props)
-    this.state = {
-      rounds: [],
-      round: '',
-      fixtures: []
-    }
 
     this.dataSource = this.dataSource.bind(this);
   }
@@ -31,6 +28,7 @@ class Rounds extends Component {
 
   componentDidMount () {
     this.props.fetchRounds();
+    this.props.fetchTeams();
     setInterval(function () {
       if (self.state.round.is_current && !self.state.round.data_checked) {
         self.dataSource(this);
@@ -46,22 +44,24 @@ class Rounds extends Component {
     this.setState({
       rounds: nextProps.rounds,
       round: nextProps.round,
-      fixtures: nextProps.fixtures
+      fixtures: nextProps.fixtures,
+      teams: nextProps.teams
     })
   }
 
 
 
   render () {
-    if (this.state.rounds.length == 0) {
+    if (this.state == null) {
       return (
         <p>Loading...</p>
       )
     } else {
       return (
-        <div>
+        <div className='container'>
           <RoundsNav rounds={this.state.rounds} round={this.state.round} onChange={this.dataSource} />
           <Round round={this.state.round} fixtures={this.state.fixtures} />
+          <TeamLadder teams={this.state.teams}/>
         </div>
       );
     }
@@ -72,13 +72,15 @@ function mapStateToProps(state) {
   return {
     rounds: state.rounds_data.rounds,
     round: state.rounds_data.round,
-    fixtures: state.rounds_data.fixtures
+    fixtures: state.rounds_data.fixtures,
+    teams: state.teams
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     fetchRounds: fetchRounds,
+    fetchTeams: fetchTeams
   }, dispatch);
 }
 
