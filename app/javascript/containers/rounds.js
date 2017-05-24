@@ -52,7 +52,7 @@ class Rounds extends Component {
 
 
   render () {
-    if (this.state == null) {
+    if (this.state == null || this.state.rounds == null || this.state.round == null) {
       return (
         <p>Loading...</p>
       )

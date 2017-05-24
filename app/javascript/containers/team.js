@@ -31,7 +31,7 @@ class Team extends Component {
   }
 
   render () {
-    if (this.state == null) {
+    if (this.state == null || this.state.team == null || this.state.teams == null) {
       return (
         <p>Loading...</p>
       );
