@@ -12,6 +12,7 @@ html
     = yield :inline_javascript_vars
 
   body class="controller-#{params[:controller].gsub('_', '-')} action-#{params[:action].gsub('_', '-')}"
+    #root
     / - if user_signed_in?
     /   li = link_to('Logout', destroy_user_session_path, :method => :delete)
     / - else

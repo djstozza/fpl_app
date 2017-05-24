@@ -1,6 +1,6 @@
 class TeamsController < ApplicationController
   before_action :set_team, only: [:show, :team_player_datatable, :team_fixture_datatable]
-
+  
   # GET /teams/1
   # GET /teams/1.json
   def show

@@ -33,15 +33,15 @@ class RoundDecorator < SimpleDelegator
   end
 
   def fixture_hash_by_game_day
-    {
-      fixture_groups: fixture_arr.map do |fixture_group|
-        {
+      arr = []
+      fixture_arr.each do |fixture_group|
+      arr << {
           game_day: fixture_group[0],
           fixtures: fixture_group[1].map do |fixture|
             base_fixture_hash(fixture)
           end
         }
       end
-    }
+      arr
   end
 end

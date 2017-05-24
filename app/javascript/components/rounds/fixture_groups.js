@@ -1,5 +1,5 @@
 import React from 'react'
-import FixtureGroup from './fixture_group.js.jsx';
+import FixtureGroup from './fixture_group.js';
 
 export default class FixtureGroups extends React.Component {
   render () {
@@ -9,7 +9,7 @@ export default class FixtureGroups extends React.Component {
       {
         self.props.fixtureGroups.map(function (fixtureGroup, key) {
           return(
-            < FixtureGroup key={'game-day-' + key} gameDay={fixtureGroup.game_day} fixtures={fixtureGroup.fixtures} />
+            < FixtureGroup key={`game-day-${key}`} gameDay={fixtureGroup.game_day} fixtures={fixtureGroup.fixtures} />
           )
         })
       }

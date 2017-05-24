@@ -7,7 +7,11 @@ export default class DataListWrapper {
   }
 
   getSize() {
-    return this._indexMap.length;
+    if (this._indexMap == null) {
+      return 0
+    } else {
+      return this._indexMap.length;
+    }
   }
 
   getObjectAt(index) {

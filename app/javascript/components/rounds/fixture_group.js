@@ -1,5 +1,5 @@
 import React from 'react'
-import Match from './match.js.jsx';
+import Match from './match.js';
 
 export default class FixtureGroup extends React.Component {
   matches () {
@@ -7,7 +7,7 @@ export default class FixtureGroup extends React.Component {
     return (
       self.props.fixtures.map(function (match) {
         return (
-          < Match key={'match-' + match.fixture.id} match={match} />
+          < Match key={`match-${match.fixture.id}`} match={match} />
         )
       })
     );

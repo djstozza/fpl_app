@@ -8,7 +8,11 @@ class RoundsController < ApplicationController
     @round_decorator = RoundDecorator.new(Round.find_by(is_current: true))
     respond_to do |format|
       format.html
-      format.json { render json: { round: @round_decorator, fixtures: @round_decorator.fixture_stats, rounds: @rounds.sort } }
+      format.json do
+        render json: {
+          round: @round_decorator, fixtures: @round_decorator.fixture_stats, rounds: @rounds.sort
+        }
+      end
     end
   end
 
@@ -18,7 +22,7 @@ class RoundsController < ApplicationController
     @round_decorator = RoundDecorator.new(@round)
     respond_to do |format|
       format.html
-      format.json { render json: { round: @round_decorator, fixtures: @round_decorator.fixture_stats} }
+      format.json { render json: { round: @round_decorator, fixtures: @round_decorator.fixture_stats } }
     end
   end
 
