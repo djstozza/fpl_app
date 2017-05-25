@@ -10,7 +10,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import createHistory from 'history/createBrowserHistory'
-import { Route } from 'react-router'
+import { Route, IndexRoute } from 'react-router'
 import { createStore, applyMiddleware } from 'redux';
 import { ConnectedRouter, routerReducer, routerMiddleware, push } from 'react-router-redux'
 import Rounds from '../containers/rounds.js';
@@ -41,7 +41,10 @@ export default class App extends Component {
         <ConnectedRouter history={history}>
            <div>
             <Route exact path="/" component={Rounds}/>
+            <Route exact path='/rounds' component={Rounds}/>
+            <Route exact path='/rounds/:id' component={Rounds} />
             <Route path='/teams/:id' component={Team} />
+
            </div>
         </ConnectedRouter>
       </Provider>

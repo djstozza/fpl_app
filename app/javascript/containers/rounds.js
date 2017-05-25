@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Provider } from 'react-redux';
 import fetchRounds from '../actions/action_fetch_rounds.js';
+import fetchRound from '../actions/action_fetch_round.js';
 import fetchTeams from '../actions/action_fetch_teams.js'
 import axios from 'axios';
 import RoundsNav from '../components/rounds/rounds_nav.js';
@@ -12,7 +13,6 @@ import TeamLadder from '../components/teams/team_ladder.js';
 class Rounds extends Component {
   constructor(props) {
     super(props)
-
     this.dataSource = this.dataSource.bind(this);
   }
 
@@ -23,12 +23,17 @@ class Rounds extends Component {
         fixtures: res.data.fixtures,
         round: res.data.round
       });
+      window.history.replaceState(null, 'rounds', roundId)
     });
   }
 
   componentDidMount () {
+    if (this.props.match.params.id) {
+      this.dataSource(this.props.match.params.id);
+    }
     this.props.fetchRounds();
     this.props.fetchTeams();
+
     setInterval(function () {
       if (self.state.round.is_current && !self.state.round.data_checked) {
         self.dataSource(this);
@@ -41,12 +46,19 @@ class Rounds extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({
-      rounds: nextProps.rounds,
-      round: nextProps.round,
-      fixtures: nextProps.fixtures,
-      teams: nextProps.teams
-    })
+    if (this.state === null || this.state.round === null) {
+      this.setState({
+        rounds: nextProps.rounds,
+        round: nextProps.round,
+        fixtures: nextProps.fixtures,
+        teams: nextProps.teams
+      })
+    } else if (this.state !== null && this.state.round !== null) {
+      this.setState({
+        rounds: nextProps.rounds,
+        teams: nextProps.teams
+      })
+    }
   }
 
 

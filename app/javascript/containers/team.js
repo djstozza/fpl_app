@@ -11,6 +11,7 @@ import TeamFixtures from '../components/teams/team_fixtures.js';
 class Team extends Component {
   constructor(props) {
     super(props)
+    this.dataSource = this.dataSource.bind(this);
   }
 
   dataSource (teamId) {
