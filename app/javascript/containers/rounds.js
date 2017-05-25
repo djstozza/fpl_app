@@ -22,7 +22,7 @@ class Rounds extends Component {
         fixtures: res.data.fixtures,
         round: res.data.round
       });
-      window.history.replaceState(null, 'rounds', roundId)
+      window.history.pushState(null, '', `/rounds/${roundId}`)
     });
   }
 
@@ -34,8 +34,8 @@ class Rounds extends Component {
     this.props.fetchTeams();
 
     setInterval(function () {
-      if (self.state.round.is_current && !self.state.round.data_checked) {
-        self.dataSource(this);
+      if (this.state.round.is_current && !self.state.round.data_checked) {
+        self.dataSource();
       }
     }.bind(this), 60000);
   }
