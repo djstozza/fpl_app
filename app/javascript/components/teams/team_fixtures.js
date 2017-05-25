@@ -21,8 +21,12 @@ export default class TeamFixtures extends Component {
     return row.fixture_advantage
   }
 
-  linkCellText (cell, row) {
+  opponentLinkCellText (cell, row) {
     return (<Link to={ `/teams/${row.opponent_id}` } onClick={ () => this.dataSource(row.opponent_id) }>{cell}</Link>);
+  }
+
+  roundLinkCellText (cell, row) {
+    return (<Link to={ `/rounds/${row.round_id}` }>{cell}</Link>);
   }
 
   render () {
@@ -33,6 +37,7 @@ export default class TeamFixtures extends Component {
             dataField='round_id'
             dataAlign='center'
             dataSort
+            dataFormat={this.roundLinkCellText}
             filter={ { type: 'TextFilter', placeholder: ' ' } }
             isKey>
             <span data-tip='Round'>R</span>
@@ -48,7 +53,7 @@ export default class TeamFixtures extends Component {
             dataField='opponent'
             dataAlign='center'
             filter={ { type: 'TextFilter', placeholder: ' ' } }
-            dataFormat={this.linkCellText}
+            dataFormat={this.opponentLinkCellText}
             dataSort>
             <span data-tip='Opponent'>O</span>
           </TableHeaderColumn>

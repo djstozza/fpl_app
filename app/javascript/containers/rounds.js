@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Provider } from 'react-redux';
 import fetchRounds from '../actions/action_fetch_rounds.js';
-import fetchRound from '../actions/action_fetch_round.js';
 import fetchTeams from '../actions/action_fetch_teams.js'
 import axios from 'axios';
 import RoundsNav from '../components/rounds/rounds_nav.js';
