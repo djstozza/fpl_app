@@ -5,18 +5,18 @@ export function centerItVariableWidth (target, outer) {
     return;
   }
   var x = out.clientWidth;
-  var y = this.outerWidth(tar);
-  var z = this.indexInParent(tar);
+  var y = outerWidth(tar);
+  var z = indexInParent(tar);
   var q = 0;
   var m = out.querySelectorAll('li');
 
   for (var i = 0; i < z; i++) {
-    q += this.outerWidth(m[i]);
+    q += outerWidth(m[i]);
   }
   out.scrollLeft = (Math.max(0, q - (x - y)/2));
 }
 
-export function outerWidth (el) {
+function outerWidth (el) {
   var width = el.offsetWidth;
   var style = getComputedStyle(el);
 
@@ -24,7 +24,7 @@ export function outerWidth (el) {
   return width;
 }
 
-export function indexInParent (node) {
+function indexInParent (node) {
   var children = node.parentNode.childNodes;
   var num = 0;
   for (var i=0; i < children.length; i++) {
