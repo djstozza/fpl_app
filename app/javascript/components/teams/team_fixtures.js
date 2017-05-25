@@ -17,6 +17,10 @@ export default class TeamFixtures extends Component {
     return (<div className={row.fixture_advantage}>{cell}</div>);
   }
 
+  columnClassNameFormat (fieldValue, row, rowIdx, colIdx) {
+    return row.fixture_advantage
+  }
+
   linkCellText (cell, row) {
     return (<Link to={ `/teams/${row.opponent_id}` } onClick={ () => this.dataSource(row.opponent_id) }>{cell}</Link>);
   }
@@ -72,7 +76,7 @@ export default class TeamFixtures extends Component {
           <TableHeaderColumn
             dataField='advantage'
             dataAlign='center'
-            dataFormat={this.cellAdvantageClass}
+            columnClassName={ this.columnClassNameFormat }
             filter={ { type: 'TextFilter', placeholder: ' ' } }
             dataSort>
             <span data-tip='Advantage'>A</span>

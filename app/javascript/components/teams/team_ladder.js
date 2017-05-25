@@ -13,6 +13,14 @@ export default class TeamLadder extends Component {
     this.props.onChange(teamId);
   }
 
+  trClassFormat (row) {
+    if (row.position <= 4) {
+      return 'champions-league'
+    } else if (row.position >= 18) {
+      return 'relegation'
+    }
+  }
+
   linkCellText (cell, row) {
     return (<Link to={`/teams/${row.id}` } onClick={ () => this.dataSource(row.id) }>{cell}</Link>);
   }
@@ -20,7 +28,7 @@ export default class TeamLadder extends Component {
   render () {
     return (
       <div>
-        <BootstrapTable data={this.props.teams} striped hover>
+        <BootstrapTable data={this.props.teams} striped hover trClassName={ this.trClassFormat }>
           <TableHeaderColumn
             dataField='position'
             dataAlign='center'
