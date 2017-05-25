@@ -1,18 +1,7 @@
 import React from 'react';
-import { centerItVariableWidth } from '../../utils/nav_tab.js';
+import { selectTabClick, centerItVariableWidth } from '../../utils/nav_tab.js';
 
 export default class RoundsNav extends React.Component {
-  selectRoundClick (roundTabClass, roundId) {
-    document.querySelector('li.active').classList.remove('active');
-    document.querySelector(`li.${roundTabClass}`).classList.add('active');
-    centerItVariableWidth('li.active', '.js-scrollable-nav');
-    this.dataSource(roundId);
-  }
-
-  dataSource (roundId) {
-    this.props.onChange(roundId);
-  }
-
   componentDidMount () {
     centerItVariableWidth('li.active', '.js-scrollable-nav');
   }
@@ -24,7 +13,7 @@ export default class RoundsNav extends React.Component {
       var roundTabClass = `round-tab-${round.id}`
       return (
         <li key={round.id} className={`${round.id == roundId ? 'active' : ''} presenter ${roundTabClass}`}>
-          <a href="javascript:;" onClick={function () {self.selectRoundClick(roundTabClass, round.id)}}>
+          <a href="javascript:;" onClick={ function () { selectTabClick(roundTabClass, round.id, self.props) } }>
             {round.name}
           </a>
         </li>

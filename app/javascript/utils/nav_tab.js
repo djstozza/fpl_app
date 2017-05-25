@@ -1,3 +1,14 @@
+export function selectTabClick (roundTabClass, id, props) {
+  document.querySelector('li.active').classList.remove('active');
+  document.querySelector(`li.${roundTabClass}`).classList.add('active');
+  centerItVariableWidth('li.active', '.js-scrollable-nav');
+  dataSource(id, props);
+}
+
+function dataSource (id, props) {
+  props.onChange(id);
+}
+
 export function centerItVariableWidth (target, outer) {
   var out = document.querySelector(outer);
   var tar = document.querySelector(target);

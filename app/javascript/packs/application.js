@@ -15,7 +15,6 @@ import { createStore, applyMiddleware } from 'redux';
 import { ConnectedRouter, routerReducer, routerMiddleware, push } from 'react-router-redux'
 import Rounds from '../containers/rounds.js';
 import Team from '../containers/team.js'
-
 import thunk from 'redux-thunk';
 import reducers from '../reducers';
 import axios from 'axios';
@@ -39,7 +38,7 @@ export default class App extends Component {
     return (
       <Provider store={store}>
         <ConnectedRouter history={history}>
-           <div>
+           <div className='col-md-offset-1 col-md-10 col-xs-12'>
             <Route exact path="/" component={Rounds}/>
             <Route exact path='/rounds' component={Rounds}/>
             <Route exact path='/rounds/:id' component={Rounds} />

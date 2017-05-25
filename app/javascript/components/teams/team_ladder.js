@@ -28,7 +28,7 @@ export default class TeamLadder extends Component {
   render () {
     return (
       <div>
-        <BootstrapTable data={this.props.teams} striped hover trClassName={ this.trClassFormat }>
+        <BootstrapTable data={this.props.teams} striped hover trClassName={ this.trClassFormat } >
           <TableHeaderColumn
             dataField='position'
             dataAlign='center'

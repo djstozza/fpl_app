@@ -1,4 +1,5 @@
 import React from 'react';
+import imgSrc from '../../../assets/images/badges-sprite.jpeg';
 
 export default class  MatchPanelTitle extends React.Component {
   matchPanelTitleText () {
@@ -6,7 +7,6 @@ export default class  MatchPanelTitle extends React.Component {
     var fixture = this.props.match.fixture;
     var homeTeamShortName = this.props.match.home_team.short_name;
     var awayTeamShortName = this.props.match.away_team.short_name;
-    var imgSrc = '/assets/badges-sprite.jpeg';
     var matchScore = function () {
       if (fixture.started) {
         return (` ${fixture.team_h_score} - ${fixture.team_a_score} `);
@@ -18,9 +18,9 @@ export default class  MatchPanelTitle extends React.Component {
     return (
       <div>
         <span> {homeTeamShortName} </span>
-        <img className={homeTeamShortName.toLowerCase()} src={imgSrc}/>
+        <img className={`crest ${homeTeamShortName.toLowerCase()} match-panel-title-text`} src={imgSrc}/>
         <span> {matchScore()} </span>
-        <img className={awayTeamShortName.toLowerCase()} src={imgSrc}/>
+        <img className={`crest ${awayTeamShortName.toLowerCase()} match-panel-title-text`} src={imgSrc}/>
         <span> {awayTeamShortName}</span>
       </div>
     );

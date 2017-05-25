@@ -69,7 +69,7 @@ class Rounds extends Component {
       )
     } else {
       return (
-        <div className='container'>
+        <div>
           <RoundsNav rounds={this.state.rounds} round={this.state.round} onChange={this.dataSource} />
           <Round round={this.state.round} fixtures={this.state.fixtures} />
           <TeamLadder teams={this.state.teams}/>

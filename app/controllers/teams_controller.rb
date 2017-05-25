@@ -7,7 +7,7 @@ class TeamsController < ApplicationController
     respond_to do |format|
       format.html
       format.json do
-        render json: { team: @team_decorator, fixtures: @team_decorator.fixture_hash }
+        render json: { team: @team_decorator, fixtures: @team_decorator.fixture_hash, players: @team_decorator.players }
       end
     end
   end
