@@ -44,17 +44,17 @@ class Rounds extends Component {
     return nextState !== this.state || nextProps !== this.props;
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.state === null || this.state.round === null) {
+  componentWillReceiveProps(nextProps, nextState) {
+    if (this.state != null && this.state.round != null) {
+      this.setState({
+        rounds: nextProps.rounds,
+        teams: nextProps.teams
+      })
+    } else {
       this.setState({
         rounds: nextProps.rounds,
         round: nextProps.round,
         fixtures: nextProps.fixtures,
-        teams: nextProps.teams
-      })
-    } else if (this.state !== null && this.state.round !== null) {
-      this.setState({
-        rounds: nextProps.rounds,
         teams: nextProps.teams
       })
     }
