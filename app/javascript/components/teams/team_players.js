@@ -4,105 +4,118 @@ import { Link } from 'react-router-dom';
 import ReactTooltip from 'react-tooltip';
 require('../../../../node_modules/react-bootstrap-table/dist/react-bootstrap-table.min.css');
 
-export default class TeamLadder extends Component {
-  dataSource (teamId) {
-    this.props.onChange(teamId);
-  }
-
-  trClassFormat (row) {
-    if (row.position <= 4) {
-      return 'champions-league'
-    } else if (row.position >= 18) {
-      return 'relegation'
+export default class TeamPlayers extends Component {
+  constructor(props) {
+    super(props)
+    this.options = {
+      defaultSortName: 'total_points',
+      defaultSortOrder: 'desc'
     }
   }
 
-  linkCellText (cell, row) {
-    return (<Link to={`/teams/${row.id}` } onClick={ () => this.dataSource(row.id) }>{cell}</Link>);
-  }
-
   render () {
+    const positionText = {
+      1: 'GKP',
+      2: 'DEF',
+      3: 'MID',
+      4: 'FWD'
+    }
+
+    var positionTextCell = function (cell, row) {
+      return positionText[cell]
+    }
+
     return (
       <div>
-        <BootstrapTable data={this.props.teams} striped hover trClassName={ this.trClassFormat } >
+        <BootstrapTable data={this.props.team_players} striped hover options={ this.options }>
           <TableHeaderColumn
-            dataField='position'
+            dataField='last_name'
             dataAlign='center'
             dataSort
             filter={ { type: 'TextFilter', placeholder: ' ' } }
             isKey>
-            <span data-tip='Position'>Pos</span>
-          </TableHeaderColumn>
-          <TableHeaderColumn
-            dataField='short_name'
-            dataAlign='center'
-            dataFormat={this.linkCellText}
-            filter={ { type: 'TextFilter', placeholder: ' ' } }
-            dataSort>
             <span data-tip='Name'>N</span>
           </TableHeaderColumn>
           <TableHeaderColumn
-            dataField='played'
+            dataField='position_id'
             dataAlign='center'
             dataSort
-            filter={ { type: 'TextFilter', placeholder: ' ' } }>
-            <span data-tip='Matches'>M</span>
+            dataFormat={positionTextCell}
+            filter={ { type: 'SelectFilter', options: positionText, placeholder: ' ' } }>
+            <span data-tip='Position'>Pos</span>
           </TableHeaderColumn>
           <TableHeaderColumn
-            dataField='wins'
+            dataField='minutes'
             dataAlign='center'
             dataSort
             filter={ { type: 'TextFilter', placeholder: ' ' } }>
-            <span data-tip='Wins'>W</span>
+            <span data-tip='Minutes'>Min</span>
           </TableHeaderColumn>
           <TableHeaderColumn
-            dataField='losses'
+            dataField='goals_scored'
             dataAlign='center'
             dataSort
             filter={ { type: 'TextFilter', placeholder: ' ' } }>
-            <span data-tip='Losses'>L</span>
+            <span data-tip='Goals'>G</span>
           </TableHeaderColumn>
           <TableHeaderColumn
-            dataField='draws'
+            dataField='assists'
             dataAlign='center'
             dataSort
             filter={ { type: 'TextFilter', placeholder: ' ' } }>
-            <span data-tip='Draws'>D</span>
+            <span data-tip='Assists'>A</span>
           </TableHeaderColumn>
           <TableHeaderColumn
-            dataField='form'
+            dataField='saves'
             dataAlign='center'
             dataSort
+            hidden
             filter={ { type: 'TextFilter', placeholder: ' ' } }>
-            <span data-tip='Form'>F</span>
+            <span data-tip='Saves'>S</span>
           </TableHeaderColumn>
           <TableHeaderColumn
-            dataField='goals_for'
+            dataField='penalties_saved'
             dataAlign='center'
             dataSort
+            hidden
             filter={ { type: 'TextFilter', placeholder: ' ' } }>
-            <span data-tip='Goals For'>GF</span>
+            <span data-tip='Penalties Saved'>PS</span>
           </TableHeaderColumn>
           <TableHeaderColumn
-            dataField='goals_against'
+            dataField='penalties_missed'
             dataAlign='center'
             dataSort
+            hidden
             filter={ { type: 'TextFilter', placeholder: ' ' } }>
-            <span data-tip='Goals Against'>GA</span>
+            <span data-tip='Penalties Missed'>PM</span>
           </TableHeaderColumn>
           <TableHeaderColumn
-            dataField='goal_difference'
+            dataField='yellow_cards'
             dataAlign='center'
             dataSort
             filter={ { type: 'TextFilter', placeholder: ' ' } }>
-            <span data-tip='Goal Difference'>GD</span>
+            <span data-tip='Yellow Cards'>YC</span>
           </TableHeaderColumn>
           <TableHeaderColumn
-            dataField='points'
+            dataField='red_cards'
             dataAlign='center'
             dataSort
             filter={ { type: 'TextFilter', placeholder: ' ' } }>
-            <span data-tip='Points'>Pts</span>
+            <span data-tip='Red Cards'>RC</span>
+          </TableHeaderColumn>
+          <TableHeaderColumn
+            dataField='points_per_game'
+            dataAlign='center'
+            dataSort
+            filter={ { type: 'TextFilter', placeholder: ' ' } }>
+            <span data-tip='Points Per Game'>PPG</span>
+          </TableHeaderColumn>
+          <TableHeaderColumn
+            dataField='total_points'
+            dataAlign='center'
+            dataSort
+            filter={ { type: 'TextFilter', placeholder: ' ' } }>
+            <span data-tip='Total Points'>TP</span>
           </TableHeaderColumn>
         </BootstrapTable>
         <ReactTooltip />

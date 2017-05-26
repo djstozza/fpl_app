@@ -5,10 +5,6 @@ import ReactTooltip from 'react-tooltip';
 require('../../../../node_modules/react-bootstrap-table/dist/react-bootstrap-table.min.css');
 
 export default class TeamFixtures extends Component {
-  constructor(props) {
-    super(props)
-  }
-
   dataSource (teamId) {
     this.props.onChange(teamId);
   }
