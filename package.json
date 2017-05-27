@@ -46,6 +46,7 @@
     "sass-loader": "^6.0.3",
     "string-humanize": "^1.0.0",
     "style-loader": "^0.17.0",
+    "underscore": "^1.8.3",
     "webpack": "^2.4.1",
     "webpack-manifest-plugin": "^1.1.0",
     "webpack-merge": "^4.1.0"

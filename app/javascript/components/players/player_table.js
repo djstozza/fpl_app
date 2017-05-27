@@ -3,9 +3,10 @@ import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { Button, Modal, Checkbox } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import ReactTooltip from 'react-tooltip';
+import _ from 'underscore';
 require('../../../../node_modules/react-bootstrap-table/dist/react-bootstrap-table.min.css');
 
-export default class TeamPlayers extends Component {
+export default class PlayerTable extends Component {
   constructor(props) {
     super(props)
     this.options = {
@@ -39,9 +40,24 @@ export default class TeamPlayers extends Component {
 
   render () {
     const positionText = { 1: 'GKP', 2: 'DEF', 3: 'MID', 4: 'FWD' }
+    const teamText = _.object(_.map(this.props.teams, function (obj) {
+      return [obj.id, obj.short_name]
+    }))
+
+    const selectTeamText = _.object(_.map(this.props.teams, function (obj) {
+      return [obj.short_name, obj.short_name]
+    }).sort())
 
     var positionTextCell = function (cell, row) {
       return positionText[cell]
+    }
+
+    var teamTextCell = function (cell, row) {
+      return teamText[cell]
+    }
+
+    function filterType (cell, row) {
+      return teamText[cell]
     }
 
     return (
@@ -143,14 +159,23 @@ export default class TeamPlayers extends Component {
 
           </Modal.Body>
         </Modal>
-        <BootstrapTable data={this.props.team_players} striped hover options={ this.options }>
+        <BootstrapTable data={this.props.players} striped hover options={ this.options } pagination>
           <TableHeaderColumn
             dataField='last_name'
             dataAlign='center'
             dataSort
-            filter={ { type: 'TextFilter', placeholder: ' ' } }
-            isKey>
+            filter={ { type: 'TextFilter', placeholder: ' ' } }>
             <span data-tip='Name'>N</span>
+          </TableHeaderColumn>
+          <TableHeaderColumn
+            dataField='team_id'
+            dataAlign='center'
+            dataSort
+            dataFormat={teamTextCell}
+            filterValue={ filterType }
+            filter={ { type: 'SelectFilter', options: selectTeamText, placeholder: ' ' } }
+            isKey>
+            <span data-tip='Team'>T</span>
           </TableHeaderColumn>
           <TableHeaderColumn
             dataField='position_id'

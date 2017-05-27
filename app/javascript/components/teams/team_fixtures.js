@@ -26,6 +26,17 @@ export default class TeamFixtures extends Component {
   }
 
   render () {
+    const homeAwayOptions = {
+      H: 'Home',
+      A: 'Away'
+    }
+
+    const resultOptions = {
+      W: 'Win',
+      L: 'Loss',
+      D: 'Draw'
+    }
+
     return (
       <div>
         <BootstrapTable data={this.props.team_fixtures} striped hover>
@@ -56,14 +67,14 @@ export default class TeamFixtures extends Component {
           <TableHeaderColumn
             dataField='result'
             dataAlign='center'
-            filter={ { type: 'TextFilter', placeholder: ' ' } }
+            filter={ { type: 'SelectFilter', options: resultOptions, placeholder: ' ' } }
             dataSort>
             <span data-tip='Result'>R</span>
           </TableHeaderColumn>
           <TableHeaderColumn
             dataField='leg'
             dataAlign='center'
-            filter={ { type: 'TextFilter', placeholder: ' ' } }
+            filter={ { type: 'SelectFilter', options: homeAwayOptions, placeholder: ' ' } }
             dataSort>
             <span data-tip='Home/Away'>H/A</span>
           </TableHeaderColumn>

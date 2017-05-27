@@ -4,7 +4,10 @@ class PlayersController < ApplicationController
   # GET /players
   # GET /players.json
   def index
-    @players = Player.all
+    respond_to do |format|
+      format.html
+      format.json { render json: Player.all }
+    end
   end
 
   # GET /players/1
@@ -14,14 +17,6 @@ class PlayersController < ApplicationController
       format.html
       format.json { render json: @player.fixture_stats }
     end
-  end
-
-  def player_dreamteam_datatable
-    render_datatable_json(PlayerDreamteamDatatable)
-  end
-
-  def player_stats_datatable
-    render_datatable_json(PlayerStatDatatable, params[:stat])
   end
 
   private
