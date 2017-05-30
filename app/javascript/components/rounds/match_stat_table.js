@@ -24,7 +24,7 @@ export default class MatchStatTable extends React.Component {
         {
           statEntry.map(function(stat) {
               return (
-                <p key={stat.player}>{stat.player}</p>
+                <p key={stat.player.id}><Link to={ `/players/${stat.player.id}` }>{ stat.player.last_name }</Link></p>
               )
             }
         )}
@@ -33,7 +33,7 @@ export default class MatchStatTable extends React.Component {
         {
           statEntry.map(function(stat) {
               return (
-                <p key={`${stat.player}-${stat.value}`}>{stat.value}</p>
+                <p key={ `${stat.player.last_name}-${stat.value}` }>{ stat.value }</p>
               )
             }
         )}
@@ -55,14 +55,14 @@ export default class MatchStatTable extends React.Component {
             <thead>
               <tr>
                 <td/>
-                <td><Link to={`/teams/${homeTeam.id}`}><b>{homeTeam.name}</b></Link></td>
-                <td><b>{fixture.team_h_score}</b></td>
-                <td><Link to={`/teams/${awayTeam.id}`}><b>{awayTeam.name}</b></Link></td>
-                <td><b>{fixture.team_a_score}</b></td>
+                <td><Link to={ `/teams/${homeTeam.id}` }><b>{ homeTeam.name }</b></Link></td>
+                <td><b>{ fixture.team_h_score }</b></td>
+                <td><Link to={ `/teams/${awayTeam.id}` }><b>{ awayTeam.name }</b></Link></td>
+                <td><b>{ fixture.team_a_score }</b></td>
               </tr>
             </thead>
             <tbody>
-              {self.matchStats()}
+              { this.matchStats() }
             </tbody>
           </table>
         </div>

@@ -13,9 +13,10 @@ class PlayersController < ApplicationController
   # GET /players/1
   # GET /players/1.json
   def show
+    team_decorator = TeamDecorator.new(@player.team)
     respond_to do |format|
       format.html
-      format.json { render json: @player.fixture_stats }
+      format.json { render json: { player: @player, team: team_decorator, team_fixtures: team_decorator.fixture_hash } }
     end
   end
 

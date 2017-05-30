@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170425084417) do
+ActiveRecord::Schema.define(version: 20170530122023) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -41,13 +41,13 @@ ActiveRecord::Schema.define(version: 20170425084417) do
 
   create_table "fpl_teams", force: :cascade do |t|
     t.string   "name",        null: false
-    t.integer  "users_id"
-    t.integer  "leagues_id"
+    t.integer  "user_id"
+    t.integer  "league_id"
     t.integer  "total_score"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
-    t.index ["leagues_id"], name: "index_fpl_teams_on_leagues_id", using: :btree
-    t.index ["users_id"], name: "index_fpl_teams_on_users_id", using: :btree
+    t.index ["league_id"], name: "index_fpl_teams_on_league_id", using: :btree
+    t.index ["user_id"], name: "index_fpl_teams_on_user_id", using: :btree
   end
 
   create_table "fpl_teams_players", id: false, force: :cascade do |t|
@@ -139,6 +139,8 @@ ActiveRecord::Schema.define(version: 20170425084417) do
     t.integer  "offside"
     t.integer  "attempted_passes"
     t.integer  "target_missed"
+    t.json     "player_fixture_histories"
+    t.json     "player_past_histories"
   end
 
   create_table "positions", force: :cascade do |t|
@@ -213,7 +215,7 @@ ActiveRecord::Schema.define(version: 20170425084417) do
 
   add_foreign_key "fixtures", "teams", column: "team_a_id"
   add_foreign_key "fixtures", "teams", column: "team_h_id"
-  add_foreign_key "fpl_teams", "leagues", column: "leagues_id"
-  add_foreign_key "fpl_teams", "users", column: "users_id"
+  add_foreign_key "fpl_teams", "leagues"
+  add_foreign_key "fpl_teams", "users"
   add_foreign_key "leagues", "users", column: "commissioner_id"
 end

@@ -35,7 +35,11 @@ class FixtureService
       ['home_team', 'away_team'].each do |x|
         stats[stat][x] = []
         @fixture_hash['stats'].find { |s| s[stat] }.dig(stat, x[0]).each do |s|
-          stats[stat][x] << { value: s['value'], player: Player.find(s['element']).last_name }
+          player = Player.find(s['element'])
+          stats[stat][x] << {
+            value: s['value'],
+            player: { id: player.id, last_name: player.last_name }
+          }
         end
       end
     end

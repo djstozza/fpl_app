@@ -3,51 +3,104 @@ import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { Button, Modal, Checkbox } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import ReactTooltip from 'react-tooltip';
+import _ from 'underscore';
 require('../../../../node_modules/react-bootstrap-table/dist/react-bootstrap-table.min.css');
 
-export default class TeamPlayers extends Component {
+export default class PlayersTable extends Component {
   constructor(props) {
     super(props)
     this.options = {
       defaultSortName: 'total_points',
-      defaultSortOrder: 'desc'
+      defaultSortOrder: 'desc',
+      paginationShowsTotal: true
     }
 
     this.state = {
-      showModal: false,
-      hiddenColumns: {}
+      showColumnVisibilityModal: false,
+      hiddenColumns: {},
+      pagination: true,
+      dreamTeamButtonText: 'Show Dream Team'
     };
 
     this.openColumnDialog = this.openColumnDialog.bind(this);
     this.closeColumnDialog = this.closeColumnDialog.bind(this);
     this.changeColumn = this.changeColumn.bind(this);
+    this.dreamTeamButton = this.dreamTeamButton.bind(this);
+    this.handleBtnClick = this.handleBtnClick.bind(this);
   }
 
   closeColumnDialog() {
-    this.setState({ showModal: false });
+    this.setState({ showColumnVisibilityModal: false });
   }
 
   openColumnDialog() {
-    this.setState({ showModal: true });
+    this.setState({ showColumnVisibilityModal: true });
   }
 
   changeColumn(id) {
     return () => {
-      this.setState({ hiddenColumns: Object.assign(this.state.hiddenColumns, { [id]: !this.state.hiddenColumns[id]}) });
+      this.setState({
+        hiddenColumns: Object.assign(this.state.hiddenColumns, { [id]: !this.state.hiddenColumns[id] })
+      });
     };
+  }
+
+  dreamTeamButton () {
+    if (this.props.teams != null) {
+      return (<Button onClick={ this.handleBtnClick }>{ this.state.dreamTeamButtonText }</Button>);
+    }
+  }
+
+  handleBtnClick () {
+    if (this.refs.showDreamTeamCol == null || this.refs.showDreamTeamCol == false) {
+      this.refs.dreamTeamCol.applyFilter('true');
+      this.refs.showDreamTeamCol = true;
+      this.setState({
+        pagination: false,
+        dreamTeamButtonText: 'Show All Players'
+      });
+    } else {
+      this.refs.dreamTeamCol.applyFilter('');
+      this.refs.showDreamTeamCol = false;
+      this.setState({
+        pagination: true,
+        dreamTeamButtonText: 'Show Dream Team'
+      });
+    }
+  }
+
+  linkCellText (cell, row) {
+    return (<Link to={`/players/${row.id}` } >{cell}</Link>);
   }
 
   render () {
     const positionText = { 1: 'GKP', 2: 'DEF', 3: 'MID', 4: 'FWD' }
+    const teamText = _.object(_.map(this.props.teams, function (obj) {
+      return [obj.id, obj.short_name]
+    }));
 
-    var positionTextCell = function (cell, row) {
+    const selectTeamText = _.object(_.map(this.props.teams, function (obj) {
+      return [obj.short_name, obj.name]
+    }).sort());
+
+    let positionTextCell = function (cell, row) {
       return positionText[cell]
+    }
+
+    let teamTextCell = function (cell, row) {
+      return teamText[cell]
+    }
+
+    function filterType (cell, row) {
+      return teamText[cell]
     }
 
     return (
       <div>
         <Button onClick={this.openColumnDialog}>Show/Hide Columns</Button>
-        <Modal show={this.state.showModal} onHide={this.closeColumnDialog}>
+        { this.dreamTeamButton() }
+
+        <Modal show={ this.state.showColumnVisibilityModal } onHide={ this.closeColumnDialog }>
           <Modal.Header closeButton><b>Show/Hide Columns</b></Modal.Header>
           <Modal.Body>
             <Checkbox
@@ -143,20 +196,37 @@ export default class TeamPlayers extends Component {
 
           </Modal.Body>
         </Modal>
-        <BootstrapTable data={this.props.team_players} striped hover options={ this.options }>
+        <BootstrapTable
+          data={ this.props.players }
+          striped
+          hover
+          ignoreSinglePage
+          options={ this.options }
+          pagination={ this.props.teams != null && this.state.pagination == true }>
           <TableHeaderColumn
             dataField='last_name'
             dataAlign='center'
             dataSort
-            filter={ { type: 'TextFilter', placeholder: ' ' } }
-            isKey>
+            dataFormat={this.linkCellText}
+            filter={ { type: 'TextFilter', placeholder: ' ' } }>
             <span data-tip='Name'>N</span>
+          </TableHeaderColumn>
+          <TableHeaderColumn dataField='id' isKey={ true } hidden/>
+          <TableHeaderColumn
+            dataField='team_id'
+            dataAlign='center'
+            dataSort
+            hidden={ this.props.teams == null }
+            dataFormat={ teamTextCell }
+            filterValue={ filterType }
+            filter={ { type: 'SelectFilter', options: selectTeamText, placeholder: ' ' } }>
+            <span data-tip='Team'>T</span>
           </TableHeaderColumn>
           <TableHeaderColumn
             dataField='position_id'
             dataAlign='center'
             dataSort
-            dataFormat={positionTextCell}
+            dataFormat={ positionTextCell }
             filter={ { type: 'SelectFilter', options: positionText, placeholder: ' ' } }>
             <span data-tip='Position'>Pos</span>
           </TableHeaderColumn>
@@ -265,11 +335,18 @@ export default class TeamPlayers extends Component {
             <span data-tip='Points Per Game'>PPG</span>
           </TableHeaderColumn>
           <TableHeaderColumn
+            dataField='in_dreamteam'
+            ref='dreamTeamCol'
+            dataAlign='center'
+            dataSort
+            hidden
+            filter={ { type: 'SelectFilter', options: { true: true, false: false }, placeholder: ' ' } }/>
+          <TableHeaderColumn
             dataField='total_points'
             dataAlign='center'
             dataSort
             hidden={ this.state.hiddenColumns.total_points }
-            filter={ { type: 'TextFilter', placeholder: ' ' } }>
+            filter={ { type: 'TextFilter', placeholder: ' ' } } >
             <span data-tip='Total Points'>TP</span>
           </TableHeaderColumn>
         </BootstrapTable>

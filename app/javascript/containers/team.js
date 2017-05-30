@@ -6,7 +6,7 @@ import fetchTeams from '../actions/action_fetch_teams.js'
 import fetchTeam from '../actions/action_fetch_team.js'
 import axios from 'axios';
 import TeamsNav from '../components/teams/teams_nav.js';
-import TeamPlayers from '../components/teams/team_players.js';
+import PlayersTable from '../components/players/players_table.js';
 import TeamLadder from '../components/teams/team_ladder.js';
 import TeamFixtures from '../components/teams/team_fixtures.js';
 import imgSrc from '../../assets/images/badges-sprite.jpeg';
@@ -33,7 +33,7 @@ class Team extends Component {
       teams: nextProps.teams,
       team: nextProps.team,
       team_fixtures: nextProps.team_fixtures,
-      team_players: nextProps.team_players
+      players: nextProps.players
     })
   }
 
@@ -51,7 +51,7 @@ class Team extends Component {
           <h2><img src={imgSrc} className={`crest ${team.short_name.toLowerCase()}`}/> {team.name} </h2>
           <Accordion>
             <Panel header='Players' bsStyle='primary' panelRole='tab' eventKey='1'>
-                <TeamPlayers team_players={this.state.team_players} />
+                <PlayersTable players={this.state.players} />
             </Panel>
             <Panel header='Fixtures' bsStyle='primary' panelRole='tab' eventKey='2'>
                 <TeamFixtures team_fixtures={this.state.team_fixtures} onChange={this.dataSource}/>
@@ -71,7 +71,7 @@ function mapStateToProps(state) {
     teams: state.teams,
     team: state.team_data.team,
     team_fixtures: state.team_data.fixtures,
-    team_players: state.team_data.players
+    players: state.team_data.players
   }
 }
 function mapDispatchToProps(dispatch) {

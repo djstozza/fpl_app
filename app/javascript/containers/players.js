@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import { Provider } from 'react-redux';
 import fetchPlayers from '../actions/action_fetch_players.js';
 import fetchTeams from '../actions/action_fetch_teams.js';
-import PlayerTable from '../components/players/player_table.js';
+import PlayersTable from '../components/players/players_table.js';
 
 class Players extends Component {
   constructor(props) {
@@ -31,7 +31,8 @@ class Players extends Component {
     } else {
       return (
         <div>
-          <PlayerTable players={this.state.players} teams={this.state.teams} />
+          <h2>Players</h2>
+          <PlayersTable players={this.state.players} teams={this.state.teams} />
         </div>
       );
     }

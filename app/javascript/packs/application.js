@@ -16,9 +16,11 @@ import { ConnectedRouter, routerReducer, routerMiddleware, push } from 'react-ro
 import Rounds from '../containers/rounds.js';
 import Team from '../containers/team.js';
 import Players from '../containers/players.js';
+import Player from '../containers/player.js';
 import thunk from 'redux-thunk';
 import reducers from '../reducers';
 import axios from 'axios';
+
 // Support component names relative to this directory:
 
 const history = createHistory();
@@ -46,6 +48,7 @@ export default class App extends Component {
             <Route exact path='/rounds/:id' component={Rounds} />
             <Route path='/teams/:id' component={Team} />
             <Route exact path='/players' component={Players} />
+            <Route exact path='/players/:id' component={Player} />
            </div>
         </ConnectedRouter>
       </Provider>
