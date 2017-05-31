@@ -4,7 +4,6 @@ import { Button, Modal, Checkbox } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import ReactTooltip from 'react-tooltip';
 import _ from 'underscore';
-require('../../../../node_modules/react-bootstrap-table/dist/react-bootstrap-table.min.css');
 
 export default class PlayersTable extends Component {
   constructor(props) {

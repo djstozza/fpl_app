@@ -20,6 +20,7 @@ import Player from '../containers/player.js';
 import thunk from 'redux-thunk';
 import reducers from '../reducers';
 import axios from 'axios';
+import '../../../node_modules/react-bootstrap-table/dist/react-bootstrap-table.min.css';
 
 // Support component names relative to this directory:
 

@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { Link } from 'react-router-dom';
 import ReactTooltip from 'react-tooltip';
-require('../../../../node_modules/react-bootstrap-table/dist/react-bootstrap-table.min.css');
 
 export default class TeamLadder extends Component {
   dataSource (teamId) {
