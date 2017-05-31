@@ -8,7 +8,6 @@ import _ from 'underscore';
 export default class PlayerFixtureHistoriesTable extends Component {
   constructor(props) {
     super(props)
-    console.log(this.props);
   }
 
   linkCellText (cell, row) {

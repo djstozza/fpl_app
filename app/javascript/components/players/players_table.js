@@ -25,6 +25,7 @@ export default class PlayersTable extends Component {
     this.closeColumnDialog = this.closeColumnDialog.bind(this);
     this.changeColumn = this.changeColumn.bind(this);
     this.dreamTeamButton = this.dreamTeamButton.bind(this);
+    this.allPlayersButton = this.allPlayersButton.bind(this);
     this.handleBtnClick = this.handleBtnClick.bind(this);
   }
 
@@ -47,6 +48,12 @@ export default class PlayersTable extends Component {
   dreamTeamButton () {
     if (this.props.teams != null) {
       return (<Button onClick={ this.handleBtnClick }>{ this.state.dreamTeamButtonText }</Button>);
+    }
+  }
+
+  allPlayersButton () {
+    if (this.props.teams == null) {
+      return (<Button href='/players'>All Players</Button>);
     }
   }
 
@@ -96,6 +103,7 @@ export default class PlayersTable extends Component {
 
     return (
       <div>
+        { this.allPlayersButton() }
         <Button onClick={this.openColumnDialog}>Show/Hide Columns</Button>
         { this.dreamTeamButton() }
 

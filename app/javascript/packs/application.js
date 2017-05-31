@@ -39,7 +39,6 @@ export default class App extends Component {
   }
 
   render () {
-    console.log(this.props);
     return (
       <Provider store={store}>
         <ConnectedRouter history={history}>
