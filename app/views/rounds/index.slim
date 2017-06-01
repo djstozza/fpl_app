@@ -1,7 +1,0 @@
-/ = react_component 'rounds',
-/                   rounds: @rounds.sort, fixtures: @round_decorator.fixture_stats, round: @round_decorator,
-/                   prerender: true
-
-.container
-  / = react_component 'team_ladder', rows: Team.all.order(:position), prerendt: true
-  #team-ladder

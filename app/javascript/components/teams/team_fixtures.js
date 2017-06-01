@@ -4,6 +4,13 @@ import { Link } from 'react-router-dom';
 import ReactTooltip from 'react-tooltip';
 
 export default class TeamFixtures extends Component {
+  constructor(props) {
+    super(props)
+    this.options = {
+      defaultSortName: 'round_id',
+      defaultSortOrder: 'asc'
+    }
+  }
   dataSource (teamId) {
     this.props.onChange(teamId);
   }
@@ -38,12 +45,12 @@ export default class TeamFixtures extends Component {
 
     return (
       <div>
-        <BootstrapTable data={this.props.team_fixtures} striped hover>
+        <BootstrapTable data={ this.props.team_fixtures } striped hover options={ this.options }>
           <TableHeaderColumn
             dataField='round_id'
             dataAlign='center'
             dataSort
-            dataFormat={this.roundLinkCellText}
+            dataFormat={ this.roundLinkCellText }
             filter={ { type: 'TextFilter', placeholder: ' ' } }
             isKey>
             <span data-tip='Round'>R</span>
@@ -59,7 +66,7 @@ export default class TeamFixtures extends Component {
             dataField='opponent'
             dataAlign='center'
             filter={ { type: 'TextFilter', placeholder: ' ' } }
-            dataFormat={this.opponentLinkCellText}
+            dataFormat={ this.opponentLinkCellText }
             dataSort>
             <span data-tip='Opponent'>O</span>
           </TableHeaderColumn>

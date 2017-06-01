@@ -4,6 +4,13 @@ import { Link } from 'react-router-dom';
 import ReactTooltip from 'react-tooltip';
 
 export default class TeamLadder extends Component {
+  constructor(props) {
+    super(props)
+    this.options = {
+      defaultSortName: 'position',
+      defaultSortOrder: 'asc'
+    }
+  }
   dataSource (teamId) {
     this.props.onChange(teamId);
   }
@@ -23,7 +30,12 @@ export default class TeamLadder extends Component {
   render () {
     return (
       <div>
-        <BootstrapTable data={this.props.teams} striped hover trClassName={ this.trClassFormat } >
+        <BootstrapTable
+          data={this.props.teams}
+          options={ this.options }
+          striped
+          hover
+          trClassName={ this.trClassFormat } >
           <TableHeaderColumn
             dataField='position'
             dataAlign='center'

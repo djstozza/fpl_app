@@ -1,5 +1,20 @@
 class TeamsDecorator < SimpleDelegator
-  def ladder
-    all.order(:position)
+  def all_data
+    pluck_to_hash(
+      :id,
+      :name,
+      :short_name,
+      :position,
+      :played,
+      :goals_for,
+      :goals_against,
+      :goal_difference,
+      :wins,
+      :losses,
+      :draws,
+      :clean_sheets,
+      :points,
+      :form
+    )
   end
 end

@@ -11,6 +11,7 @@ import TeamLadder from '../components/teams/team_ladder.js';
 import TeamFixtures from '../components/teams/team_fixtures.js';
 import imgSrc from '../../assets/images/badges-sprite.jpeg';
 import { Panel, Accordion } from 'react-bootstrap';
+import _ from 'underscore';
 
 class Team extends Component {
   constructor(props) {
@@ -44,7 +45,8 @@ class Team extends Component {
       );
     } else {
       var team = this.state.team
-      var teams = this.state.teams
+      var teams = _.sortBy(this.state.teams, function (obj) { return obj.position })
+
       return (
         <div>
           <TeamsNav teams={teams} team={team} onChange={this.dataSource} />

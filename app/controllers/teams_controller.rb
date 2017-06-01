@@ -3,7 +3,7 @@ class TeamsController < ApplicationController
 
   def index
     respond_to do |format|
-      format.json { render json: Team.all.order(:position).each { |team| TeamDecorator.new(team) } }
+      format.json { render json: TeamsDecorator.new(Team.all).all_data }
     end
   end
 
@@ -13,7 +13,11 @@ class TeamsController < ApplicationController
     respond_to do |format|
       format.html
       format.json do
-        render json: { team: @team_decorator, fixtures: @team_decorator.fixture_hash, players: @team_decorator.players }
+        render json: {
+          team: @team_decorator,
+          fixtures: @team_decorator.fixture_hash,
+          players: PlayersDecorator.new(@team_decorator.players).all_data
+        }
       end
     end
   end

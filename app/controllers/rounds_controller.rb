@@ -1,16 +1,15 @@
 class RoundsController < ApplicationController
-  before_action :set_round, only: [:show]
-  before_action :set_rounds, only: [:show, :index]
-
   # GET /rounds
   # GET /rounds.json
   def index
-    @round_decorator = RoundDecorator.new(Round.find_by(is_current: true))
+    round_decorator = RoundDecorator.new(Round.find_by(is_current: true))
     respond_to do |format|
       format.html
       format.json do
         render json: {
-          round: @round_decorator, fixtures: @round_decorator.fixture_stats, rounds: @rounds.sort
+          round: round_decorator,
+          fixtures: round_decorator.fixture_stats,
+          rounds: RoundsDecorator.new(Round.all).all_data
         }
       end
     end
@@ -19,22 +18,14 @@ class RoundsController < ApplicationController
   # GET /rounds/1
   # GET /rounds/1.json
   def show
-    @round_decorator = RoundDecorator.new(@round)
+    round_decorator = RoundDecorator.new(Round.find_by(id: params[:id]))
     respond_to do |format|
       format.html
-      format.json { render json: { round: @round_decorator, fixtures: @round_decorator.fixture_stats } }
+      format.json { render json: { round: round_decorator, fixtures: round_decorator.fixture_stats } }
     end
   end
 
   private
-  # Use callbacks to share common setup or constraints between actions.
-  def set_round
-    @round = Round.find(params[:id])
-  end
-
-  def set_rounds
-    @rounds = Round.all
-  end
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def round_params
