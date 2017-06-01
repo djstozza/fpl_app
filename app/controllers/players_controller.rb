@@ -6,7 +6,7 @@ class PlayersController < ApplicationController
   def index
     respond_to do |format|
       format.html
-      format.json { render json: Player.all.to_json(except: [:player_fixture_histories, :player_past_histories]) }
+      format.json { render json: PlayersDecorator.new(Player.all).all_data }
     end
   end
 
