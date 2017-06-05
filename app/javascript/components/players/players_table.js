@@ -53,7 +53,7 @@ export default class PlayersTable extends Component {
 
   allPlayersButton () {
     if (this.props.teams == null) {
-      return (<Button href='/players'>All Players</Button>);
+      return (<Button href='/players'>View All Players</Button>);
     }
   }
 
@@ -80,7 +80,7 @@ export default class PlayersTable extends Component {
   }
 
   render () {
-    const positionText = { 1: 'GKP', 2: 'DEF', 3: 'MID', 4: 'FWD' }
+    const positionText={ 1: 'GKP', 2: 'DEF', 3: 'MID', 4: 'FWD' }
     const teamText = _.object(_.map(this.props.teams, function (obj) {
       return [obj.id, obj.short_name]
     }));

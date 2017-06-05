@@ -13,9 +13,7 @@
 //= require jquery
 //= require jquery_ujs
 //= require jquery-cookie
-//= require datatables
 //= require bootstrap-sprockets
 //= require jstz
 //= timezone-finder
-//= ajax_datatables
 //= require_tree .

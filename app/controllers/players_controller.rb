@@ -16,7 +16,14 @@ class PlayersController < ApplicationController
     team_decorator = TeamDecorator.new(@player.team)
     respond_to do |format|
       format.html
-      format.json { render json: { player: @player, team: team_decorator, team_fixtures: team_decorator.fixture_hash } }
+      format.json do
+        render json: {
+          player: @player,
+          team: team_decorator,
+          team_fixtures: team_decorator.fixture_hash,
+          position: @player.position
+        }
+      end
     end
   end
 

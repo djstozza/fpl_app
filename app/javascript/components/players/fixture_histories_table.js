@@ -5,9 +5,56 @@ import { Link } from 'react-router-dom';
 import ReactTooltip from 'react-tooltip';
 import _ from 'underscore';
 
-export default class PlayerFixtureHistoriesTable extends Component {
+export default class FixtureHistoriesTable extends Component {
   constructor(props) {
     super(props)
+
+    this.data = this.data.bind(this);
+    this.state = {
+      data: this.data()
+    }
+
+    this.roundTableHeaderColumn = this.roundTableHeaderColumn.bind(this);
+    this.seasonTeableHeaderColumn = this.seasonTeableHeaderColumn.bind(this);
+  }
+
+  data () {
+    if (this.props.player_fixture_histories != null) {
+      return this.props.player_fixture_histories
+    } else {
+      return this.props.player_past_histories
+    }
+  }
+
+  roundTableHeaderColumn () {
+    if (this.state.data == this.props.player_fixture_histories) {
+      return (
+        <TableHeaderColumn
+          dataField='round'
+          dataAlign='center'
+          dataSort
+          dataFormat={ this.linkCellText }
+          filter={ { type: 'TextFilter', placeholder: ' ' } }
+          isKey>
+          <span data-tip='Round'>R</span>
+        </TableHeaderColumn>
+      )
+    }
+  }
+
+  seasonTeableHeaderColumn () {
+    if (this.state.data == this.props.player_past_histories) {
+      return (
+        <TableHeaderColumn
+          dataField='season_name'
+          dataAlign='center'
+          dataSort
+          filter={ { type: 'TextFilter', placeholder: ' ' } }
+          isKey>
+          <span data-tip='Season'>S</span>
+        </TableHeaderColumn>
+      )
+    }
   }
 
   linkCellText (cell, row) {
@@ -17,16 +64,9 @@ export default class PlayerFixtureHistoriesTable extends Component {
   render () {
     return (
       <div>
-        <BootstrapTable data={this.props.player_fixture_histories}>
-          <TableHeaderColumn
-            dataField='round'
-            dataAlign='center'
-            dataSort
-            dataFormat={ this.linkCellText }
-            filter={ { type: 'TextFilter', placeholder: ' ' } }
-            isKey>
-            <span data-tip='Round'>R</span>
-          </TableHeaderColumn>
+        <BootstrapTable data={this.state.data}>
+          { this.roundTableHeaderColumn() }
+          { this.seasonTeableHeaderColumn() }
           <TableHeaderColumn
             dataField='minutes'
             dataAlign='center'
@@ -47,6 +87,13 @@ export default class PlayerFixtureHistoriesTable extends Component {
             dataSort
             filter={ { type: 'TextFilter', placeholder: ' ' } }>
             <span data-tip='Assists'>A</span>
+          </TableHeaderColumn>
+          <TableHeaderColumn
+            dataField='clean_sheets'
+            dataAlign='center'
+            dataSort
+            filter={ { type: 'TextFilter', placeholder: ' ' } }>
+            <span data-tip='Clean Sheets'>CS</span>
           </TableHeaderColumn>
           <TableHeaderColumn
             dataField='goals_conceded'

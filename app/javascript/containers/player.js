@@ -2,16 +2,23 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Provider } from 'react-redux';
+import { Panel, Accordion } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+import { Icon } from 'react-fa';
+import fetchRounds from '../actions/action_fetch_rounds.js';
 import fetchPlayer from '../actions/action_fetch_player.js';
 import fetchTeam from '../actions/action_fetch_team.js';
-import PlayerFixtureHistoriesTable from '../components/players/player_fixture_histories_table.js';
+import PlayerDetails from '../components/players/player_details.js';
+import FixtureHistoriesTable from '../components/players/fixture_histories_table.js';
 
 class Player extends Component {
   constructor(props) {
     super(props)
+    this.playerPastHistories = this.playerPastHistories.bind(this);
   }
 
   componentWillMount () {
+    this.props.fetchRounds();
     this.props.fetchPlayer(this.props.match.params.id);
   }
 
@@ -19,23 +26,42 @@ class Player extends Component {
     this.setState({
       player: nextProps.player,
       team: nextProps.team,
-      team_fixtures: nextProps.team_fixtures
+      team_fixtures: nextProps.team_fixtures,
+      position: nextProps.position,
+      rounds: nextProps.rounds
     })
   }
 
-  render () {
-    const playerImgSrc = 'https://platform-static-files.s3.amazonaws.com/premierleague/photos/players/110x140/p'
+  playerPastHistories () {
+    if (this.state.player.player_fixture_histories.length > 0) {
+      return (
+        <Panel header='Past Seasons' bsStyle='primary' panelRole='tab' eventKey='2'>
+          <FixtureHistoriesTable player_past_histories={ this.state.player.player_past_histories } />
+        </Panel>
+      )
+    }
+  }
 
-    if (this.state == null) {
+  render () {
+    if (this.state == null || this.state.player == null) {
       return (
         <p>Loading...</p>
       );
     } else {
       return (
         <div>
-          <h2>{this.state.player.first_name} {this.state.player.last_name} - {this.state.team.name}</h2>
-          <img src={`${playerImgSrc}${this.state.player.code}.png`}/>
-          <PlayerFixtureHistoriesTable player_fixture_histories={ this.state.player.player_fixture_histories } />
+          <PlayerDetails
+            player={ this.state.player }
+            rounds={ this.state.rounds }
+            team={ this.state.team }
+            player_fixture_histories={ this.state.player_fixture_histories }
+            position={ this.state.position } />
+          <Accordion>
+            <Panel header='Season' bsStyle='primary' panelRole='tab' eventKey='1'>
+              <FixtureHistoriesTable player_fixture_histories={ this.state.player.player_fixture_histories } />
+            </Panel>
+            { this.playerPastHistories() }
+          </Accordion>
         </div>
       );
     }
@@ -46,12 +72,15 @@ function mapStateToProps(state) {
   return {
     player: state.player_data.player,
     team: state.player_data.team,
-    team_fixtures: state.player_data.team_fixtures
+    team_fixtures: state.player_data.team_fixtures,
+    position: state.player_data.position,
+    rounds: state.rounds_data.rounds
   }
 }
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
-    fetchPlayer: fetchPlayer
+    fetchPlayer: fetchPlayer,
+    fetchRounds: fetchRounds
   }, dispatch);
 }
 
