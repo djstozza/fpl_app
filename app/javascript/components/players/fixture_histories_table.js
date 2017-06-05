@@ -34,8 +34,7 @@ export default class FixtureHistoriesTable extends Component {
           dataAlign='center'
           dataSort
           dataFormat={ this.linkCellText }
-          filter={ { type: 'TextFilter', placeholder: ' ' } }
-          isKey>
+          filter={ { type: 'TextFilter', placeholder: ' ' } }>
           <span data-tip='Round'>R</span>
         </TableHeaderColumn>
       )
@@ -49,8 +48,7 @@ export default class FixtureHistoriesTable extends Component {
           dataField='season_name'
           dataAlign='center'
           dataSort
-          filter={ { type: 'TextFilter', placeholder: ' ' } }
-          isKey>
+          filter={ { type: 'TextFilter', placeholder: ' ' } }>
           <span data-tip='Season'>S</span>
         </TableHeaderColumn>
       )
@@ -65,6 +63,7 @@ export default class FixtureHistoriesTable extends Component {
     return (
       <div>
         <BootstrapTable data={this.state.data}>
+          <TableHeaderColumn dataField='id' isKey={ true } hidden/>
           { this.roundTableHeaderColumn() }
           { this.seasonTeableHeaderColumn() }
           <TableHeaderColumn
