@@ -10,6 +10,7 @@ import fetchPlayer from '../actions/action_fetch_player.js';
 import fetchTeam from '../actions/action_fetch_team.js';
 import PlayerDetails from '../components/players/player_details.js';
 import FixtureHistoriesTable from '../components/players/fixture_histories_table.js';
+import PastHistoriesTable from '../components/players/past_histories_table.js';
 
 class Player extends Component {
   constructor(props) {
@@ -33,10 +34,10 @@ class Player extends Component {
   }
 
   playerPastHistories () {
-    if (this.state.player.player_fixture_histories.length > 0) {
+    if (this.state.player.player_past_histories.length > 0) {
       return (
         <Panel header='Past Seasons' bsStyle='primary' panelRole='tab' eventKey='2'>
-          <FixtureHistoriesTable player_past_histories={ this.state.player.player_past_histories } />
+          <PastHistoriesTable player_past_histories={ this.state.player.player_past_histories } />
         </Panel>
       )
     }

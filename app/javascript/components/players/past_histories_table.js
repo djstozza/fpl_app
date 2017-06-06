@@ -5,27 +5,26 @@ import { Link } from 'react-router-dom';
 import ReactTooltip from 'react-tooltip';
 import _ from 'underscore';
 
-export default class FixtureHistoriesTable extends Component {
+export default class PastHistoriesTable extends Component {
   constructor(props) {
     super(props)
   }
 
   linkCellText (cell, row) {
-    return (<Link to={ `/rounds/${row.round}` } >{ cell }</Link>);
+    return (<Link to={`/rounds/${row.round}` } >{cell}</Link>);
   }
 
   render () {
     return (
       <div>
-        <BootstrapTable data={ this.props.player_fixture_histories }>
+        <BootstrapTable data={ this.props.player_past_histories }>
           <TableHeaderColumn
-            dataField='round'
+            dataField='season_name'
             dataAlign='center'
             dataSort
-            dataFormat={ this.linkCellText }
             filter={ { type: 'TextFilter', placeholder: ' ' } }
             isKey>
-            <span data-tip='Round'>R</span>
+            <span data-tip='Season'>S</span>
           </TableHeaderColumn>
           <TableHeaderColumn
             dataField='minutes'

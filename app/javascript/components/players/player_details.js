@@ -32,7 +32,7 @@ export default class PlayerDetails extends Component {
     }
     return (
       <div className='row'>
-        <div className='col-sm-6'>
+        <div className='col-sm-6 col-xs-12'>
           <Table bordered hover>
             <tbody>
               <tr>
@@ -76,7 +76,7 @@ export default class PlayerDetails extends Component {
               </tr>
               <tr>
                 <th>Availability</th>
-                <th>This Round</th>
+              <th>This Round</th>
                 <td>{ player.chance_of_playing_this_round }%</td>
                 <th>Next Round</th>
                 <td>{ player.chance_of_playing_next_round }%</td>

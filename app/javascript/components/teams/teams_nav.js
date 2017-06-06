@@ -16,7 +16,7 @@ export default class TeamsNav extends React.Component {
         <li key={team.id} className={ `${team.id == teamId ? 'active' : ''} presenter ${teamTabClass}` }>
           <a href="javascript:;" onClick={ function () {selectTabClick(teamTabClass, team.id, self.props) } }>
             <span>
-              <img className = {`crest ${team.short_name.toLowerCase()} teams-nav`} src={imgSrc}/> {team.short_name}
+              <img className = {`crest ${team.short_name.toLowerCase()} teams-nav`} src={imgSrc}/> { team.short_name }
             </span>
           </a>
         </li>
