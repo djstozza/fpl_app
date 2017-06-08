@@ -13,6 +13,7 @@ import createHistory from 'history/createBrowserHistory'
 import { Route, IndexRoute } from 'react-router'
 import { createStore, applyMiddleware } from 'redux';
 import { ConnectedRouter, routerReducer, routerMiddleware, push } from 'react-router-redux';
+import { Row, Col } from 'react-bootstrap';
 import Rounds from '../containers/rounds.js';
 import Team from '../containers/team.js';
 import Players from '../containers/players.js';
@@ -42,14 +43,16 @@ export default class App extends Component {
     return (
       <Provider store={store}>
         <ConnectedRouter history={history}>
-           <div className='col-md-offset-1 col-md-10 col-xs-12'>
-            <Route exact path="/" component={Rounds}/>
-            <Route exact path='/rounds' component={Rounds}/>
-            <Route exact path='/rounds/:id' component={Rounds} />
-            <Route path='/teams/:id' component={Team} />
-            <Route exact path='/players' component={Players} />
-            <Route exact path='/players/:id' component={Player} />
-           </div>
+          <Row className='clearfix'>
+            <Col mdOffset={1} md={10} xs={12}>
+              <Route exact path="/" component={Rounds}/>
+              <Route exact path='/rounds' component={Rounds}/>
+              <Route exact path='/rounds/:id' component={Rounds} />
+              <Route path='/teams/:id' component={Team} />
+              <Route exact path='/players' component={Players} />
+              <Route exact path='/players/:id' component={Player} />
+           </Col>
+          </Row>
         </ConnectedRouter>
       </Provider>
     );

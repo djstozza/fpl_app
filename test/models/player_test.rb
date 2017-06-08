@@ -75,6 +75,8 @@
 #  offside                         :integer
 #  attempted_passes                :integer
 #  target_missed                   :integer
+#  player_fixture_histories        :json
+#  player_past_histories           :json
 #
 
 require 'test_helper'

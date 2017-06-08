@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  resources :fpl_team_lists
+  resources :fpl_teams
+  resources :leagues
   require 'sidekiq/web'
   require 'sidekiq-scheduler/web'
   mount Sidekiq::Web => '/sidekiq'

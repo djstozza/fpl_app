@@ -11,8 +11,10 @@
 #  updated_at  :datetime         not null
 #
 
-class FplTeam < ApplicationRecord
-  belongs_to :player
-  belongs_to :league
-  has_many :fpl_team_lists
+require 'test_helper'
+
+class FplTeamTest < ActiveSupport::TestCase
+  # test "the truth" do
+  #   assert true
+  # end
 end

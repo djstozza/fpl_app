@@ -11,7 +11,10 @@
 #  commissioner_id :integer
 #
 
-class League < ApplicationRecord
-  belongs_to :commissioner, class_name: 'User', foreign_key: 'commissioner_id'
-  has_many :users, through: :fpl_teams
+require 'test_helper'
+
+class LeagueTest < ActiveSupport::TestCase
+  # test "the truth" do
+  #   assert true
+  # end
 end

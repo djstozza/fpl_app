@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170530122023) do
+ActiveRecord::Schema.define(version: 20170608083927) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -39,25 +39,38 @@ ActiveRecord::Schema.define(version: 20170530122023) do
     t.index ["team_h_id"], name: "index_fixtures_on_team_h_id", using: :btree
   end
 
+  create_table "fpl_team_lists", force: :cascade do |t|
+    t.integer  "fpl_team_id"
+    t.integer  "round_id"
+    t.string   "formation",   default: [],              array: true
+    t.integer  "total_score"
+    t.integer  "rank"
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+    t.index ["fpl_team_id"], name: "index_fpl_team_lists_on_fpl_team_id", using: :btree
+    t.index ["round_id"], name: "index_fpl_team_lists_on_round_id", using: :btree
+  end
+
+  create_table "fpl_team_lists_players", id: false, force: :cascade do |t|
+    t.integer "player_id",        null: false
+    t.integer "fpl_team_list_id", null: false
+    t.index ["player_id", "fpl_team_list_id"], name: "index_fpl_team_lists_players_on_player_id_and_fpl_team_list_id", using: :btree
+  end
+
   create_table "fpl_teams", force: :cascade do |t|
     t.string   "name",        null: false
-    t.integer  "user_id"
-    t.integer  "league_id"
+    t.integer  "users_id"
+    t.integer  "leagues_id"
     t.integer  "total_score"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
-    t.index ["league_id"], name: "index_fpl_teams_on_league_id", using: :btree
-    t.index ["user_id"], name: "index_fpl_teams_on_user_id", using: :btree
-  end
-
-  create_table "fpl_teams_players", id: false, force: :cascade do |t|
-    t.integer "player_id",   null: false
-    t.integer "fpl_team_id", null: false
-    t.index ["player_id", "fpl_team_id"], name: "index_fpl_teams_players_on_player_id_and_fpl_team_id", using: :btree
+    t.index ["leagues_id"], name: "index_fpl_teams_on_leagues_id", using: :btree
+    t.index ["users_id"], name: "index_fpl_teams_on_users_id", using: :btree
   end
 
   create_table "leagues", force: :cascade do |t|
     t.string   "name",                            null: false
+    t.string   "code",                            null: false
     t.boolean  "active",          default: false
     t.datetime "created_at",                      null: false
     t.datetime "updated_at",                      null: false
@@ -215,7 +228,9 @@ ActiveRecord::Schema.define(version: 20170530122023) do
 
   add_foreign_key "fixtures", "teams", column: "team_a_id"
   add_foreign_key "fixtures", "teams", column: "team_h_id"
-  add_foreign_key "fpl_teams", "leagues"
-  add_foreign_key "fpl_teams", "users"
+  add_foreign_key "fpl_team_lists", "fpl_teams"
+  add_foreign_key "fpl_team_lists", "rounds"
+  add_foreign_key "fpl_teams", "leagues", column: "leagues_id"
+  add_foreign_key "fpl_teams", "users", column: "users_id"
   add_foreign_key "leagues", "users", column: "commissioner_id"
 end
