@@ -10,7 +10,7 @@ const rootReducer = combineReducers({
   rounds_data: RoundsReducer,
   team_data: TeamReducer,
   players: PlayersReducer,
-  player_data: PlayerReducer
+  player_data: PlayerReducer,
 });
 
 export default rootReducer;

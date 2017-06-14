@@ -16,4 +16,5 @@
 //= require bootstrap-sprockets
 //= require jstz
 //= timezone-finder
+//= generate-league-code
 //= require_tree .

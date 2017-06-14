@@ -1,10 +1,12 @@
 class LeaguesController < ApplicationController
   before_action :set_league, only: [:show, :edit, :update, :destroy]
+  before_action :set_fpl_team, only: [:edit, :update]
+  before_action :authenticate_user!
 
   # GET /leagues
   # GET /leagues.json
   def index
-    @leagues = League.all
+    @leagues = current_user.leagues
   end
 
   # GET /leagues/1
@@ -14,25 +16,27 @@ class LeaguesController < ApplicationController
 
   # GET /leagues/new
   def new
-    @league = League.new
+    @form = Leagues::ProcessLeagueForm.new(league: League.new, fpl_team: FplTeam.new, current_user: current_user)
   end
 
   # GET /leagues/1/edit
   def edit
+    # fpl_team = FplTeam.find_by(league: @league, user: current_user)
+    @form = Leagues::ProcessLeagueForm.new(league: @league, fpl_team: @fpl_team, current_user: current_user)
   end
 
   # POST /leagues
   # POST /leagues.json
   def create
-    @league = League.new(league_params)
-
+    @form = Leagues::ProcessLeagueForm.new(league: League.new, fpl_team: FplTeam.new, current_user: current_user)
+    @form.attributes = league_params
     respond_to do |format|
-      if @league.save
-        format.html { redirect_to @league, notice: 'League was successfully created.' }
+      if @form.save
+        format.html { redirect_to @form.league, notice: 'League was successfully created.' }
         format.json { render :show, status: :created, location: @league }
       else
         format.html { render :new }
-        format.json { render json: @league.errors, status: :unprocessable_entity }
+        format.json { render json: @form.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -40,8 +44,10 @@ class LeaguesController < ApplicationController
   # PATCH/PUT /leagues/1
   # PATCH/PUT /leagues/1.json
   def update
+    @form = Leagues::ProcessLeagueForm.new(league: @league, fpl_team: @fpl_team, current_user: current_user)
+    @form.attributes = league_params
     respond_to do |format|
-      if @league.update(league_params)
+      if @form.update
         format.html { redirect_to @league, notice: 'League was successfully updated.' }
         format.json { render :show, status: :ok, location: @league }
       else
@@ -62,13 +68,17 @@ class LeaguesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_league
-      @league = League.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_league
+    @league = League.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def league_params
-      params.fetch(:league, {})
-    end
+  def set_fpl_team
+    @fpl_team = FplTeam.find_by(league: @league, user: current_user)
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def league_params
+    params.permit(:id, :league_name, :code, :comissioner_id, :fpl_team_name, :user_id)
+  end
 end

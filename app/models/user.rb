@@ -25,5 +25,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :trackable, :validatable
 
   has_many :commisioner_leagues, class_name: 'League', foreign_key: 'commissioner_id'
+  has_many :league_commissioner_assignments, class_name: 'LeagueCommissionerAssignment', foreign_key: 'commissioner_id'
   has_many :leagues, through: :fpl_teams
+  has_many :fpl_teams
 end

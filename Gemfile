@@ -7,6 +7,8 @@ gem 'heroku-deflater', group: :production
 gem 'devise'
 gem 'webpacker'
 gem 'pluck_to_hash'
+gem 'active_interaction'
+gem 'virtus'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '>= 5.0.0.rc2', '< 5.1'
 # Use postgresql as the database for Active Record
@@ -48,6 +50,7 @@ gem 'httparty'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
+  gem 'rspec-rails'
   gem 'byebug'
   gem 'pry-rails'
 end
@@ -58,4 +61,10 @@ group :development do
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
+end
+
+group :test do
+  gem 'faker'
+  gem 'factory_girl_rails', require: false
+  gem 'database_cleaner'
 end

@@ -10,10 +10,4 @@ class ApplicationController < ActionController::Base
   def set_timezone
     Time.zone = cookies[:timezone]
   end
-
-  def render_datatable_json(datatable_class, *args)
-    respond_to do |format|
-      format.json { render json: datatable_class.new(view_context, *args) }
-    end
-  end
 end

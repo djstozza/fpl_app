@@ -1,0 +1,2 @@
+module JoinLeaguesHelper
+end

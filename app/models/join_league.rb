@@ -1,0 +1,2 @@
+class JoinLeague < ApplicationRecord
+end

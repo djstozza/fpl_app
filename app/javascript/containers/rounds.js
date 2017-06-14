@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Provider } from 'react-redux';
 import fetchRounds from '../actions/action_fetch_rounds.js';
 import fetchTeams from '../actions/action_fetch_teams.js';
 import axios from 'axios';

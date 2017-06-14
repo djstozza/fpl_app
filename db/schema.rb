@@ -10,10 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170608083927) do
+ActiveRecord::Schema.define(version: 20170608091029) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "draft_picks", force: :cascade do |t|
+    t.integer  "league_id"
+    t.integer  "player_id"
+    t.integer  "fpl_team_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.index ["fpl_team_id"], name: "index_draft_picks_on_fpl_team_id", using: :btree
+    t.index ["league_id"], name: "index_draft_picks_on_league_id", using: :btree
+    t.index ["player_id"], name: "index_draft_picks_on_player_id", using: :btree
+  end
 
   create_table "fixtures", force: :cascade do |t|
     t.datetime "kickoff_time"
@@ -59,13 +70,13 @@ ActiveRecord::Schema.define(version: 20170608083927) do
 
   create_table "fpl_teams", force: :cascade do |t|
     t.string   "name",        null: false
-    t.integer  "users_id"
-    t.integer  "leagues_id"
+    t.integer  "user_id"
+    t.integer  "league_id"
     t.integer  "total_score"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
-    t.index ["leagues_id"], name: "index_fpl_teams_on_leagues_id", using: :btree
-    t.index ["users_id"], name: "index_fpl_teams_on_users_id", using: :btree
+    t.index ["league_id"], name: "index_fpl_teams_on_league_id", using: :btree
+    t.index ["user_id"], name: "index_fpl_teams_on_user_id", using: :btree
   end
 
   create_table "leagues", force: :cascade do |t|
@@ -228,9 +239,5 @@ ActiveRecord::Schema.define(version: 20170608083927) do
 
   add_foreign_key "fixtures", "teams", column: "team_a_id"
   add_foreign_key "fixtures", "teams", column: "team_h_id"
-  add_foreign_key "fpl_team_lists", "fpl_teams"
-  add_foreign_key "fpl_team_lists", "rounds"
-  add_foreign_key "fpl_teams", "leagues", column: "leagues_id"
-  add_foreign_key "fpl_teams", "users", column: "users_id"
   add_foreign_key "leagues", "users", column: "commissioner_id"
 end
