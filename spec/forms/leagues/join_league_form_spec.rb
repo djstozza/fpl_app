@@ -58,6 +58,16 @@ RSpec.describe Leagues::JoinLeagueForm, type: :form do
       expect{ form.save }.to_not change(FplTeam, :count)
       expect(form.errors.full_messages).to include('You have already joined this league')
     end
+
+    it 'prevents a user from joining if the fpl team limit has been reached' do
+      11.times do
+        FactoryGirl.create(:fpl_team, user: FactoryGirl.create(:user), league: league)
+      end
+      form = Leagues::JoinLeagueForm.new(fpl_team: FplTeam.new, current_user: FactoryGirl.create(:user))
+      form.attributes = form_attributes
+      expect{ form.save }.to_not change(FplTeam, :count)
+      expect(form.errors.full_messages).to include('Limit on fpl teams for this league has already been reached')
+    end
   end
 
   private

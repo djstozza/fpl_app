@@ -18,6 +18,7 @@ import Rounds from '../containers/rounds.js';
 import Team from '../containers/team.js';
 import Players from '../containers/players.js';
 import Player from '../containers/player.js';
+import League from '../containers/league.js';
 import thunk from 'redux-thunk';
 import reducers from '../reducers';
 import axios from 'axios';
@@ -47,10 +48,11 @@ export default class App extends Component {
             <Col mdOffset={1} md={10} xs={12}>
               <Route exact path="/" component={Rounds}/>
               <Route exact path='/rounds' component={Rounds}/>
-              <Route exact path='/rounds/:id' component={Rounds} />
+              <Route exact path='/rounds/:id' component={Rounds}/>
               <Route path='/teams/:id' component={Team} />
-              <Route exact path='/players' component={Players} />
-              <Route exact path='/players/:id' component={Player} />
+              <Route exact path='/players' component={Players}/>
+              <Route exact path='/players/:id' component={Player}/>
+              <Route exact path='/leagues/:id' component={League}/>
            </Col>
           </Row>
         </ConnectedRouter>

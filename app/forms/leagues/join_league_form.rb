@@ -17,15 +17,14 @@ class Leagues::JoinLeagueForm < ApplicationForm
   attribute :user_id, Integer
 
   validate :league_presence
-
   validates :current_user, presence: true
   validates :fpl_team, presence: true
-
   validates :code, :league_name, :fpl_team_name, presence: true
-
   validate :already_joined
-
   validate :fpl_team_name_uniqueness
+  validate :fpl_team_quota
+
+  MAX_FPL_TEAM_QUOTA = 11
 
   def save
     return false unless valid?
@@ -51,6 +50,12 @@ class Leagues::JoinLeagueForm < ApplicationForm
     return if fpl_team_name.downcase == @fpl_team&.name&.downcase
     if FplTeam.where('lower(name) = ?', fpl_team_name.downcase).count.positive?
       errors.add(:base, 'Fpl team name has already been taken')
+    end
+  end
+
+  def fpl_team_quota
+    if @league.present? && @league.fpl_teams.count >= MAX_FPL_TEAM_QUOTA
+      errors.add(:base, 'Limit on fpl teams for this league has already been reached')
     end
   end
 end

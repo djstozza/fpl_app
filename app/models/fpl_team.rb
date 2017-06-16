@@ -15,6 +15,7 @@ class FplTeam < ApplicationRecord
   belongs_to :player
   belongs_to :league
   belongs_to :user
+  has_many :draft_picks
   has_many :fpl_team_lists
   validates_presence_of :user
   validates_presence_of :league

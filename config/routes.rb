@@ -1,9 +1,9 @@
 Rails.application.routes.draw do
-  # resources :join_leagues, only: [:new, :create]
-  resources :draft_picks
   resources :fpl_team_lists
   resources :fpl_teams, except: [:new, :create]
-  resources :leagues
+  resources :leagues do
+    resources :draft_picks
+  end
   require 'sidekiq/web'
   require 'sidekiq-scheduler/web'
   mount Sidekiq::Web => '/sidekiq'

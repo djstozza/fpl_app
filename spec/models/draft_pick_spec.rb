@@ -11,11 +11,8 @@
 #  updated_at  :datetime         not null
 #
 
-class DraftPick < ApplicationRecord
-  belongs_to :league
-  belongs_to :fpl_team
-  belongs_to :player
+require 'rails_helper'
 
-  validates :pick_number, presence: true
-  validates :league_id, presence: true
+RSpec.describe DraftPick, type: :model do
+  pending "add some examples to (or delete) #{__FILE__}"
 end

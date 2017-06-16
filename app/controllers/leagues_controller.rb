@@ -12,6 +12,18 @@ class LeaguesController < ApplicationController
   # GET /leagues/1
   # GET /leagues/1.json
   def show
+    respond_to do |format|
+      format.html
+      format.json do
+        render json: {
+          league: @league,
+          fpl_teams: @league.fpl_teams,
+          users: @league.users,
+          commissioner: @league.commissioner,
+          current_user: current_user
+        }
+      end
+    end
   end
 
   # GET /leagues/new

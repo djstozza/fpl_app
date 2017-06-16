@@ -10,12 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170608091029) do
+ActiveRecord::Schema.define(version: 20170614103524) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "draft_picks", force: :cascade do |t|
+    t.integer  "pick_number"
     t.integer  "league_id"
     t.integer  "player_id"
     t.integer  "fpl_team_id"

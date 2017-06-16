@@ -1,10 +1,14 @@
 class DraftPicksController < ApplicationController
+  before_action :authenticate_user!
+  before_action :set_league
   before_action :set_draft_pick, only: [:show, :edit, :update, :destroy]
 
   # GET /draft_picks
   # GET /draft_picks.json
   def index
-    @draft_picks = DraftPick.all
+    respond_to do |format|
+      format.json { render json: @league.draft_picks }
+    end
   end
 
   # GET /draft_picks/1
@@ -14,7 +18,14 @@ class DraftPicksController < ApplicationController
 
   # GET /draft_picks/new
   def new
-    @draft_pick = DraftPick.new
+    form = Leagues::CreateDraftForm.new(league: @league, current_user: current_user)
+    respond_to do |format|
+      if form.save
+        format.json { render json: @league.draft_picks }
+      else
+        format.json { render json: form.errors, status: :unprocessable_entity }
+      end
+    end
   end
 
   # GET /draft_picks/1/edit
@@ -24,15 +35,12 @@ class DraftPicksController < ApplicationController
   # POST /draft_picks
   # POST /draft_picks.json
   def create
-    @draft_pick = DraftPick.new(draft_pick_params)
-
+    form = Leagues::CreateDraftForm.new(league: @league, current_user: current_user)
     respond_to do |format|
-      if @draft_pick.save
-        format.html { redirect_to @draft_pick, notice: 'Draft pick was successfully created.' }
-        format.json { render :show, status: :created, location: @draft_pick }
+      if form.save
+        format.json { render json: @league.draft_picks }
       else
-        format.html { render :new }
-        format.json { render json: @draft_pick.errors, status: :unprocessable_entity }
+        format.json { render json: form.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -65,6 +73,10 @@ class DraftPicksController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_draft_pick
       @draft_pick = DraftPick.find(params[:id])
+    end
+
+    def set_league
+      @league = League.find_by(id: params[:league_id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
