@@ -8,13 +8,13 @@ import LeagueReducer from './reducer_league';
 import DraftPicksReducer from './reducer_draft_picks';
 
 const rootReducer = combineReducers({
-  teams: TeamsReducer,
-  rounds_data: RoundsReducer,
-  team_data: TeamReducer,
-  players: PlayersReducer,
-  player_data: PlayerReducer,
-  league_data: LeagueReducer,
-  draft_picks: DraftPicksReducer
+  TeamsReducer: TeamsReducer,
+  RoundsReducer: RoundsReducer,
+  TeamReducer: TeamReducer,
+  PlayersReducer: PlayersReducer,
+  PlayerReducer: PlayerReducer,
+  LeagueReducer: LeagueReducer,
+  DraftPicksReducer: DraftPicksReducer
 });
 
 export default rootReducer;

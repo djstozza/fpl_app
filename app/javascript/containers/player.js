@@ -71,11 +71,11 @@ class Player extends Component {
 
 function mapStateToProps(state) {
   return {
-    player: state.player_data.player,
-    team: state.player_data.team,
-    team_fixtures: state.player_data.team_fixtures,
-    position: state.player_data.position,
-    rounds: state.rounds_data.rounds
+    player: state.PlayerReducer.player,
+    team: state.PlayerReducer.team,
+    team_fixtures: state.PlayerReducer.team_fixtures,
+    position: state.PlayerReducer.position,
+    rounds: state.RoundsReducer.rounds
   }
 }
 function mapDispatchToProps(dispatch) {

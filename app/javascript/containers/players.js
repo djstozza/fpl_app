@@ -41,8 +41,8 @@ class Players extends Component {
 
 function mapStateToProps(state) {
   return {
-    players: state.players,
-    teams: state.teams
+    players: state.PlayersReducer,
+    teams: state.TeamsReducer
   }
 }
 function mapDispatchToProps(dispatch) {

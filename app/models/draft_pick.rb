@@ -18,4 +18,5 @@ class DraftPick < ApplicationRecord
 
   validates :pick_number, presence: true
   validates :league_id, presence: true
+  validates :player_id, allow_blank: true, uniqueness: { scope: :league_id }
 end

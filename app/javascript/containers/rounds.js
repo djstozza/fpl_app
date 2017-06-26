@@ -59,8 +59,6 @@ class Rounds extends Component {
     }
   }
 
-
-
   render () {
     if (this.state == null || this.state.rounds == null || this.state.round == null) {
       return (
@@ -80,10 +78,10 @@ class Rounds extends Component {
 
 function mapStateToProps(state) {
   return {
-    rounds: state.rounds_data.rounds,
-    round: state.rounds_data.round,
-    fixtures: state.rounds_data.fixtures,
-    teams: state.teams
+    rounds: state.RoundsReducer.rounds,
+    round: state.RoundsReducer.round,
+    fixtures: state.RoundsReducer.fixtures,
+    teams: state.TeamsReducer
   }
 }
 

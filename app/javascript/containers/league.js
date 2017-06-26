@@ -7,12 +7,16 @@ import { Link } from 'react-router-dom';
 import { Icon } from 'react-fa';
 import fetchLeague from '../actions/action_fetch_league.js';
 import fetchDraftPicks from '../actions/action_fetch_draft_picks.js';
+import createDraftPicks from '../actions/action_create_draft_picks.js';
 import FplTeamsTable from '../components/leagues/fpl_teams_table.js';
 import axios from 'axios';
 
 class League extends Component {
   constructor(props) {
     super(props)
+    this.state = {
+      disabled: false
+    }
 
     this.createDraftPicksButton = this.createDraftPicksButton.bind(this);
     this.createDraftPicks = this.createDraftPicks.bind(this);
@@ -25,45 +29,46 @@ class League extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    console.log(nextProps);
     this.setState({
       league: nextProps.league,
       fpl_teams: nextProps.fpl_teams,
       users: nextProps.users,
       commissioner: nextProps.commissioner,
       current_user: nextProps.current_user,
-      draft_picks: nextProps.draft_picks
+      draft_picks: nextProps.draft_picks,
+      fpl_team: nextProps.fpl_team
     })
   }
 
   createDraftPicksButton () {
-    console.log(this.state);
-    if (this.state.draft_picks.length == 0) {
-      return (
-        <Button onClick={ () => this.createDraftPicks() }>Create draft</Button>
-      )
+    if (this.state.draft_picks.length == 0)  {
+      if (this.state.current_user.id == this.state.commissioner.id) {
+        return (
+          <Button disabled={ this.state.disabled } onClick={ () => this.createDraftPicks() }>Create draft</Button>
+        )
+      }
     } else {
       return (
-        <Button>Start the draft</Button>
+        <Button href={ `/leagues/${this.props.match.params.id}/draft_picks` }>Go to draft</Button>
       )
     }
   }
 
   createDraftPicks () {
     const leagueId = this.props.match.params.id
-    axios.get(`/leagues/${leagueId}/draft_picks/new.json`).then(res => {
-      this.setState({
-        draft_picks: res.data
-      });
-    });
+    this.setState({
+      disabled: true
+    })
+    this.props.createDraftPicks(leagueId)
   }
 
   render () {
-    if (this.state == null || this.state.league == null) {
+    if (this.state == null || this.state.league == null || this.state.draft_picks == null) {
       return (
         <p>Loading...</p>
       );
     } else {
-      console.log(this.state);
       return (
         <div>
           <h2>{ this.state.league.name }</h2>
@@ -81,19 +86,20 @@ class League extends Component {
 
 function mapStateToProps(state) {
   return {
-    league: state.league_data.league,
-    fpl_teams: state.league_data.fpl_teams,
-    users: state.league_data.users,
-    commissioner: state.league_data.commissioner,
-    current_user: state.league_data.current_user,
-    draft_picks: state.draft_picks
+    league: state.LeagueReducer.league,
+    fpl_teams: state.LeagueReducer.fpl_teams,
+    users: state.LeagueReducer.users,
+    commissioner: state.LeagueReducer.commissioner,
+    current_user: state.LeagueReducer.current_user,
+    draft_picks: state.DraftPicksReducer.draft_picks
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     fetchLeague: fetchLeague,
-    fetchDraftPicks: fetchDraftPicks
+    fetchDraftPicks: fetchDraftPicks,
+    createDraftPicks: createDraftPicks
   }, dispatch);
 }
 

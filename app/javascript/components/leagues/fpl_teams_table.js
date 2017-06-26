@@ -67,7 +67,7 @@ export default class FplTeamsTable extends Component {
             filter={ { type: 'TextFilter', placeholder: ' ' } }
             dataSort
             isKey>
-            <span data-tip='Name'>N</span>
+            <span data-tip='Team'>T</span>
           </TableHeaderColumn>
           <TableHeaderColumn
             dataField='user_id'
@@ -75,7 +75,7 @@ export default class FplTeamsTable extends Component {
             filter={ { type: 'TextFilter', placeholder: ' ' } }
             dataFormat={ userTextCell }
             dataSort>
-            <span data-tip='Username'>U</span>
+            <span data-tip='User'>U</span>
           </TableHeaderColumn>
           { getDraftPicksColumn(this.props.draft_picks) }
           <TableHeaderColumn

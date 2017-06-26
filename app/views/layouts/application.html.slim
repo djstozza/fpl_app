@@ -5,6 +5,7 @@ html
     = favicon_link_tag 'soccer-ball'
     = stylesheet_link_tag('application', media: 'all', 'data-turbolinks-track' => true)
     = javascript_include_tag('application', 'data-turbolinks-track' => true)
+    = action_cable_meta_tag
     meta http-equiv="Content-Language" content="en"
     = csrf_meta_tags
     javascript:
@@ -14,7 +15,6 @@ html
   body class="controller-#{params[:controller].gsub('_', '-')} action-#{params[:action].gsub('_', '-')}"
     nav.navbar.navbar-default
       .container-fluid
-        /! Brand and toggle get grouped for better mobile display
         .navbar-header
           button.navbar-toggle.collapsed aria-expanded="false" data-target="#nav" data-toggle="collapse" type="button"
             span.sr-only Toggle navigation
@@ -22,7 +22,6 @@ html
             span.icon-bar
             span.icon-bar
           .navbar-brand href="#"  FplApp
-        /! Collect the nav links, forms, and other content for toggling
         #nav.collapse.navbar-collapse
           ul.nav.navbar-nav.navbar-right
             - if current_user
@@ -33,17 +32,9 @@ html
                 ul.dropdown-menu
                   li = link_to('Create a League', new_league_path)
                   li = link_to('Join a League', join_a_league_path)
-                  li
-                    a href="#"  Something else here
-                  li.divider role="separator"
-                  li
-                    a href="#"  Separated link
+                  li = link_to('My Leagues', leagues_path)
             li = sign_up_link
             li = session_link
-    / - if user_signed_in?
-    /   li = link_to('Logout', destroy_user_session_path, :method => :delete)
-    / - else
-    /   li = link_to('Login', new_user_session_path)
 
     = yield
     #root

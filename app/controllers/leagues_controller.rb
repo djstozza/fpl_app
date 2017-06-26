@@ -28,7 +28,11 @@ class LeaguesController < ApplicationController
 
   # GET /leagues/new
   def new
-    @form = Leagues::ProcessLeagueForm.new(league: League.new, fpl_team: FplTeam.new, current_user: current_user)
+    @form = Leagues::ProcessLeagueForm.new(
+      league: League.new,
+      fpl_team: FplTeam.new,
+      current_user: current_user
+    )
   end
 
   # GET /leagues/1/edit
@@ -40,7 +44,11 @@ class LeaguesController < ApplicationController
   # POST /leagues
   # POST /leagues.json
   def create
-    @form = Leagues::ProcessLeagueForm.new(league: League.new, fpl_team: FplTeam.new, current_user: current_user)
+    @form = Leagues::ProcessLeagueForm.new(
+      league: League.new,
+      fpl_team: FplTeam.new,
+      current_user: current_user
+    )
     @form.attributes = league_params
     respond_to do |format|
       if @form.save

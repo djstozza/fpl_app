@@ -19,11 +19,14 @@ import Team from '../containers/team.js';
 import Players from '../containers/players.js';
 import Player from '../containers/player.js';
 import League from '../containers/league.js';
+import DraftPicks from '../containers/draft_picks.js';
 import thunk from 'redux-thunk';
 import reducers from '../reducers';
 import axios from 'axios';
+import Alert from 'react-s-alert';
 import '../../../node_modules/react-bootstrap-table/dist/react-bootstrap-table.min.css';
-
+import '../../../node_modules/react-s-alert/dist/s-alert-default.css';
+import '../../../node_modules/react-s-alert/dist/s-alert-css-effects/bouncyflip.css';
 // Support component names relative to this directory:
 
 const history = createHistory();
@@ -46,13 +49,15 @@ export default class App extends Component {
         <ConnectedRouter history={history}>
           <Row className='clearfix'>
             <Col mdOffset={1} md={10} xs={12}>
+              <Alert />
               <Route exact path="/" component={Rounds}/>
               <Route exact path='/rounds' component={Rounds}/>
               <Route exact path='/rounds/:id' component={Rounds}/>
               <Route path='/teams/:id' component={Team} />
               <Route exact path='/players' component={Players}/>
               <Route exact path='/players/:id' component={Player}/>
-              <Route exact path='/leagues/:id' component={League}/>
+              <Route exact path='/leagues/:id(\d+)' component={League}/>
+              <Route exact path='/leagues/:id/draft_picks' component={DraftPicks}/>
            </Col>
           </Row>
         </ConnectedRouter>

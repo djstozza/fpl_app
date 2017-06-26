@@ -83,7 +83,9 @@ class Player < ApplicationRecord
   belongs_to :position
   belongs_to :team
   has_many :draft_picks
+  has_and_belongs_to_many :leagues
   has_and_belongs_to_many :fpl_teams
+  has_and_belongs_to_many :fpl_team_lists
   scope :position, -> { Position.find_by(id: position_id)  }
 
   def name

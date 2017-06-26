@@ -1,5 +1,5 @@
 require 'rails_helper'
 
-RSpec.describe JoinLeague, type: :model do
+RSpec.describe DraftPickJob, type: :job do
   pending "add some examples to (or delete) #{__FILE__}"
 end

@@ -70,10 +70,10 @@ class Team extends Component {
 
 function mapStateToProps(state) {
   return {
-    teams: state.teams,
-    team: state.team_data.team,
-    team_fixtures: state.team_data.fixtures,
-    players: state.team_data.players
+    teams: state.TeamsReducer,
+    team: state.TeamReducer.team,
+    team_fixtures: state.TeamReducer.fixtures,
+    players: state.TeamReducer.players
   }
 }
 function mapDispatchToProps(dispatch) {

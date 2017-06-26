@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170614103524) do
+ActiveRecord::Schema.define(version: 20170624075700) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -66,7 +66,9 @@ ActiveRecord::Schema.define(version: 20170614103524) do
   create_table "fpl_team_lists_players", id: false, force: :cascade do |t|
     t.integer "player_id",        null: false
     t.integer "fpl_team_list_id", null: false
-    t.index ["player_id", "fpl_team_list_id"], name: "index_fpl_team_lists_players_on_player_id_and_fpl_team_list_id", using: :btree
+    t.index ["fpl_team_list_id", "player_id"], name: "by_fpl_team_list_and_player", unique: true, using: :btree
+    t.index ["fpl_team_list_id"], name: "index_fpl_team_lists_players_on_fpl_team_list_id", using: :btree
+    t.index ["player_id"], name: "index_fpl_team_lists_players_on_player_id", using: :btree
   end
 
   create_table "fpl_teams", force: :cascade do |t|
@@ -80,6 +82,14 @@ ActiveRecord::Schema.define(version: 20170614103524) do
     t.index ["user_id"], name: "index_fpl_teams_on_user_id", using: :btree
   end
 
+  create_table "fpl_teams_players", id: false, force: :cascade do |t|
+    t.integer "fpl_team_id", null: false
+    t.integer "player_id",   null: false
+    t.index ["fpl_team_id", "player_id"], name: "by_fpl_team_and_player", unique: true, using: :btree
+    t.index ["fpl_team_id"], name: "index_fpl_teams_players_on_fpl_team_id", using: :btree
+    t.index ["player_id"], name: "index_fpl_teams_players_on_player_id", using: :btree
+  end
+
   create_table "leagues", force: :cascade do |t|
     t.string   "name",                            null: false
     t.string   "code",                            null: false
@@ -89,6 +99,14 @@ ActiveRecord::Schema.define(version: 20170614103524) do
     t.integer  "commissioner_id"
     t.index ["commissioner_id"], name: "index_leagues_on_commissioner_id", using: :btree
     t.index ["name"], name: "index_leagues_on_name", unique: true, using: :btree
+  end
+
+  create_table "leagues_players", id: false, force: :cascade do |t|
+    t.integer "league_id", null: false
+    t.integer "player_id", null: false
+    t.index ["league_id", "player_id"], name: "by_league_and_player", unique: true, using: :btree
+    t.index ["league_id"], name: "index_leagues_players_on_league_id", using: :btree
+    t.index ["player_id"], name: "index_leagues_players_on_player_id", using: :btree
   end
 
   create_table "players", force: :cascade do |t|
