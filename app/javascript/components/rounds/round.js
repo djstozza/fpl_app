@@ -8,7 +8,8 @@ export default class Round extends React.Component {
     return (
       <Row className='clearfix'>
         <Col mdOffset={3} md={6}>
-          < FixtureGroups fixtureGroups={this.props.fixtures} />
+          <h3>{ this.props.round.name }</h3>
+          <FixtureGroups fixtureGroups={this.props.fixtures} />
         </Col>
       </Row>
     );

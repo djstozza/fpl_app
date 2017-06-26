@@ -25,9 +25,14 @@ export default class PlayerDetails extends Component {
     let previousRoundLink = () => {
       if (previousFixtureHistory != null) {
         return (
-          `${<Link to={ `/rounds/${previousFixtureHistory.round}` }>{ previousFixtureHistory.round }</Link>}: ` +
-          `${ previousFixtureHistory.total_points }`
+          <Link to={ `/rounds/${previousFixtureHistory.round}` }>{ previousFixtureHistory.round }</Link>
         )
+      }
+    }
+
+    let previousRoundScore = () => {
+      if (previousFixtureHistory != null) {
+        return `: ${ previousFixtureHistory.total_points }`
       }
     }
 
@@ -39,6 +44,7 @@ export default class PlayerDetails extends Component {
       s: { name: 'gavel', title: 'Suspended' },
       i: { name: 'ambulance', title: 'Injured' }
     }
+
     return (
       <div className='row'>
         <div className='col-sm-6 col-xs-12'>
@@ -68,7 +74,7 @@ export default class PlayerDetails extends Component {
               <tr>
                 <td>{ player.total_points }</td>
                 <td>
-                  { previousRoundLink }
+                  { previousRoundLink() }{ previousRoundScore() }
                 </td>
                 <td>
                   <Link to={ `/rounds/${currentFixtureHistory.round}` }>{ currentFixtureHistory.round }</Link>

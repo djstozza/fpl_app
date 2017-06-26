@@ -14,10 +14,10 @@ export default class RoundsNav extends Component {
       var roundTabClass = `round-tab-${round.id}`
       return (
         <NavItem
-          key={round.id}
-          className={`${round.id == roundId ? 'active' : ''} ${roundTabClass}`}
+          key={ round.id }
+          className={ `${round.id == roundId ? 'active' : ''} ${roundTabClass}` }
           onClick={ function () { selectTabClick(roundTabClass, round.id, self.props) } }>
-          {round.name}
+          { round.name }
         </NavItem>
       );
     });

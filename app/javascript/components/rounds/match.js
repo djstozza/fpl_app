@@ -17,11 +17,11 @@ export default class Match extends React.Component {
     var fixtureId = this.props.match.fixture.id;
     return (
       <div className='panel-group fixture-group' aria-multiselectable='true'
-        role='tablist' id={`accordion-sharing-group-${fixtureId}`}>
+        role='tablist' id={ `accordion-sharing-group-${fixtureId}` }>
         <div className='panel'>
-          <div className='panel-heading' id={`accordion-sharing-${fixtureId}`}>
-            < MatchPanelTitle match={this.props.match} />
-            {self.matchTable()}
+          <div className='panel-heading' id={ `accordion-sharing-${fixtureId}` }>
+            < MatchPanelTitle match={ this.props.match } />
+            { self.matchTable() }
           </div>
         </div>
       </div>
