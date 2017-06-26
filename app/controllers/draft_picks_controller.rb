@@ -7,20 +7,16 @@ class DraftPicksController < ApplicationController
   # GET /draft_picks
   # GET /draft_picks.json
   def index
-    draft_picks = @league.draft_picks.order(:pick_number).pluck_to_struct(
-      :id, :pick_number, :league_id, :player_id, :fpl_team_id
-    )
-    current_draft_pick = draft_picks.select { |dp| dp.player_id.nil? }.first
-    picked_players = PlayersDecorator.new(@league.players).all_data
+    league_decorator = LeagueDecorator.new(@league)
     respond_to do |format|
       format.html
       format.json do
         render json: {
-          draft_picks: draft_picks,
-          current_draft_pick: current_draft_pick,
-          unpicked_players: PlayersDecorator.new(Player.all).all_data - picked_players,
-          picked_players: picked_players,
-          fpl_team: current_user.fpl_teams.find_by(league_id: @league.id),
+          draft_picks: league_decorator.all_draft_picks,
+          current_draft_pick: league_decorator.current_draft_pick,
+          unpicked_players: league_decorator.unpicked_players,
+          picked_players: league_decorator.picked_players,
+          fpl_team: current_user.fpl_teams.find_by(league_id: league_decorator.id),
           positions: Position.all
         }
       end
@@ -56,36 +52,35 @@ class DraftPicksController < ApplicationController
   # PATCH/PUT /draft_picks/1
   # PATCH/PUT /draft_picks/1.json
   def update
+    league_decorator = LeagueDecorator.new(@league)
     form = Leagues::UpdateDraftPickForm.new(
       league: @league,
       player: Player.find_by(id: params[:player_id]),
       current_user: current_user,
-      draft_pick: @league.draft_picks.order(:pick_number).where(player: nil).first
+      draft_pick: league_decorator.current_draft_pick
     )
 
     respond_to do |format|
       if form.save
-        picked_players = PlayersDecorator.new(@league.players).all_data
         format.json do
           render json: {
-            draft_picks: @league.draft_picks,
-            current_draft_pick: @league.draft_picks.order(:pick_number).where(player: nil).first,
-            fpl_team: current_user.fpl_teams.find_by(league_id: @league.id),
-            picked_players: picked_players,
-            unpicked_players: PlayersDecorator.new(Player.all).all_data - picked_players,
+            draft_picks: league_decorator.all_draft_picks,
+            current_draft_pick: league_decorator.current_draft_pick,
+            fpl_team: current_user.fpl_teams.find_by(league_id: league_decorator.id),
+            picked_players: league_decorator.picked_players,
+            unpicked_players: league_decorator.unpicked_players,
             positions: Position.all
           }
         end
       else
-        picked_players = PlayersDecorator.new(@league.players).all_data
         format.json do
           render json: {
             errors: form.errors.full_messages,
-            draft_picks: @league.draft_picks,
-            current_draft_pick:  @league.draft_picks.order(:pick_number).where(player: nil).first,
-            fpl_team: current_user.fpl_teams.find_by(league_id: @league.id),
-            picked_players: picked_players,
-            unpicked_players: PlayersDecorator.new(Player.all).all_data - picked_players,
+            draft_picks: league_decorator.all_draft_picks,
+            current_draft_pick:  league_decorator.current_draft_pick,
+            fpl_team: current_user.fpl_teams.find_by(league_id: league_decorator.id),
+            picked_players: league_decorator.picked_players,
+            unpicked_players: league_decorator.unpicked_players,
             positions: Position.all
           }, status: :unprocessable_entity
         end
@@ -104,10 +99,6 @@ class DraftPicksController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_current_draft_pick
-      @current_draft_pick = @league.draft_picks.order(:pick_number).where(player: nil).first
-    end
 
     def set_league
       @league = League.find_by(id: params[:league_id])

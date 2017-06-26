@@ -33,13 +33,21 @@ class Leagues::UpdateDraftPickForm
       @league.players << @player
       @fpl_team.players << @player
 
-      picked_players = PlayersDecorator.new(@league.players).all_data
+      league_decorator = LeagueDecorator.new(@league)
+
       ActionCable.server.broadcast("draft_picks_league #{@league.id}", {
-        draft_picks: @league.draft_picks,
-        current_draft_pick: @league.draft_picks.order(:pick_number).where(player: nil).first,
-        unpicked_players: PlayersDecorator.new(Player.all).all_data - picked_players,
-        picked_players: picked_players
+        draft_picks: league_decorator.all_draft_picks,
+        current_draft_pick: league_decorator.current_draft_pick,
+        unpicked_players: league_decorator.unpicked_players,
+        picked_players: league_decorator.picked_players
       })
+
+      if @league.draft_picks.all? { |draft_pick| draft_pick.player_id.present? }
+        @league.fpl_teams.each do |fpl_team|
+          fpl_team_list = FplTeamList.create(round: Round.first, fpl_team: fpl_team)
+          fpl_team_list.players << fpl_team.players
+        end
+      end
     end
     true
   end
