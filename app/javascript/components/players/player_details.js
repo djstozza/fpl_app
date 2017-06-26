@@ -22,6 +22,15 @@ export default class PlayerDetails extends Component {
       return obj.round == currentRound.id
     })
 
+    let previousRoundLink = () => {
+      if (previousFixtureHistory != null) {
+        return (
+          `${<Link to={ `/rounds/${previousFixtureHistory.round}` }>{ previousFixtureHistory.round }</Link>}: ` +
+          `${ previousFixtureHistory.total_points }`
+        )
+      }
+    }
+
     const statuses = {
       a: { name: 'check', title: 'Available' },
       n: { name: 'warning', title: 'Unavailable' },
@@ -59,8 +68,7 @@ export default class PlayerDetails extends Component {
               <tr>
                 <td>{ player.total_points }</td>
                 <td>
-                  <Link to={ `/rounds/${previousFixtureHistory.round}` }>{ previousFixtureHistory.round }</Link>
-                  : { previousFixtureHistory.total_points }
+                  { previousRoundLink }
                 </td>
                 <td>
                   <Link to={ `/rounds/${currentFixtureHistory.round}` }>{ currentFixtureHistory.round }</Link>
