@@ -5,5 +5,4 @@ test:
   adapter: async
 
 production:
-  adapter: redis
-  url: redis://redistogo:c92eec09b8c230afd5b9ab272925dddd@koi.redistogo.com:11002/
+  adapter: async

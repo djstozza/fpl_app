@@ -42,12 +42,7 @@ class Leagues::UpdateDraftPickForm
         picked_players: league_decorator.picked_players
       })
 
-      if @league.draft_picks.all? { |draft_pick| draft_pick.player_id.present? }
-        @league.fpl_teams.each do |fpl_team|
-          fpl_team_list = FplTeamList.create(round: Round.first, fpl_team: fpl_team)
-          fpl_team_list.players << fpl_team.players
-        end
-      end
+      @league.update(status: active) if league_decorator.all_draft_picks.all? { |pick| pick['player_id'].present? }
     end
     true
   end
