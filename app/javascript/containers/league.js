@@ -29,7 +29,6 @@ class League extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log(nextProps);
     this.setState({
       league: nextProps.league,
       fpl_teams: nextProps.fpl_teams,
@@ -77,7 +76,7 @@ class League extends Component {
             fpl_teams={ this.state.fpl_teams }
             users={ this.state.users }
             draft_picks={ this.state.draft_picks }/>
-          {this.createDraftPicksButton()}
+          { this.createDraftPicksButton() }
         </div>
       )
     }

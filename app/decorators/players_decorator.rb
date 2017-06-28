@@ -9,7 +9,7 @@ class PlayersDecorator < SimpleDelegator
       :chance_of_playing_this_round,
       :chance_of_playing_next_round,
       :in_dreamteam,
-      :dreamteam_count,
+      :status,
       :form,
       :minutes,
       :goals_scored,

@@ -49,7 +49,7 @@ export default class App extends Component {
         <ConnectedRouter history={history}>
           <Row className='clearfix'>
             <Col mdOffset={1} md={10} xs={12}>
-              <Alert />
+              <Alert stack={ { limit: 3 } } />
               <Route exact path="/" component={Rounds}/>
               <Route exact path='/rounds' component={Rounds}/>
               <Route exact path='/rounds/:id' component={Rounds}/>

@@ -44,9 +44,9 @@ class DraftPicks extends Component {
       unpicked_players: nextProps.unpicked_players,
       teams: nextProps.teams,
       fpl_team: nextProps.fpl_team,
-      positions: nextProps.positions,
-      errors: nextProps.errors
+      positions: nextProps.positions
     })
+    this.showAlerts(nextProps);
   }
 
   shouldComponentUpdate (nextProps, nextState) {
@@ -61,14 +61,45 @@ class DraftPicks extends Component {
           draft_picks: data.draft_picks,
           unpicked_players: data.unpicked_players,
           current_draft_pick: data.current_draft_pick,
-          picked_players: data.picked_players
+          picked_players: data.picked_players,
         })
+        self.showDraftPickInfo(data.info);
       }
     })
   }
 
-  yourTurn () {
-    if (this.state.current_draft_pick.fpl_team_id == this.state.fpl_team.id) {
+  showAlerts (nextProps) {
+    if (nextProps.errors) {
+      this.showErrors(nextProps.errors)
+    } else if (nextProps.success) {
+      this.successfulPick(nextProps.success);
+    } else if (nextProps.current_draft_pick && nextProps.fpl_team) {
+      this.yourTurn(nextProps.current_draft_pick.fpl_team_id, nextProps.fpl_team.id);
+    }
+  }
+
+  showErrors (errors) {
+    errors.map( (error) => {
+      return (
+        Alert.error(error, {
+          position: 'top',
+          effect: 'bouncyflip',
+          timeout: 5000
+        })
+      )
+    })
+  }
+
+  successfulPick (success) {
+    Alert.success(success, {
+      position: 'top',
+      effect: 'bouncyflip',
+      timeout: 5000
+    })
+  }
+
+  yourTurn (curren_pick_fpl_team_id, fpl_team_id) {
+    if (curren_pick_fpl_team_id == fpl_team_id) {
       return (
         Alert.info("It's your turn to pick a player", {
           position: 'top',
@@ -79,24 +110,17 @@ class DraftPicks extends Component {
     }
   }
 
-  showErrors () {
-    if (this.state.errors && this.state.errors.length > 0) {
-      return (
-        this.state.errors.map( (error) => {
-          return (
-            Alert.error(error, {
-              position: 'top',
-              effect: 'bouncyflip',
-              timeout: 5000
-            })
-          )
-        })
-      )
-    }
+  showDraftPickInfo (info) {
+    return (
+      Alert.info(info, {
+        position: 'top',
+        effect: 'bouncyflip',
+        timeout: 5000
+      })
+    )
   }
 
   render () {
-    console.log(this.state);
     if (this.state == null || this.state.draft_picks == null) {
       return (
         <p>Loading...</p>
@@ -118,10 +142,6 @@ class DraftPicks extends Component {
             fpl_teams={ this.state.fpl_teams }
             positions={ this.state.positions }
             teams={ this.state.teams }/>
-          <div className='hidden'>
-            { this.yourTurn() }
-            { this.showErrors() }
-          </div>
         </div>
       )
     }
@@ -142,7 +162,8 @@ function mapStateToProps(state) {
     unpicked_players: state.DraftPicksReducer.unpicked_players,
     teams: state.TeamsReducer,
     positions: state.DraftPicksReducer.positions,
-    errors: state.DraftPicksReducer.errors
+    errors: state.DraftPicksReducer.errors,
+    success: state.DraftPicksReducer.success
   }
 }
 

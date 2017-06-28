@@ -69,7 +69,8 @@ class DraftPicksController < ApplicationController
             fpl_team: current_user.fpl_teams.find_by(league_id: league_decorator.id),
             picked_players: league_decorator.picked_players,
             unpicked_players: league_decorator.unpicked_players,
-            positions: Position.all
+            positions: Position.all,
+            success: "You have successfully drafted #{form.player.name}."
           }
         end
       else

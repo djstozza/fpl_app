@@ -4,6 +4,7 @@ import { Button, Modal, Checkbox } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import ReactTooltip from 'react-tooltip';
 import Alert from 'react-s-alert';
+import { Icon } from 'react-fa';
 import _ from 'underscore';
 
 export default class DraftPlayersTable extends Component {
@@ -16,6 +17,7 @@ export default class DraftPlayersTable extends Component {
     this.state = {
       pagination: true
     };
+
     this.draftButton = this.draftButton.bind(this);
     this.showDraftCol = this.showDraftCol.bind(this);
   }
@@ -33,7 +35,7 @@ export default class DraftPlayersTable extends Component {
   }
 
   showDraftCol () {
-    if (this.props.current_draft_pick.fpl_team_id == this.props.fpl_team.id) {
+    if (this.props.current_draft_pick && this.props.current_draft_pick.fpl_team_id == this.props.fpl_team.id) {
       return (
         <TableHeaderColumn
           dataField='id'
@@ -43,6 +45,28 @@ export default class DraftPlayersTable extends Component {
         </TableHeaderColumn>
       )
     }
+  }
+
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.current_draft_pick) {
+      this.yourTurn(nextProps.current_draft_pick.fpl_team_id, nextProps.fpl_team.id);
+    }
+  }
+
+  yourTurn (curren_pick_fpl_team_id, fpl_team_id) {
+    if (curren_pick_fpl_team_id == fpl_team_id) {
+      return (
+        Alert.info("It's your turn to pick a player", {
+          position: 'top',
+          effect: 'bouncyflip',
+          timeout: 5000
+        })
+      )
+    }
+  }
+
+  columnClassNameFormat (fieldValue, row, rowIdx, colIdx) {
+    return `player-status-${row.status}`
   }
 
   shouldComponentUpdate (nextProps, nextState) {
@@ -74,6 +98,29 @@ export default class DraftPlayersTable extends Component {
       return teamText[cell]
     }
 
+    const statuses = {
+      a: { name: 'check', title: 'Available' },
+      n: { name: 'warning', title: 'Unavailable' },
+      u: { name: 'plane', title: 'On Loan' },
+      d: { name: 'question', title: 'In Doubt' },
+      s: { name: 'gavel', title: 'Suspended' },
+      i: { name: 'ambulance', title: 'Injured' }
+    }
+
+    const statusText = _.mapObject(statuses, (val, key) => {
+      console.log([key, val['title']])
+      return val['title']
+    })
+
+    let statusIconCell = function (cell, row) {
+      return (
+        <Icon size='lg' name={ statuses[cell].name } />
+      )
+    }
+
+
+    console.log(statusText);
+
     return (
       <div>
         <BootstrapTable
@@ -84,12 +131,20 @@ export default class DraftPlayersTable extends Component {
           options={ this.options }
           pagination={ this.props.teams != null && this.state.pagination == true }>
           <TableHeaderColumn
+            dataField='first_name'
+            dataAlign='center'
+            dataSort
+            dataFormat={ this.linkCellText }
+            filter={ { type: 'TextFilter', placeholder: ' ' } }>
+            <span data-tip='First Name'>FN</span>
+          </TableHeaderColumn>
+          <TableHeaderColumn
             dataField='last_name'
             dataAlign='center'
             dataSort
             dataFormat={ this.linkCellText }
             filter={ { type: 'TextFilter', placeholder: ' ' } }>
-            <span data-tip='Name'>N</span>
+            <span data-tip='Name'>LN</span>
           </TableHeaderColumn>
           <TableHeaderColumn dataField='id' isKey={ true } hidden/>
           <TableHeaderColumn
@@ -108,6 +163,15 @@ export default class DraftPlayersTable extends Component {
             dataFormat={ positionTextCell }
             filter={ { type: 'SelectFilter', options: positionText, placeholder: ' ' } }>
             <span data-tip='Position'>Pos</span>
+          </TableHeaderColumn>
+          <TableHeaderColumn
+            dataField='status'
+            dataAlign='center'
+            dataSort
+            columnClassName={ this.columnClassNameFormat }
+            dataFormat={ statusIconCell }
+            filter={ { type: 'SelectFilter', options: statusText, placeholder: ' ' } }>
+            <span data-tip='Status'>S</span>
           </TableHeaderColumn>
           { this.showDraftCol() }
         </BootstrapTable>
