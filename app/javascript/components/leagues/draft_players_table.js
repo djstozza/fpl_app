@@ -108,7 +108,6 @@ export default class DraftPlayersTable extends Component {
     }
 
     const statusText = _.mapObject(statuses, (val, key) => {
-      console.log([key, val['title']])
       return val['title']
     })
 
@@ -117,9 +116,6 @@ export default class DraftPlayersTable extends Component {
         <Icon size='lg' name={ statuses[cell].name } />
       )
     }
-
-
-    console.log(statusText);
 
     return (
       <div>
