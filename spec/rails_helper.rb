@@ -8,6 +8,7 @@ require 'rspec/rails'
 require 'factory_girl_rails'
 require 'faker'
 require 'database_cleaner'
+require 'support/seeds'
 # Add additional requires below this line. Rails is not loaded until this point!
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
@@ -61,6 +62,7 @@ RSpec.configure do |config|
   config.before(:suite) do
     DatabaseCleaner.strategy = :transaction
     DatabaseCleaner.clean_with(:truncation)
+    Support::Seeds.seed
   end
 
   config.around(:each) do |example|

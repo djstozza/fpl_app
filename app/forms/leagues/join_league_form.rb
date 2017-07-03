@@ -1,4 +1,4 @@
-class Leagues::JoinLeagueForm < ApplicationForm
+class Leagues::JoinLeagueForm
   include ActiveModel::Model
   include ::Virtus.model
 

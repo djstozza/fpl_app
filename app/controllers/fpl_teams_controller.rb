@@ -1,4 +1,5 @@
 class FplTeamsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_fpl_team, only: [:show, :edit, :update, :destroy]
 
   # GET /fpl_teams
@@ -10,31 +11,26 @@ class FplTeamsController < ApplicationController
   # GET /fpl_teams/1
   # GET /fpl_teams/1.json
   def show
-  end
-
-  # GET /fpl_teams/new
-  def new
-    @fpl_team = FplTeam.new
+    # TODO: fix rounds and fpl team lists once new round data comes from fantasypremierleague.com
+    respond_to do |format|
+      format.html
+      format.json do
+        render json: {
+          fpl_team: @fpl_team,
+          fpl_team_list: @fpl_team.fpl_team_lists.first,
+          league: @fpl_team.league,
+          round: Round.first,
+          line_up: ListPositionsDecorator.new(@fpl_team.fpl_team_lists.first.list_positions).list_position_arr,
+          players: PlayersDecorator.new(@fpl_team.players).all_data,
+          positions: Position.all,
+          current_user: current_user
+        }
+      end
+    end
   end
 
   # GET /fpl_teams/1/edit
   def edit
-  end
-
-  # POST /fpl_teams
-  # POST /fpl_teams.json
-  def create
-    @fpl_team = FplTeam.new(fpl_team_params)
-
-    respond_to do |format|
-      if @fpl_team.save
-        format.html { redirect_to @fpl_team, notice: 'Fpl team was successfully created.' }
-        format.json { render :show, status: :created, location: @fpl_team }
-      else
-        format.html { render :new }
-        format.json { render json: @fpl_team.errors, status: :unprocessable_entity }
-      end
-    end
   end
 
   # PATCH/PUT /fpl_teams/1

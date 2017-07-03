@@ -1,0 +1,11 @@
+import { FETCH_FPL_TEAM } from '../actions/types';
+
+export default function(state=[], action) {
+  switch (action.type) {
+    case FETCH_FPL_TEAM:
+      return action.payload
+
+    default:
+      return state;
+  }
+}

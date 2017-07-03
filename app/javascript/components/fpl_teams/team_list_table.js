@@ -1,0 +1,188 @@
+import React, { Component } from 'react';
+import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
+import ReactTooltip from 'react-tooltip';
+import { Link } from 'react-router-dom';
+import Select from 'react-select';
+import axios from 'axios';
+import _ from 'underscore';
+import { Icon } from 'react-fa';
+
+export default class TeamListTable extends Component {
+  constructor (props) {
+    super(props);
+    this.updateLineUp = this.updateLineUp.bind(this);
+    this.state = {
+      selected: '',
+      options: []
+    }
+    this.onRowSelect = this.onRowSelect.bind(this);
+    this.trClassFormat = this.trClassFormat.bind(this);
+  }
+
+  linkCellText (cell, row) {
+    return (<Link to={`/players/${row.id}` } >{cell}</Link>);
+  }
+
+  updateLineUp (target) {
+    this.props.onChange(this.state.selected, target);
+  }
+
+  onRowSelect (row, isSelected, e) {
+    if (this.props.fpl_team.user_id != this.props.current_user.id) {
+      return false
+    }
+
+    if (new Date() > new Date(this.props.round.deadline_time)) {
+      return false
+    }
+
+    if (this.state.selected == '') {
+      axios.get(`/list_positions/${row.id}.json`).then(res => {
+        this.setState({
+          selected: row.player_id,
+          options: res.data.options
+        })
+      })
+    } else if (this.state.selected == row.player_id) {
+      this.setState({
+        selected: '',
+        options: []
+      })
+    } else if (_.contains(this.state.options, row.player_id)) {
+      this.updateLineUp(row.player_id);
+      this.setState({
+        selected: '',
+        options: []
+      })
+    }
+  }
+
+  trClassFormat (row) {
+    if (this.state.selected == row.player_id) {
+      return 'selected-player'
+    }
+
+    if (_.contains(this.state.options, row.player_id)) {
+      return 'substitute-option'
+    }
+  }
+
+  descriptionText () {
+    if (new Date() > new Date(this.props.round.deadline_time)) {
+      return false
+    } else if (this.props.fpl_team.user_id == this.props.current_user.id) {
+      return (
+        <div>
+          <h3>Choose your starting line up</h3>
+          <p>
+            Click the row of the player you wish to sub out. Once clicked, the player you wish to substitute will
+              be highlighted in red and all valid substitutions will appear in green. Click one of the green rows to
+              enact the substitution. Click the red row to clear your selection.
+          </p>
+        </div>
+      )
+    }
+  }
+
+  render () {
+    const self = this;
+
+    const positionText = _.object(_.map(this.props.positions, function (obj) {
+      return [obj.id, obj.singular_name_short]
+    }))
+
+    let positionTextCell = function (cell, row) {
+      return positionText[cell]
+    }
+
+    const playerLastNameText = _.object(_.map(this.props.players, function(obj) {
+      return [obj.id, obj.last_name]
+    }))
+
+    let playerLastNameCell = (cell, row) => {
+      return <Link to={`/players/${cell}` } >{ playerLastNameText[cell] }</Link>
+    }
+
+    const statuses = {
+      a: { name: 'check', title: 'Available' },
+      n: { name: 'warning', title: 'Unavailable' },
+      u: { name: 'plane', title: 'On Loan' },
+      d: { name: 'question', title: 'In Doubt' },
+      s: { name: 'gavel', title: 'Suspended' },
+      i: { name: 'ambulance', title: 'Injured' }
+    }
+
+    const playerStatusText = _.object(_.map(this.props.players, function(obj) {
+      return [obj.id, obj.status]
+    }))
+
+    let columnClassNameFormat = (fieldValue, row, rowIdx, colIdx) => {
+      return `player-status-${playerStatusText[row.player_id]}`
+    }
+
+    let statusIconCell = function (cell, row) {
+      return (
+        <Icon size='lg' name={ statuses[playerStatusText[row.player_id]].name } />
+      )
+    }
+
+    const roleText = {
+      starting: 'Starting',
+      substitute_1: 'S1',
+      substitute_2: 'S2',
+      substitute_3: 'S3',
+      substitute_gkp: 'SGKP'
+    }
+
+    let roleTextCell = (cell, row) => {
+      return roleText[cell]
+    }
+
+    const selectRowProp = {
+      mode: 'checkbox',
+      hideSelectColumn: true,
+      clickToSelect: true,
+      onSelect: this.onRowSelect
+    };
+
+    return (
+      <div>
+        { this.descriptionText() }
+        <BootstrapTable
+          data={ this.props.line_up }
+          selectRow={ selectRowProp }
+          striped
+          trClassName={ this.trClassFormat }
+          hover >
+          <TableHeaderColumn
+            dataField='role'
+            dataAlign='center'
+            dataFormat={ roleTextCell }>
+            <span data-tip='Role'>R</span>
+          </TableHeaderColumn>
+          <TableHeaderColumn
+            dataField='position_id'
+            dataAlign='center'
+            dataFormat={ positionTextCell }>
+            <span data-tip='Position'>Pos</span>
+          </TableHeaderColumn>
+          <TableHeaderColumn
+            dataField='player_id'
+            dataAlign='center'
+            dataFormat={ playerLastNameCell }
+            isKey>
+            <span data-tip='Player'>P</span>
+          </TableHeaderColumn>
+          <TableHeaderColumn
+            dataField='player_id'
+            dataAlign='center'
+            columnClassName={ columnClassNameFormat }
+            dataFormat={ statusIconCell }>
+            <span data-tip='Status'>S</span>
+          </TableHeaderColumn>
+        </BootstrapTable>
+        <ReactTooltip />
+      </div>
+    )
+  }
+}

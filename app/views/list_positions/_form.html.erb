@@ -1,0 +1,17 @@
+<%= form_for(list_position) do |f| %>
+  <% if list_position.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(list_position.errors.count, "error") %> prohibited this list_position from being saved:</h2>
+
+      <ul>
+      <% list_position.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

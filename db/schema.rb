@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170624075700) do
+ActiveRecord::Schema.define(version: 20170703142511) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -54,11 +54,11 @@ ActiveRecord::Schema.define(version: 20170624075700) do
   create_table "fpl_team_lists", force: :cascade do |t|
     t.integer  "fpl_team_id"
     t.integer  "round_id"
-    t.string   "formation",   default: [],              array: true
     t.integer  "total_score"
     t.integer  "rank"
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.boolean  "active"
     t.index ["fpl_team_id"], name: "index_fpl_team_lists_on_fpl_team_id", using: :btree
     t.index ["round_id"], name: "index_fpl_team_lists_on_round_id", using: :btree
   end
@@ -107,6 +107,18 @@ ActiveRecord::Schema.define(version: 20170624075700) do
     t.index ["league_id", "player_id"], name: "by_league_and_player", unique: true, using: :btree
     t.index ["league_id"], name: "index_leagues_players_on_league_id", using: :btree
     t.index ["player_id"], name: "index_leagues_players_on_player_id", using: :btree
+  end
+
+  create_table "list_positions", force: :cascade do |t|
+    t.integer  "fpl_team_list_id"
+    t.integer  "player_id"
+    t.integer  "position_id"
+    t.integer  "role"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+    t.index ["fpl_team_list_id"], name: "index_list_positions_on_fpl_team_list_id", using: :btree
+    t.index ["player_id"], name: "index_list_positions_on_player_id", using: :btree
+    t.index ["position_id"], name: "index_list_positions_on_position_id", using: :btree
   end
 
   create_table "players", force: :cascade do |t|

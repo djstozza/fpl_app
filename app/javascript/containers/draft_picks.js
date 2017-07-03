@@ -70,15 +70,17 @@ class DraftPicks extends Component {
 
   showAlerts (nextProps) {
     if (nextProps.errors) {
-      this.showErrors(nextProps.errors)
+      this.errorMessages(nextProps.errors)
     } else if (nextProps.success) {
-      this.successfulPick(nextProps.success);
+      this.successMessage(nextProps.success);
     } else if (nextProps.current_draft_pick && nextProps.fpl_team) {
       this.yourTurn(nextProps.current_draft_pick.fpl_team_id, nextProps.fpl_team.id);
+    } else if (nextProps.league && nextProps.league.active && !this.state.alertShown) {
+      this.successMessage('The draft has been completed.');
     }
   }
 
-  showErrors (errors) {
+  errorMessages (errors) {
     errors.map( (error) => {
       return (
         Alert.error(error, {
@@ -90,11 +92,14 @@ class DraftPicks extends Component {
     })
   }
 
-  successfulPick (success) {
+  successMessage (success) {
     Alert.success(success, {
       position: 'top',
       effect: 'bouncyflip',
       timeout: 5000
+    });
+    this.setState({
+      alertShown: true
     })
   }
 

@@ -1,4 +1,6 @@
 class FplTeamListsController < ApplicationController
+  before_action :authenticate_user!
+  skip_before_action :verify_authenticity_token
   before_action :set_fpl_team_list, only: [:show, :edit, :update, :destroy]
 
   # GET /fpl_team_lists
@@ -40,13 +42,24 @@ class FplTeamListsController < ApplicationController
   # PATCH/PUT /fpl_team_lists/1
   # PATCH/PUT /fpl_team_lists/1.json
   def update
+    player = Player.find_by(id: params[:player_id])
+    target = Player.find_by(id: params[:target_id])
+    form = ::FplTeams::ProcessSubstitutionForm.new(
+      fpl_team_list: @fpl_team_list,
+      player: player,
+      target: target,
+      current_user: current_user
+    )
     respond_to do |format|
-      if @fpl_team_list.update(fpl_team_list_params)
-        format.html { redirect_to @fpl_team_list, notice: 'Fpl team list was successfully updated.' }
-        format.json { render :show, status: :ok, location: @fpl_team_list }
+      if form.save
+        format.json do
+          render json: {
+            line_up: ListPositionsDecorator.new(@fpl_team_list.list_positions).list_position_arr,
+            success: "Successfully substituted #{player.name} with #{target.name}."
+          }
+        end
       else
-        format.html { render :edit }
-        format.json { render json: @fpl_team_list.errors, status: :unprocessable_entity }
+        format.json { render json: form.errors.full_messages, status: :unprocessable_entity }
       end
     end
   end

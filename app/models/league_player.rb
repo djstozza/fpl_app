@@ -2,8 +2,8 @@
 #
 # Table name: leagues_players
 #
-#  player_id :integer
-#  league_id :integer
+#  league_id :integer          not null
+#  player_id :integer          not null
 #
 
 class LeaguePlayer < ApplicationRecord

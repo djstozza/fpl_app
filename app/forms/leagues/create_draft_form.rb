@@ -1,4 +1,4 @@
-class Leagues::CreateDraftForm < ApplicationForm
+class Leagues::CreateDraftForm
   include ActiveModel::Model
   include ::Virtus.model
 

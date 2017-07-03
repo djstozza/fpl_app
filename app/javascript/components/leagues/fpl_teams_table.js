@@ -1,11 +1,16 @@
 import React, { Component } from 'react';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import ReactTooltip from 'react-tooltip';
+import { Link } from 'react-router-dom';
 import _ from 'underscore';
 
 export default class FplTeamsTable extends Component {
   constructor(props) {
     super(props)
+  }
+
+  linkCellText (cell, row) {
+    return (<Link to={`/fpl_teams/${row.id}` } >{cell}</Link>);
   }
 
   render () {
@@ -50,7 +55,6 @@ export default class FplTeamsTable extends Component {
             sortFunc={ pickSortFunc }>
             <span data-tip='Pick Number'>PN</span>
           </TableHeaderColumn>
-
         )
       }
     }
@@ -64,6 +68,7 @@ export default class FplTeamsTable extends Component {
           <TableHeaderColumn
             dataField='name'
             dataAlign='center'
+            dataFormat={ this.linkCellText }
             filter={ { type: 'TextFilter', placeholder: ' ' } }
             dataSort
             isKey>

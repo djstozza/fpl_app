@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   mount ActionCable.server => "/cable"
-  resources :fpl_team_lists
+  resources :list_positions
+  resources :fpl_team_lists, only: :update
   resources :fpl_teams, except: [:new, :create]
   resources :leagues do
     resources :draft_picks
