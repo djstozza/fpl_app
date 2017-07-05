@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import ReactTooltip from 'react-tooltip';
 import { Link } from 'react-router-dom';
-import Select from 'react-select';
 import axios from 'axios';
 import _ from 'underscore';
 import { Icon } from 'react-fa';
@@ -10,11 +9,11 @@ import { Icon } from 'react-fa';
 export default class TeamListTable extends Component {
   constructor (props) {
     super(props);
-    this.updateLineUp = this.updateLineUp.bind(this);
     this.state = {
       selected: '',
       options: []
     }
+    this.substitutePlayer = this.substitutePlayer.bind(this);
     this.onRowSelect = this.onRowSelect.bind(this);
     this.trClassFormat = this.trClassFormat.bind(this);
   }
@@ -23,8 +22,46 @@ export default class TeamListTable extends Component {
     return (<Link to={`/players/${row.id}` } >{cell}</Link>);
   }
 
-  updateLineUp (target) {
-    this.props.onChange(this.state.selected, target);
+  substitutePlayer (target) {
+    this.props.substitutePlayer(this.state.selected, target);
+  }
+
+  selectLineUp (row) {
+    if (this.state.selected == '') {
+      axios.get(`/list_positions/${row.id}.json`).then(res => {
+        if (this.props.action == 'selectLineUp') {
+          this.setState({
+            selected: row.player_id,
+            options: res.data.options
+          });
+        }
+      })
+    } else if (this.state.selected == row.player_id) {
+      this.setState({
+        selected: '',
+        options: []
+      });
+    } else if (_.contains(this.state.options, row.player_id)) {
+      this.substitutePlayer(row.player_id);
+      this.setState({
+        selected: '',
+        options: []
+      });
+    }
+  }
+
+  tradePlayers (row) {
+    if (this.state.selected != row.player_id) {
+      this.props.setlistPosition(row);
+      this.setState({
+        selected: row.player_id
+      });
+    } else if (this.state.selected == row.player_id) {
+      this.setState({
+        selected: ''
+      });
+      this.props.setlistPosition(null);
+    }
   }
 
   onRowSelect (row, isSelected, e) {
@@ -32,28 +69,12 @@ export default class TeamListTable extends Component {
       return false
     }
 
-    if (new Date() > new Date(this.props.round.deadline_time)) {
-      return false
-    }
-
-    if (this.state.selected == '') {
-      axios.get(`/list_positions/${row.id}.json`).then(res => {
-        this.setState({
-          selected: row.player_id,
-          options: res.data.options
-        })
-      })
-    } else if (this.state.selected == row.player_id) {
-      this.setState({
-        selected: '',
-        options: []
-      })
-    } else if (_.contains(this.state.options, row.player_id)) {
-      this.updateLineUp(row.player_id);
-      this.setState({
-        selected: '',
-        options: []
-      })
+    switch (this.props.action) {
+      case 'selectLineUp':
+        return this.selectLineUp(row);
+      case 'tradePlayers':
+        return this.tradePlayers(row);
+      default: this.selectLineUp(row);
     }
   }
 
@@ -68,9 +89,11 @@ export default class TeamListTable extends Component {
   }
 
   descriptionText () {
-    if (new Date() > new Date(this.props.round.deadline_time)) {
-      return false
-    } else if (this.props.fpl_team.user_id == this.props.current_user.id) {
+    if (this.props.fpl_team.user_id != this.props.current_user.id) {
+      return
+    }
+
+    const selectLineUpText = () => {
       return (
         <div>
           <h3>Choose your starting line up</h3>
@@ -81,6 +104,32 @@ export default class TeamListTable extends Component {
           </p>
         </div>
       )
+    }
+
+    switch (this.props.action) {
+      case 'selectLineUp':
+        return selectLineUpText();
+
+      case 'tradePlayers':
+        return (
+          <div>
+            <h3>Trade Out Player</h3>
+            <p>
+              (1) Click the row of the player you wish to trade out.
+            </p>
+          </div>
+        );
+
+      default: selectLineUpText();
+    }
+  }
+
+  componentWillReceiveProps (nextProps) {
+    if (this.props.action != nextProps.action) {
+      this.setState({
+        selected: '',
+        options: []
+      })
     }
   }
 
@@ -95,7 +144,7 @@ export default class TeamListTable extends Component {
       return positionText[cell]
     }
 
-    const playerLastNameText = _.object(_.map(this.props.players, function(obj) {
+    let playerLastNameText = _.object(_.map(this.props.players, function(obj) {
       return [obj.id, obj.last_name]
     }))
 
@@ -112,17 +161,13 @@ export default class TeamListTable extends Component {
       i: { name: 'ambulance', title: 'Injured' }
     }
 
-    const playerStatusText = _.object(_.map(this.props.players, function(obj) {
-      return [obj.id, obj.status]
-    }))
-
     let columnClassNameFormat = (fieldValue, row, rowIdx, colIdx) => {
-      return `player-status-${playerStatusText[row.player_id]}`
+      return `player-status-${row.status}`
     }
 
     let statusIconCell = function (cell, row) {
       return (
-        <Icon size='lg' name={ statuses[playerStatusText[row.player_id]].name } />
+        <Icon size='lg' name={ statuses[row.status].name } />
       )
     }
 
@@ -136,6 +181,14 @@ export default class TeamListTable extends Component {
 
     let roleTextCell = (cell, row) => {
       return roleText[cell]
+    }
+
+    const teamText = _.object(_.map(this.props.teams, function (obj) {
+      return [obj.id, obj.short_name]
+    }));
+
+    let teamTextCell = function (cell, row) {
+      return teamText[cell]
     }
 
     const selectRowProp = {
@@ -174,7 +227,13 @@ export default class TeamListTable extends Component {
             <span data-tip='Player'>P</span>
           </TableHeaderColumn>
           <TableHeaderColumn
-            dataField='player_id'
+            dataField='team_id'
+            dataAlign='center'
+            dataFormat={ teamTextCell }>
+            <span data-tip='Team'>T</span>
+          </TableHeaderColumn>
+          <TableHeaderColumn
+            dataField='status'
             dataAlign='center'
             columnClassName={ columnClassNameFormat }
             dataFormat={ statusIconCell }>

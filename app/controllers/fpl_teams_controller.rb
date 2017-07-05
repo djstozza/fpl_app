@@ -12,6 +12,7 @@ class FplTeamsController < ApplicationController
   # GET /fpl_teams/1.json
   def show
     # TODO: fix rounds and fpl team lists once new round data comes from fantasypremierleague.com
+    league_decorator = LeagueDecorator.new(@fpl_team.league)
     respond_to do |format|
       format.html
       format.json do
@@ -22,6 +23,8 @@ class FplTeamsController < ApplicationController
           round: Round.first,
           line_up: ListPositionsDecorator.new(@fpl_team.fpl_team_lists.first.list_positions).list_position_arr,
           players: PlayersDecorator.new(@fpl_team.players).all_data,
+          unpicked_players: league_decorator.unpicked_players,
+          picked_players: league_decorator.picked_players,
           positions: Position.all,
           current_user: current_user
         }

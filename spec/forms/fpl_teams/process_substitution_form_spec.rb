@@ -7,7 +7,7 @@ RSpec.describe FplTeams::ProcessSubstitutionForm, type: :form do
 
   before do
     i = 0
-    3.times do |i|
+    3.times do
       i += 1
       FactoryGirl.create(:player, position: Position.find_by(singular_name_short: 'FWD'), ict_index: i)
     end
@@ -17,12 +17,12 @@ RSpec.describe FplTeams::ProcessSubstitutionForm, type: :form do
       FactoryGirl.create(:player, position: Position.find_by(singular_name_short: 'MID'), ict_index: i)
     end
 
-    5.times do |i|
+    5.times do
       i += 1
       FactoryGirl.create(:player, position: Position.find_by(singular_name_short: 'DEF'), ict_index: i)
     end
 
-    2.times do |i|
+    2.times do
       i += 1
       FactoryGirl.create(:player, position: Position.find_by(singular_name_short: 'GKP'), ict_index: i)
     end

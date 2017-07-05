@@ -8,10 +8,6 @@ RSpec.describe Leagues::UpdateDraftPickForm, type: :form do
       FactoryGirl.create(:league, commissioner: User.first) if i == 1
       FactoryGirl.create(:fpl_team, name: "#{Faker::Team.name} #{i}", user: user, league: League.first)
     end
-    FactoryGirl.create(:position, plural_name: 'Goalkeepers')
-    FactoryGirl.create(:position, plural_name: 'Defenders')
-    FactoryGirl.create(:position, plural_name: 'Midfielders')
-    FactoryGirl.create(:position, plural_name: 'Forwards')
     20.times do
       FactoryGirl.create(:team)
     end
@@ -33,7 +29,7 @@ RSpec.describe Leagues::UpdateDraftPickForm, type: :form do
     expect(form.league.players.first).to eq(Player.first)
   end
 
-  it 'fails to complete the pick if the player has already been picked' do
+  it 'fails to complete the pick if the player has already been picked.' do
     Leagues::UpdateDraftPickForm.new(
       league: League.first,
       draft_pick: selected_pick(1),
@@ -47,7 +43,7 @@ RSpec.describe Leagues::UpdateDraftPickForm, type: :form do
       current_user: selected_pick(2).fpl_team.user
     )
     form.save
-    expect(form.errors.full_messages).to include('This player has already been picked')
+    expect(form.errors.full_messages).to include('This player has already been picked.')
     expect(selected_pick(1).fpl_team.players).to include(Player.first)
     expect(selected_pick(2).fpl_team.players).to be_empty
     expect(form.league.players.count).to eq(1)
@@ -61,7 +57,7 @@ RSpec.describe Leagues::UpdateDraftPickForm, type: :form do
       current_user: selected_pick(2).fpl_team.user
     )
     form.save
-    expect(form.errors.full_messages).to include('You cannot pick out of turn')
+    expect(form.errors.full_messages).to include('You cannot pick out of turn.')
     expect(form.fpl_team.players).to be_empty
     expect(form.draft_pick.fpl_team.players).to be_empty
     expect(form.league.players).to be_empty
@@ -75,7 +71,7 @@ RSpec.describe Leagues::UpdateDraftPickForm, type: :form do
       current_user: selected_pick(2).fpl_team.user
     )
     form.save
-    expect(form.errors.full_messages).to include('You cannot pick out of turn')
+    expect(form.errors.full_messages).to include('You cannot pick out of turn.')
     expect(form.fpl_team.players).to be_empty
     expect(form.draft_pick.fpl_team.players).to be_empty
     expect(form.league.players).to be_empty
@@ -112,7 +108,7 @@ RSpec.describe Leagues::UpdateDraftPickForm, type: :form do
     )
     form.save
 
-    expect(form.errors.full_messages).to include("You can't have more than 2 Goalkeepers in your team")
+    expect(form.errors.full_messages).to include("You can't have more than 2 Goalkeepers in your team.")
 
     10.times do |i|
       expect(FplTeam.all[i].players.where(position: goalkeepers).count).to eq(2)
@@ -136,10 +132,11 @@ RSpec.describe Leagues::UpdateDraftPickForm, type: :form do
       current_user: selected_pick(31).fpl_team.user
     )
     form.save
-    expect(form.errors.full_messages).to include("You can't have more than 3 players from the same team")
+    expect(form.errors.full_messages).to include(
+      "You can't have more than #{Leagues::UpdateDraftPickForm::QUOTAS[:team]} players from the same team " \
+        "(#{form.player.team.name})."
+    )
   end
-
-
 
   private
 
