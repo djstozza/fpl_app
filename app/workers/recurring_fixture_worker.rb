@@ -1,6 +1,6 @@
 require 'sidekiq'
 require 'sidekiq-scheduler'
-require 'rake'
+
 FplApp::Application.load_tasks
 
 class RecurringFixtureWorker

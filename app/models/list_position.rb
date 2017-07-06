@@ -23,4 +23,5 @@ class ListPosition < ApplicationRecord
   scope :defenders, -> { where(position: Position.find_by(singular_name: 'Defender')) }
   scope :goalkeepers, -> { where(position: Position.find_by(singular_name: 'Goalkeeper')) }
   scope :field_players, -> { where.not(position: Position.find_by(singular_name: 'Goalkeeper')) }
+  scope :substitutes, -> { where.not(role: 'starting').order(:role) }
 end

@@ -85,14 +85,20 @@ export default class TradePlayersTable extends Component {
 
   completeTrade () {
     this.props.completeTrade(this.state.selected);
+    this.setState({
+      selected: ''
+    })
   }
 
   completeTradeButton () {
     if (this.state.selected) {
       return (
-        <Button onClick={ () => this.completeTrade() }>
-          Complete Trade
-        </Button>
+        <div>
+          <p>(3) Click the button to complete the trade</p>
+          <Button onClick={ () => this.completeTrade() }>
+            Complete Trade
+          </Button>
+        </div>
       )
     }
   }

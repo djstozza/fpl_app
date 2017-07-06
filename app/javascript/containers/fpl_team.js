@@ -193,6 +193,7 @@ function mapStateToProps(state) {
     teams: state.TeamsReducer
   }
 }
+
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     fetchFplTeam: fetchFplTeam,

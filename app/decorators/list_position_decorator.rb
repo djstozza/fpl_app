@@ -10,6 +10,7 @@ class ListPositionDecorator < SimpleDelegator
       elsif starting?
         list_positions.field_players.where.not(role: 'starting').to_a.delete_if do |list_position|
           @starting_lineup_arr = list_positions.starting.where.not(player_id: player_id).to_a
+          @starting_lineup_arr << list_position
           starting_position_count('Forward').zero? || starting_position_count('Midfielder') < 2 ||
           starting_position_count('Defender') < 3
         end
