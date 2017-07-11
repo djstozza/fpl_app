@@ -1,7 +1,7 @@
 import { FETCH_LEAGUE } from './types';
 import axios from 'axios';
 
-export default function fetchLeague(leagueId) {
+export default function fetchLeague (leagueId) {
   return dispatch => {
     axios.get(`/leagues/${leagueId}.json`)
       .then(res => {
@@ -10,7 +10,7 @@ export default function fetchLeague(leagueId) {
   }
 }
 
-function fetchLeagueAsync(data){
+function fetchLeagueAsync (data) {
   return {
     type: FETCH_LEAGUE,
     payload: data

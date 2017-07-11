@@ -2,14 +2,15 @@ class RoundsController < ApplicationController
   # GET /rounds
   # GET /rounds.json
   def index
-    round_decorator = RoundDecorator.new(Round.find_by(is_current: true))
+    rounds_decorator = RoundsDecorator.new(Round.all)
+    current_round = rounds_decorator.current_round
     respond_to do |format|
       format.html
       format.json do
         render json: {
-          round: round_decorator,
-          fixtures: round_decorator.fixture_stats,
-          rounds: RoundsDecorator.new(Round.all).all_data
+          round: current_round,
+          fixtures: current_round.fixture_stats,
+          rounds: rounds_decorator.all_data
         }
       end
     end

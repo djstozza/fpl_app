@@ -13,16 +13,19 @@ class FplTeamsController < ApplicationController
   def show
     # TODO: fix rounds and fpl team lists once new round data comes from fantasypremierleague.com
     league_decorator = LeagueDecorator.new(@fpl_team.league)
+    fpl_team_lists = @fpl_team.fpl_team_lists
+    fpl_team_list = fpl_team_lists.second
     respond_to do |format|
       format.html
       format.json do
         render json: {
           fpl_team: @fpl_team,
-          fpl_team_list: @fpl_team.fpl_team_lists.first,
+          fpl_team_list: fpl_team_list,
           league: @fpl_team.league,
-          round: Round.first,
-          line_up: ListPositionsDecorator.new(@fpl_team.fpl_team_lists.first.list_positions).list_position_arr,
-          players: PlayersDecorator.new(@fpl_team.players).all_data,
+          round: Round.second,
+          rounds: Round.where(id: fpl_team_lists.pluck(:round_id)),
+          fpl_team_lists: fpl_team_lists,
+          line_up: ListPositionsDecorator.new(fpl_team_list.list_positions).list_position_arr,
           unpicked_players: league_decorator.unpicked_players,
           picked_players: league_decorator.picked_players,
           positions: Position.all,

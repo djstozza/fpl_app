@@ -1,40 +1,16 @@
 class FplTeamListsController < ApplicationController
   before_action :authenticate_user!
   skip_before_action :verify_authenticity_token
-  before_action :set_fpl_team_list, only: [:show, :edit, :update, :destroy]
-
-  # GET /fpl_team_lists
-  # GET /fpl_team_lists.json
-  def index
-    @fpl_team_lists = FplTeamList.all
-  end
+  before_action :set_fpl_team_list, only: [:show, :update]
 
   # GET /fpl_team_lists/1
   # GET /fpl_team_lists/1.json
   def show
-  end
-
-  # GET /fpl_team_lists/new
-  def new
-    @fpl_team_list = FplTeamList.new
-  end
-
-  # GET /fpl_team_lists/1/edit
-  def edit
-  end
-
-  # POST /fpl_team_lists
-  # POST /fpl_team_lists.json
-  def create
-    @fpl_team_list = FplTeamList.new(fpl_team_list_params)
-
     respond_to do |format|
-      if @fpl_team_list.save
-        format.html { redirect_to @fpl_team_list, notice: 'Fpl team list was successfully created.' }
-        format.json { render :show, status: :created, location: @fpl_team_list }
-      else
-        format.html { render :new }
-        format.json { render json: @fpl_team_list.errors, status: :unprocessable_entity }
+      format.json do
+        render json: {
+          line_up: ListPositionsDecorator.new(@fpl_team_list.list_positions).list_position_arr
+        }
       end
     end
   end
@@ -61,16 +37,6 @@ class FplTeamListsController < ApplicationController
       else
         format.json { render json: form.errors.full_messages, status: :unprocessable_entity }
       end
-    end
-  end
-
-  # DELETE /fpl_team_lists/1
-  # DELETE /fpl_team_lists/1.json
-  def destroy
-    @fpl_team_list.destroy
-    respond_to do |format|
-      format.html { redirect_to fpl_team_lists_url, notice: 'Fpl team list was successfully destroyed.' }
-      format.json { head :no_content }
     end
   end
 

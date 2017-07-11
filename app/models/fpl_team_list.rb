@@ -15,6 +15,6 @@
 class FplTeamList < ApplicationRecord
   belongs_to :round
   belongs_to :fpl_team
-  has_and_belongs_to_many :players
   has_many :list_positions
+  has_many :players, through: :list_positions
 end

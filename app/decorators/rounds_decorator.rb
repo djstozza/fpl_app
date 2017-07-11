@@ -1,6 +1,6 @@
 class RoundsDecorator < SimpleDelegator
   def all_data
-    pluck_to_hash(
+    order(:id).pluck_to_hash(
       :id,
       :name,
       :finished,
@@ -11,5 +11,14 @@ class RoundsDecorator < SimpleDelegator
       :is_previous,
       :is_next
     )
+  end
+
+  def current_round
+    round = if Round.find_by(is_current: true).data_checked
+              Round.find_by(is_next: true) || Round.find_by(is_current: true)
+            else
+              Round.find_by(is_current: true)
+            end
+    RoundDecorator.new(round)
   end
 end

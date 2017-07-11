@@ -25,9 +25,36 @@ class ListPositionDecorator < SimpleDelegator
     options.map { |option| option.player_id }
   end
 
+  # Not sure whether I'll have to use this or whether event_points will be sufficient
+  def scoring_hash
+    pfh = player_fixture_history
+    {
+      id: id,
+      role: role,
+      position_id: position_id,
+      player_id: player_id,
+      status: player.status,
+      minutes: pfh.nil? ? 0 : pfh['minutes'],
+      points: pfh.nil? ? 0 : pfh['total_points'],
+      team_id: player.team_id
+    }
+  end
+
   private
 
   def starting_position_count(position_name)
     @starting_lineup_arr.select { |list_position| list_position.position.singular_name == position_name }.count
+  end
+
+  def player_fixture_history
+    player.player_fixture_histories.find { |pfh| pfh['round'] == fpl_team_list.round_id }
+  end
+
+  def minutes
+    player_fixture_history ? player_fixture_history['minutes'] : 0
+  end
+
+  def points
+    player_fixture_history ? player_fixture_history['total_points'] : 0
   end
 end

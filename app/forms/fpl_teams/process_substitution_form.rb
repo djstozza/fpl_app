@@ -14,7 +14,7 @@ class FplTeams::ProcessSubstitutionForm
     @round = fpl_team_list.round
   end
 
-  validate :before_deadline_time
+  # validate :before_deadline_time
   validate :authorised_user
   validate :player_team_presnece
   validate :target_team_presence

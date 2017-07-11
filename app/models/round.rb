@@ -19,6 +19,4 @@
 class Round < ApplicationRecord
   has_many :fixtures
   has_many :player_fixture_histories
-
-  scope :current, -> { find_by(is_current: true) }
 end

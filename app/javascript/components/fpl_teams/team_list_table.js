@@ -27,6 +27,10 @@ export default class TeamListTable extends Component {
   }
 
   selectLineUp (row) {
+    if (!this.props.round.is_current) {
+      return;
+    }
+
     if (this.state.selected == '') {
       axios.get(`/list_positions/${row.id}.json`).then(res => {
         if (this.props.action == 'selectLineUp') {
@@ -89,7 +93,7 @@ export default class TeamListTable extends Component {
   }
 
   descriptionText () {
-    if (this.props.fpl_team.user_id != this.props.current_user.id) {
+    if (this.props.fpl_team.user_id != this.props.current_user.id || !this.props.round.is_current) {
       return
     }
 
@@ -144,7 +148,7 @@ export default class TeamListTable extends Component {
       return positionText[cell]
     }
 
-    let playerLastNameText = _.object(_.map(this.props.players, function(obj) {
+    let playerLastNameText = _.object(_.map(this.props.line_up, function(obj) {
       return [obj.id, obj.last_name]
     }))
 
@@ -191,6 +195,23 @@ export default class TeamListTable extends Component {
       return teamText[cell]
     }
 
+    let playerFixtureHistories = _.object(_.map(this.props.line_up, (obj) => {
+      return [
+        obj.id,
+        _.filter(obj.player_fixture_histories, (obj) => {
+          return obj.round == self.props.round.id
+        })
+      ]
+    }));
+
+    let pointsText = (cell, row) => {
+      return (
+        _.reduce(_.map(playerFixtureHistories[row.id], (obj) => {
+          return obj.total_points
+        }), (x, y) => { return x + y; }, 0)
+      );
+    }
+
     const selectRowProp = {
       mode: 'checkbox',
       hideSelectColumn: true,
@@ -220,9 +241,8 @@ export default class TeamListTable extends Component {
             <span data-tip='Position'>Pos</span>
           </TableHeaderColumn>
           <TableHeaderColumn
-            dataField='player_id'
+            dataField='last_name'
             dataAlign='center'
-            dataFormat={ playerLastNameCell }
             isKey>
             <span data-tip='Player'>P</span>
           </TableHeaderColumn>
@@ -231,6 +251,12 @@ export default class TeamListTable extends Component {
             dataAlign='center'
             dataFormat={ teamTextCell }>
             <span data-tip='Team'>T</span>
+          </TableHeaderColumn>
+          <TableHeaderColumn
+            dataField='player_fixture_histories'
+            dataAlign='center'
+            dataFormat={ pointsText }>
+            <span data-tip='Points'>Pts</span>
           </TableHeaderColumn>
           <TableHeaderColumn
             dataField='status'

@@ -20,7 +20,7 @@ RSpec.describe Leagues::CreateDraftForm, type: :form do
       .to eq([10, 11, 30, 31, 50, 51, 70, 71, 90, 91, 110, 111, 130, 131, 150])
   end
 
-  it 'can only be initiated by the leageu commissioner' do
+  it 'can only be initiated by the league commissioner' do
     form = Leagues::CreateDraftForm.new(league: league, current_user: league.fpl_teams.last.user)
     expect{ form.save }.to_not change(DraftPick, :count)
     expect(form.errors.full_messages).to include('You are not authorised to initiate the draft')

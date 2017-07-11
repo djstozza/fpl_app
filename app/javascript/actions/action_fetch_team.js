@@ -1,7 +1,7 @@
 import { FETCH_TEAM } from './types';
 import axios from 'axios';
 
-export default function fetchTeam(teamId) {
+export default function fetchTeam (teamId) {
   return dispatch => {
     axios.get(`/teams/${teamId}.json`)
       .then(res => {
@@ -10,7 +10,7 @@ export default function fetchTeam(teamId) {
   }
 }
 
-function fetchTeamAsync(data){
+function fetchTeamAsync (data) {
   return {
     type: FETCH_TEAM,
     payload: data

@@ -6,26 +6,42 @@ import { Row, Col, Button } from 'react-bootstrap';
 import axios from 'axios';
 import fetchFplTeam from '../actions/action_fetch_fpl_team.js';
 import fetchTeams from '../actions/action_fetch_teams.js';
+import RoundsNav from '../components/rounds/rounds_nav.js';
 import TeamListTable from '../components/fpl_teams/team_list_table.js';
 import TradePlayersTable from '../components/fpl_teams/trade_players_table.js';
 import Alert from 'react-s-alert';
+import _ from 'underscore';
 
 
 class FplTeam extends Component {
   constructor(props) {
     super(props)
+    this.showButtons = this.showButtons.bind(this);
     this.substitutePlayer = this.substitutePlayer.bind(this);
     this.setlistPosition = this.setlistPosition.bind(this);
     this.completeTrade = this.completeTrade.bind(this);
+    this.dataSource = this.dataSource.bind(this);
     this.state = {
       action: 'selectLineUp'
     }
   }
 
+  dataSource (roundId) {
+    let fplTeamList = _.find(this.state.fpl_team_lists, (obj) => {
+      return obj.round_id == roundId
+    })
+
+    axios.get(`/fpl_team_lists/${fplTeamList.id}.json`).then((res) => {
+      this.setState({
+        line_up: res.data.line_up
+      })
+    })
+  }
+
   substitutePlayer (playerId, targetId) {
     axios({
       method: 'put',
-      url: `/fpl_team_lists/${this.state.team_list.id}.json`,
+      url: `/fpl_team_lists/${this.state.fpl_team_list.id}.json`,
       data: {
         player_id: playerId,
         target_id: targetId
@@ -101,13 +117,14 @@ class FplTeam extends Component {
       league: nextProps.league,
       fpl_team: nextProps.fpl_team,
       current_user: nextProps.current_user,
-      players: nextProps.players,
       unpicked_players: nextProps.unpicked_players,
       picked_players: nextProps.picked_players,
-      team_list: nextProps.team_list,
+      fpl_team_list: nextProps.fpl_team_list,
+      fpl_team_lists: nextProps.fpl_team_lists,
       line_up: nextProps.line_up,
       positions: nextProps.positions,
       round: nextProps.round,
+      rounds: nextProps.rounds,
       teams: nextProps.teams
     })
   }
@@ -137,12 +154,28 @@ class FplTeam extends Component {
               unpicked_players={ this.state.unpicked_players }
               teams={ this.state.teams }
               positions={ this.state.positions }
+              current_user={ this.state.current_user }
+              fpl_team={ this.state.fpl_team }
+              round={ this.state.round }
               action={ this.state.action }
               listPosition={ this.state.listPosition }
-              completeTrade={ this.completeTrade } />
+              completeTrade={ this.completeTrade }
+            />
           </Col>
         )
     }
+  }
+
+  showButtons () {
+    if (this.state.fpl_team.user_id != this.state.current_user.id) {
+      return;
+    }
+    return (
+      <div>
+      <Button onClick={ () => this.setAction('selectLineUp') }>Select starting line up</Button>
+      <Button onClick={ () => this.setAction('tradePlayers') }>Trade Players</Button>
+      </div>
+    )
   }
 
   render () {
@@ -154,9 +187,10 @@ class FplTeam extends Component {
       return (
         <div>
           <h2>{ this.state.fpl_team.name }</h2>
-          <Button onClick={ () => this.setAction('selectLineUp') }>Select starting line up</Button>
-          <Button onClick={ () => this.setAction('tradePlayers') }>Trade Players</Button>
-          <Row className='clearfix'>
+
+          <RoundsNav rounds={ this.state.rounds } round={ this.state.round }  onChange={ this.dataSource } />
+          { this.showButtons() }
+          <Row clasName='clearfix'>
             <Col sm={ this.setTeamTableCol() } >
               <TeamListTable
                 fpl_team={ this.state.fpl_team }
@@ -164,11 +198,11 @@ class FplTeam extends Component {
                 line_up={ this.state.line_up }
                 positions={ this.state.positions }
                 teams={ this.state.teams }
-                players={ this.state.players }
                 round={ this.state.round }
                 action={ this.state.action }
                 substitutePlayer={ this.substitutePlayer }
-                setlistPosition={ this.setlistPosition } />
+                setlistPosition={ this.setlistPosition }
+              />
             </Col>
             { this.tradePlayers() }
           </Row>
@@ -183,17 +217,17 @@ function mapStateToProps(state) {
     league: state.FplTeamReducer.league,
     fpl_team: state.FplTeamReducer.fpl_team,
     current_user: state.FplTeamReducer.current_user,
-    players: state.FplTeamReducer.players,
     picked_players: state.FplTeamReducer.picked_players,
     unpicked_players: state.FplTeamReducer.unpicked_players,
-    team_list: state.FplTeamReducer.fpl_team_list,
+    fpl_team_list: state.FplTeamReducer.fpl_team_list,
+    fpl_team_lists: state.FplTeamReducer.fpl_team_lists,
     line_up: state.FplTeamReducer.line_up,
     positions: state.FplTeamReducer.positions,
     round: state.FplTeamReducer.round,
+    rounds: state.FplTeamReducer.rounds,
     teams: state.TeamsReducer
   }
 }
-
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     fetchFplTeam: fetchFplTeam,

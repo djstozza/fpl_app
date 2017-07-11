@@ -87,9 +87,15 @@ export default class FplTeamsTable extends Component {
             dataField='total_score'
             dataAlign='center'
             filter={ { type: 'TextFilter', placeholder: ' ' } }
-            dataFormat={ userTextCell }
             dataSort>
             <span data-tip='Total Score'>TS</span>
+          </TableHeaderColumn>
+          <TableHeaderColumn
+            dataField='rank'
+            dataAlign='center'
+            filter={ { type: 'TextFilter', placeholder: ' ' } }
+            dataSort>
+            <span data-tip='Rank'>Rank</span>
           </TableHeaderColumn>
         </BootstrapTable>
         <ReactTooltip />

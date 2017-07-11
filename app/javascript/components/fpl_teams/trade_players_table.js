@@ -42,16 +42,17 @@ export default class TradePlayersTable extends Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    if (nextProps.listPosition != null) {
-      this.refs.positionId.applyFilter(nextProps.listPosition.position_id);
-    } else {
+    if (nextProps.listPosition == null) {
       this.refs.positionId.cleanFiltered();
       this.setState({
         selected: ''
       })
+      return
     }
 
-    if (this.props.listPosition != null && this.props.listPosition.position_id != nextProps.listPosition.position_id) {
+    this.refs.positionId.applyFilter(nextProps.listPosition.position_id);
+
+    if (this.props.listPosition && this.props.listPosition.position_id != nextProps.listPosition.position_id) {
       this.setState({
         selected: ''
       })
@@ -66,17 +67,21 @@ export default class TradePlayersTable extends Component {
   }
 
   trClassFormat (row) {
-    if (this.state.selected == row.id) {
+    if (this.state.selected == row) {
       return 'substitute-option'
     }
   }
 
   selectPlayerToTrade (row) {
-    if (this.state.selected != row.id) {
+    if (this.props.listPosition == null) {
+      return
+    }
+
+    if (this.state.selected != row) {
       this.setState({
-        selected: row.id
+        selected: row
       });
-    } else if (this.state.selected == row.id) {
+    } else if (this.state.selected == row) {
       this.setState({
         selected: ''
       });
@@ -84,14 +89,18 @@ export default class TradePlayersTable extends Component {
   }
 
   completeTrade () {
-    this.props.completeTrade(this.state.selected);
+    this.props.completeTrade(this.state.selected.id);
     this.setState({
       selected: ''
     })
   }
 
   completeTradeButton () {
-    if (this.state.selected) {
+    if (this.props.fpl_team.user_id != this.props.current_user.id || !this.props.round.is_current) {
+      return;
+    }
+
+    if (this.state.selected && this.props.listPosition) {
       return (
         <div>
           <p>(3) Click the button to complete the trade</p>

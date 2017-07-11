@@ -17,6 +17,7 @@ class League < ApplicationRecord
   has_many :draft_picks
   has_and_belongs_to_many :players
   has_many :users, through: :fpl_teams
+  has_many :fpl_team_lists, through: :fpl_teams
   validates :name, presence: true, uniqueness: { case_sensitive: false }
   validates :code, presence: true
   validates_presence_of :commissioner

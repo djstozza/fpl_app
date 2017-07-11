@@ -1,7 +1,7 @@
 import { UPDATE_DRAFT_PICK, SHOW_ERRORS } from './types';
 import axios from 'axios';
 
-export default function updateDraftPick(leagueId, draftPickId, playerId) {
+export default function updateDraftPick (leagueId, draftPickId, playerId) {
   return dispatch => {
     axios({
       method: 'put',
@@ -17,7 +17,7 @@ export default function updateDraftPick(leagueId, draftPickId, playerId) {
   }
 }
 
-function updateDraftPickAsync(data){
+function updateDraftPickAsync (data) {
   return {
     type: UPDATE_DRAFT_PICK,
     payload: data

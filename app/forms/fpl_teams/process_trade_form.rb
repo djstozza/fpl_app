@@ -17,7 +17,7 @@ class FplTeams::ProcessTradeForm
   validate :authorised_user
   validate :player_in_fpl_team
   validate :target_unpicked
-  validate :trade_occurring_in_valid_period
+  # validate :trade_occurring_in_valid_period
   validate :identical_player_and_target_positions
   validate :maximum_number_of_players_from_team
 
