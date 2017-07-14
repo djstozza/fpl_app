@@ -1,6 +1,6 @@
 class TeamsDecorator < SimpleDelegator
   def all_data
-    pluck_to_hash(
+    order(:id).pluck_to_hash(
       :id,
       :name,
       :short_name,

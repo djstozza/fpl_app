@@ -37,7 +37,7 @@ RSpec.describe FplTeams::ProcessTradeForm, type: :form do
 
     fpl_team.players << Player.all
     league.players << Player.all
-    Round.create(name: 'Gameweek 1', deadline_time: 1.day.from_now)
+    Round.create(name: 'Gameweek 1', deadline_time: 1.day.from_now, is_current: true)
     ::FplTeams::ProcessInitialLineUp.run(fpl_team: fpl_team)
     @list_position = ListPosition.midfielders.first
     @player = @list_position.player

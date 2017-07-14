@@ -17,4 +17,6 @@ class FplTeamList < ApplicationRecord
   belongs_to :fpl_team
   has_many :list_positions
   has_many :players, through: :list_positions
+  has_many :waiver_picks, through: :list_positions
+  validates_uniqueness_of :round_id, scope: :fpl_team_id
 end

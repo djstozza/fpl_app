@@ -19,7 +19,7 @@ export default class TeamListTable extends Component {
   }
 
   linkCellText (cell, row) {
-    return (<Link to={`/players/${row.id}` } >{cell}</Link>);
+    return (<Link to={`/players/${row.player_id}` } >{cell}</Link>);
   }
 
   substitutePlayer (target) {
@@ -27,10 +27,6 @@ export default class TeamListTable extends Component {
   }
 
   selectLineUp (row) {
-    if (!this.props.round.is_current) {
-      return;
-    }
-
     if (this.state.selected == '') {
       axios.get(`/list_positions/${row.id}.json`).then(res => {
         if (this.props.action == 'selectLineUp') {
@@ -69,16 +65,18 @@ export default class TeamListTable extends Component {
   }
 
   onRowSelect (row, isSelected, e) {
+    if (!this.props.editable) {
+      return false
+    }
+
     if (this.props.fpl_team.user_id != this.props.current_user.id) {
       return false
     }
 
-    switch (this.props.action) {
-      case 'selectLineUp':
-        return this.selectLineUp(row);
-      case 'tradePlayers':
-        return this.tradePlayers(row);
-      default: this.selectLineUp(row);
+    if (this.props.action == 'selectLineUp') {
+      return this.selectLineUp(row);
+    } else if (this.props.action == 'tradePlayers' || this.props.action == 'waiverPicks') {
+      return this.tradePlayers(row);
     }
   }
 
@@ -93,7 +91,7 @@ export default class TeamListTable extends Component {
   }
 
   descriptionText () {
-    if (this.props.fpl_team.user_id != this.props.current_user.id || !this.props.round.is_current) {
+    if (this.props.fpl_team.user_id != this.props.current_user.id || !this.props.editable) {
       return
     }
 
@@ -118,9 +116,15 @@ export default class TeamListTable extends Component {
         return (
           <div>
             <h3>Trade Out Player</h3>
-            <p>
-              (1) Click the row of the player you wish to trade out.
-            </p>
+            <p>(1) Click the row of the player you wish to trade out.</p>
+          </div>
+        );
+
+      case 'waiverPicks':
+        return (
+          <div>
+            <h3>Waiver (Out)</h3>
+            <p>(1) Click the row of the player you wish to trade out for this waiver pick</p>
           </div>
         );
 
@@ -243,6 +247,7 @@ export default class TeamListTable extends Component {
           <TableHeaderColumn
             dataField='last_name'
             dataAlign='center'
+            dataFormat={ this.linkCellText }
             isKey>
             <span data-tip='Player'>P</span>
           </TableHeaderColumn>

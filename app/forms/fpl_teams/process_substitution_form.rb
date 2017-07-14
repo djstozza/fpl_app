@@ -14,7 +14,8 @@ class FplTeams::ProcessSubstitutionForm
     @round = fpl_team_list.round
   end
 
-  # validate :before_deadline_time
+  validate :round_is_current
+  validate :before_deadline_time
   validate :authorised_user
   validate :player_team_presnece
   validate :target_team_presence
@@ -31,6 +32,11 @@ class FplTeams::ProcessSubstitutionForm
   end
 
   private
+
+  def round_is_current
+    return if @round.id == RoundsDecorator.new(Round.all).current_round.id
+    errors.add(:base, "You can only make changes to your squad's line up for the upcoming round.")
+  end
 
   def before_deadline_time
     return if Time.now < @round.deadline_time

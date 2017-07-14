@@ -30,9 +30,23 @@ export default class PlayerDetails extends Component {
       }
     }
 
+    let currentRoundLink = () => {
+      if (currentFixtureHistory != null) {
+        return (
+          <Link to={ `/rounds/${currentFixtureHistory.round}` }>{ currentFixtureHistory.round }</Link>
+        )
+      }
+    }
+
     let previousRoundScore = () => {
       if (previousFixtureHistory != null) {
         return `: ${ previousFixtureHistory.total_points }`
+      }
+    }
+
+    let currentRoundScore = () => {
+      if (currentFixtureHistory != null) {
+        return `: ${ currentFixtureHistory.total_points }`
       }
     }
 
@@ -73,13 +87,8 @@ export default class PlayerDetails extends Component {
               </tr>
               <tr>
                 <td>{ player.total_points }</td>
-                <td>
-                  { previousRoundLink() }{ previousRoundScore() }
-                </td>
-                <td>
-                  <Link to={ `/rounds/${currentFixtureHistory.round}` }>{ currentFixtureHistory.round }</Link>
-                  : { currentFixtureHistory.total_points }
-                </td>
+                <td>{ previousRoundLink() }{ previousRoundScore() }</td>
+                <td>{ currentRoundLink() }{ currentRoundScore() }</td>
               </tr>
               <tr>
                 <th>Status</th>

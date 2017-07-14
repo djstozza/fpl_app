@@ -6,6 +6,7 @@ class Leagues::UpdateDraftPickForm
 
   def initialize(league:, current_user:, player:, draft_pick:)
     @league = league
+    @league_decorator = LeagueDecorator.new(league)
     @current_user = current_user
     @fpl_team = current_user.fpl_teams.find_by(league_id: @league.id)
     @player = player
@@ -43,8 +44,10 @@ class Leagues::UpdateDraftPickForm
         picked_players: league_decorator.picked_players,
         info: "#{@current_user.username} has just drafted #{@player.name}."
       })
+    end
 
-      @league.update(active: true) if league_decorator.all_draft_picks.all? { |pick| pick['player_id'].present? }
+    if @league_decorator.all_draft_picks.all? { |pick| pick['player_id'].present? }
+      ::ActivateLeagueWorker.perform_async(@league.id)
     end
     true
   end

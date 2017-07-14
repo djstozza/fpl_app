@@ -11,10 +11,21 @@ class FplTeamsController < ApplicationController
   # GET /fpl_teams/1
   # GET /fpl_teams/1.json
   def show
-    # TODO: fix rounds and fpl team lists once new round data comes from fantasypremierleague.com
-    league_decorator = LeagueDecorator.new(@fpl_team.league)
     fpl_team_lists = @fpl_team.fpl_team_lists
-    fpl_team_list = fpl_team_lists.second
+    if fpl_team_lists.empty?
+      fpl_team_list = ''
+      line_up = []
+      rounds = []
+      round = ''
+    else
+      rounds_decorator = RoundsDecorator.new(Round.where(id: fpl_team_lists.pluck(:round_id)))
+      rounds = rounds_decorator.all_data
+      round = rounds_decorator.current_round
+      fpl_team_list = fpl_team_lists.find_by(round_id: round.id)
+      line_up = ListPositionsDecorator.new(fpl_team_list.list_positions).list_position_arr
+    end
+    league_decorator = LeagueDecorator.new(@fpl_team.league)
+
     respond_to do |format|
       format.html
       format.json do
@@ -22,10 +33,12 @@ class FplTeamsController < ApplicationController
           fpl_team: @fpl_team,
           fpl_team_list: fpl_team_list,
           league: @fpl_team.league,
-          round: Round.second,
-          rounds: Round.where(id: fpl_team_lists.pluck(:round_id)),
+          round: round,
+          rounds: rounds,
+          editable: true,
           fpl_team_lists: fpl_team_lists,
-          line_up: ListPositionsDecorator.new(fpl_team_list.list_positions).list_position_arr,
+          line_up: line_up,
+          waiver_picks: @fpl_team.waiver_picks.where(round_id: round.id),
           unpicked_players: league_decorator.unpicked_players,
           picked_players: league_decorator.picked_players,
           positions: Position.all,

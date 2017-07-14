@@ -14,7 +14,9 @@ class RoundsDecorator < SimpleDelegator
   end
 
   def current_round
-    round = if Round.find_by(is_current: true).data_checked
+    round = if Round.where(is_current: true).empty?
+              Round.find_by(is_next: true)
+            elsif Round.find_by(is_current: true).data_checked
               Round.find_by(is_next: true) || Round.find_by(is_current: true)
             else
               Round.find_by(is_current: true)

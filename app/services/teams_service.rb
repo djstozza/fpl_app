@@ -42,7 +42,7 @@ class TeamsService
         points: (wins * 3 + draws),
         played: team_decorator.fixtures.finished.count,
         form: team_decorator.current_form,
-        position: team_decorator.find_position
+        position: (team_decorator.find_position if team_decorator.points)
       )
     end
   end

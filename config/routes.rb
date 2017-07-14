@@ -5,6 +5,7 @@ Rails.application.routes.draw do
 
   resources :fpl_teams, except: [:new, :create] do
     resources :trades, only: :create
+    resources :waiver_picks, only: [:index, :create, :update]
   end
 
   resources :leagues do

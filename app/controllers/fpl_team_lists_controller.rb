@@ -9,7 +9,8 @@ class FplTeamListsController < ApplicationController
     respond_to do |format|
       format.json do
         render json: {
-          line_up: ListPositionsDecorator.new(@fpl_team_list.list_positions).list_position_arr
+          line_up: ListPositionsDecorator.new(@fpl_team_list.list_positions).list_position_arr,
+          editable: @fpl_team_list.round.id == RoundsDecorator.new(Round.all).current_round.id
         }
       end
     end

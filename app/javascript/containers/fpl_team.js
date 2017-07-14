@@ -19,8 +19,11 @@ class FplTeam extends Component {
     this.showButtons = this.showButtons.bind(this);
     this.substitutePlayer = this.substitutePlayer.bind(this);
     this.setlistPosition = this.setlistPosition.bind(this);
-    this.completeTrade = this.completeTrade.bind(this);
+    this.completeTradeAction = this.completeTradeAction.bind(this);
     this.dataSource = this.dataSource.bind(this);
+    this.tradePlayers = this.tradePlayers.bind(this);
+    this.sortWaiverPicks = this.sortWaiverPicks.bind(this);
+    this.waiverPicks = this.waiverPicks.bind(this);
     this.state = {
       action: 'selectLineUp'
     }
@@ -33,7 +36,8 @@ class FplTeam extends Component {
 
     axios.get(`/fpl_team_lists/${fplTeamList.id}.json`).then((res) => {
       this.setState({
-        line_up: res.data.line_up
+        line_up: res.data.line_up,
+        editable: res.data.editable
       })
     })
   }
@@ -50,13 +54,13 @@ class FplTeam extends Component {
       this.setState({
         line_up: res.data.line_up
       })
-      if (res.data.success) {
-        Alert.success(res.data.success, {
-          position: 'top',
-          effect: 'bouncyflip',
-          timeout: 5000
-        });
-      }
+
+      Alert.success(res.data.success, {
+        position: 'top',
+        effect: 'bouncyflip',
+        timeout: 5000
+      });
+
     }).catch(error => {
       error.response.data.map((error) => {
         Alert.error(error, {
@@ -68,7 +72,7 @@ class FplTeam extends Component {
     })
   }
 
-  completeTrade (targetId) {
+  tradePlayers (targetId) {
     axios({
       method: 'post',
       url: `/fpl_teams/${this.props.match.params.id}/trades.json`,
@@ -83,13 +87,13 @@ class FplTeam extends Component {
         picked_players: res.data.picked_players,
         players: res.data.players
       })
-      if (res.data.success) {
-        Alert.success(res.data.success, {
-          position: 'top',
-          effect: 'bouncyflip',
-          timeout: 5000
-        });
-      }
+
+      Alert.success(res.data.success, {
+        position: 'top',
+        effect: 'bouncyflip',
+        timeout: 5000
+      });
+
     }).catch(error => {
       error.response.data.map((error) => {
         Alert.error(error, {
@@ -99,6 +103,56 @@ class FplTeam extends Component {
         });
       })
     })
+  }
+
+  waiverPicks (targetId) {
+    axios({
+      method: 'post',
+      url: `/fpl_teams/${this.props.match.params.id}/waiver_picks.json`,
+      data: {
+        list_position_id: this.state.listPosition.id,
+        target_id: targetId
+      }
+    }).then(res => {
+      this.setState({
+        waiver_picks: res.data.waiver_picks
+      });
+
+      Alert.success(res.data.success, {
+        position: 'top',
+        effect: 'bouncyflip',
+        timeout: 5000
+      });
+
+    }).catch(error => {
+      error.response.data.map((error) => {
+        Alert.error(error, {
+          position: 'top',
+          effect: 'bouncyflip',
+          timeout: 5000
+        });
+      })
+    })
+  }
+
+  completeTradeAction (targetId) {
+    switch (this.state.action) {
+      case 'tradePlayers':
+        return this.tradePlayers(targetId);
+      case 'waiverPicks':
+        return this.waiverPicks(targetId);
+    }
+  }
+
+  sortWaiverPicks () {
+    console.log(this.state.waiver_picks);
+    if (this.state.waiver_picks.length == 0 || this.state.fpl_team.user_id != this.state.current_user.id) {
+      return;
+    }
+
+    return (
+      <p>Hello</p>
+    )
   }
 
   setlistPosition (listPosition) {
@@ -121,12 +175,14 @@ class FplTeam extends Component {
       picked_players: nextProps.picked_players,
       fpl_team_list: nextProps.fpl_team_list,
       fpl_team_lists: nextProps.fpl_team_lists,
+      editable: nextProps.editable,
+      waiver_picks: nextProps.waiver_picks,
       line_up: nextProps.line_up,
       positions: nextProps.positions,
       round: nextProps.round,
       rounds: nextProps.rounds,
       teams: nextProps.teams
-    })
+    });
   }
 
   setAction (action) {
@@ -136,44 +192,49 @@ class FplTeam extends Component {
   }
 
   setTeamTableCol () {
-    switch (this.state.action) {
-      case 'selectLineUp':
-        return 12;
-      case 'tradePlayers':
-        return 6;
-      default: 12
+    if (this.state.action == 'selectLineUp') {
+      return 12;
+    } else if (this.state.action == 'tradePlayers' || this.state.action == 'waiverPicks') {
+      return 6;
     }
   }
 
   tradePlayers () {
-    switch (this.state.action) {
-      case 'tradePlayers':
-        return (
-          <Col sm={6}>
-            <TradePlayersTable
-              unpicked_players={ this.state.unpicked_players }
-              teams={ this.state.teams }
-              positions={ this.state.positions }
-              current_user={ this.state.current_user }
-              fpl_team={ this.state.fpl_team }
-              round={ this.state.round }
-              action={ this.state.action }
-              listPosition={ this.state.listPosition }
-              completeTrade={ this.completeTrade }
-            />
-          </Col>
-        )
+    if (this.state.action == 'tradePlayers' || this.state.action == 'waiverPicks') {
+      return (
+        <Col sm={6}>
+          <TradePlayersTable
+            unpicked_players={ this.state.unpicked_players }
+            teams={ this.state.teams }
+            positions={ this.state.positions }
+            current_user={ this.state.current_user }
+            fpl_team={ this.state.fpl_team }
+            round={ this.state.round }
+            editable={ this.state.editable }
+            action={ this.state.action }
+            listPosition={ this.state.listPosition }
+            completeTradeAction={ this.completeTradeAction }
+          />
+        </Col>
+      )
     }
   }
 
   showButtons () {
+    if (!this.state.editable) {
+      return;
+    }
+    if (this.state.line_up == '') {
+      return;
+    }
     if (this.state.fpl_team.user_id != this.state.current_user.id) {
       return;
     }
     return (
       <div>
-      <Button onClick={ () => this.setAction('selectLineUp') }>Select starting line up</Button>
-      <Button onClick={ () => this.setAction('tradePlayers') }>Trade Players</Button>
+        <Button onClick={ () => this.setAction('selectLineUp') }>Select starting line up</Button>
+        <Button onClick={ () => this.setAction('tradePlayers') }>Trade Players</Button>
+        <Button onClick={ () => this.setAction('waiverPicks') }>Trade Players (Waiver)</Button>
       </div>
     )
   }
@@ -199,12 +260,18 @@ class FplTeam extends Component {
                 positions={ this.state.positions }
                 teams={ this.state.teams }
                 round={ this.state.round }
+                editable={ this.state.editable }
                 action={ this.state.action }
                 substitutePlayer={ this.substitutePlayer }
                 setlistPosition={ this.setlistPosition }
               />
             </Col>
             { this.tradePlayers() }
+          </Row>
+          <Row className='clearfix'>
+            <Col sm={12}>
+              { this.sortWaiverPicks() }
+            </Col>
           </Row>
         </div>
       )
@@ -222,6 +289,8 @@ function mapStateToProps(state) {
     fpl_team_list: state.FplTeamReducer.fpl_team_list,
     fpl_team_lists: state.FplTeamReducer.fpl_team_lists,
     line_up: state.FplTeamReducer.line_up,
+    editable: state.FplTeamReducer.editable,
+    waiver_picks: state.FplTeamReducer.waiver_picks,
     positions: state.FplTeamReducer.positions,
     round: state.FplTeamReducer.round,
     rounds: state.FplTeamReducer.rounds,

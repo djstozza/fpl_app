@@ -30,16 +30,7 @@ class TradesController < ApplicationController
           }
         end
       else
-        format.json do
-          render json: {
-            errors: form.errors.full_messages,
-            fpl_team_list: fpl_team_list,
-            line_up: ListPositionsDecorator.new(fpl_team_list.list_positions).list_position_arr,
-            players:  PlayersDecorator.new(@fpl_team.players).all_data,
-            unpicked_players: league_decorator.unpicked_players,
-            picked_players: league_decorator.picked_players
-          }, status: :unprocessable_entity
-        end
+        format.json { render json: form.errors.full_messages, status: :unprocessable_entity }
       end
     end
   end

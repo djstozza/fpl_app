@@ -18,5 +18,4 @@
 
 class Round < ApplicationRecord
   has_many :fixtures
-  has_many :player_fixture_histories
 end

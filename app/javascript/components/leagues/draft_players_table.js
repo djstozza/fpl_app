@@ -11,7 +11,9 @@ export default class DraftPlayersTable extends Component {
   constructor(props) {
     super(props)
     this.options = {
-      paginationShowsTotal: true
+      paginationShowsTotal: true,
+      defaultSortName: 'ict_index',
+      defaultSortOrder: 'desc'
     }
 
     this.state = {
@@ -117,10 +119,19 @@ export default class DraftPlayersTable extends Component {
       )
     }
 
+    let ictSort = (a, b, order) => {
+      if (order == 'desc') {
+        return b.ict_index - a.ict_index
+      } else {
+        return a.ict_index - b.ict_index
+      }
+    }
+
     return (
       <div>
         <BootstrapTable
           data={ this.props.players }
+          options={ this.options }
           striped
           hover
           ignoreSinglePage
@@ -159,6 +170,14 @@ export default class DraftPlayersTable extends Component {
             dataFormat={ positionTextCell }
             filter={ { type: 'SelectFilter', options: positionText, placeholder: ' ' } }>
             <span data-tip='Position'>Pos</span>
+          </TableHeaderColumn>
+          <TableHeaderColumn
+            dataField='ict_index'
+            dataAlign='center'
+            dataSort
+            sortFunc={ ictSort }
+            filter={ { type: 'TextFilter', placeholder: ' ' } }>
+            <span data-tip='ICT Index'>ICT</span>
           </TableHeaderColumn>
           <TableHeaderColumn
             dataField='status'

@@ -28,7 +28,7 @@ RSpec.describe FplTeams::ProcessSubstitutionForm, type: :form do
     end
 
     fpl_team.players << Player.all
-    Round.create(name: 'Gameweek 1', deadline_time: 1.day.from_now)
+    Round.create(name: 'Gameweek 1', deadline_time: 1.day.from_now, is_current: true)
   end
 
   it 'successfully substitutes players' do

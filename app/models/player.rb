@@ -88,6 +88,8 @@ class Player < ApplicationRecord
   has_and_belongs_to_many :fpl_team_lists
   scope :position, -> { Position.find_by(id: position_id)  }
 
+  validates :code, presence: true, uniqueness: true
+
   def name
     "#{first_name} #{last_name}"
   end

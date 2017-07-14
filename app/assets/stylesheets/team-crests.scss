@@ -1,63 +1,66 @@
 .crest {
   &.ars {
-    @include base-crest(-200px, -100px);
+    @include base-crest(-208px, -100px);
+  }
+  &.bha {
+    @include base-crest(-200px, -400px);
   }
   &.bou {
     @include base-crest(0px, -500px);
    }
   &.bur {
-    @include base-crest(-600px, -400px);
+    @include base-crest(-600px, -500px);
    }
   &.che {
-    @include base-crest(-300px, -600px);
+    @include base-crest(-400px, -600px);
    }
   &.cry {
-    @include base-crest(-700px, -600px);
+    @include base-crest(0px, -700px);
    }
   &.eve {
-    @include base-crest(-800px, -300px);
+    @include base-crest(-800px, -500px);
    }
-  &.hul {
-    @include base-crest(-900px, -300px);
+  &.hud {
+    @include base-crest(-900px, -400px);
    }
   &.lei {
-    @include base-crest(-300px, -900px);
+    @include base-crest(-500px, -900px);
    }
   &.liv {
-    @include base-crest(-600px, -900px);
+    @include base-crest(-900px, -900px);
    }
   &.mci {
-    @include base-crest(-1000px, -700px);
-   }
-  &.mun {
-    @include base-crest(-600px, -1000px);
-   }
-  &.mid {
     @include base-crest(0px, -1000px);
    }
+  &.mun {
+    @include base-crest(-900px, -1000px);
+   }
+  &.new {
+    @include base-crest(-1110px, 0px);
+   }
   &.sou {
-    @include base-crest(-800px, -1200px);
+    @include base-crest(-1100px, -1200px);
    }
   &.stk {
-    @include base-crest(-1200px, -1200px);
+    @include base-crest(-1295px, -200px);
    }
   &.sun {
     @include base-crest(-1300px, -200px);
    }
   &.swa {
-    @include base-crest(-1300px, -300px);
-   }
-  &.tot {
-    @include base-crest(-1300px, -500px);
-   }
-  &.wat {
     @include base-crest(-1300px, -800px);
    }
+  &.tot {
+    @include base-crest(-1300px, -1000px);
+   }
+  &.wat {
+    @include base-crest(-6px, -1300px);
+   }
   &.wba {
-    @include base-crest(-1300px, -900px);
+    @include base-crest(-103px, -1300px);
    }
   &.whu {
-    @include base-crest(-1300px, -1000px);
+    @include base-crest(-200px, -1300px);
    }
   &.match-panel-title-text {
     zoom: 40%;

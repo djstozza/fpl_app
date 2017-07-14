@@ -1,4 +1,4 @@
-class FplTeams::ProcessTradeForm
+class FplTeams::CreateWaiverPickForm
   include ActiveModel::Model
   include Virtus.model
 
@@ -18,7 +18,7 @@ class FplTeams::ProcessTradeForm
   validate :player_in_fpl_team
   validate :target_unpicked
   validate :round_is_current
-  validate :trade_occurring_in_valid_period
+  validate :waiver_pick_occurring_in_valid_period
   validate :identical_player_and_target_positions
   validate :maximum_number_of_players_from_team
 
@@ -30,13 +30,17 @@ class FplTeams::ProcessTradeForm
     return false unless valid?
 
     ActiveRecord::Base.transaction do
-      @fpl_team.players.delete(@player)
-      @fpl_team.players << @target
-      @league.players.delete(@player)
-      @league.players << @target
-      @list_position.update!(player: @target)
-      true
+      WaiverPick.create!(
+        list_position: @list_position,
+        fpl_team: @fpl_team,
+        player: @target,
+        round: @round,
+        league: @league,
+        pick_number: @fpl_team.waiver_picks.where(round: @round).count + 1
+      )
     end
+
+    true
   end
 
   private
@@ -56,11 +60,9 @@ class FplTeams::ProcessTradeForm
     errors.add(:base, 'The player you are trying to trade into your team is owned by another team in your league.')
   end
 
-  def trade_occurring_in_valid_period
-    if Time.now < @round.deadline_time - 1.day
-      errors.add(:base, 'You cannot trade players until the waiver cutoff time has passed.')
-    elsif Time.now > @round.deadline_time
-      errors.add(:base, 'The deadline time for making trades has passed.')
+  def waiver_pick_occurring_in_valid_period
+    if Time.now > @round.deadline_time - 2.days
+      errors.add(:base, 'The deadline time for making waiver picks this round has passed.')
     end
   end
 

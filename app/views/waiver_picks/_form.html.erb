@@ -1,0 +1,17 @@
+<%= form_for(waiver_pick) do |f| %>
+  <% if waiver_pick.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(waiver_pick.errors.count, "error") %> prohibited this waiver_pick from being saved:</h2>
+
+      <ul>
+      <% waiver_pick.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

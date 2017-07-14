@@ -19,8 +19,8 @@ export default class TradePlayersTable extends Component {
     }
     this.onRowSelect = this.onRowSelect.bind(this);
     this.trClassFormat = this.trClassFormat.bind(this);
-    this.completeTradeButton = this.completeTradeButton.bind(this);
-    this.completeTrade = this.completeTrade.bind(this);
+    this.completeTradeActionButton = this.completeTradeActionButton.bind(this);
+    this.completeTradeAction = this.completeTradeAction.bind(this);
   }
 
   descriptionText () {
@@ -29,9 +29,14 @@ export default class TradePlayersTable extends Component {
         return (
           <div>
             <h3>Trade In Player</h3>
-            <p>
-              (2) Click the row of the player you wish to trade in.
-            </p>
+            <p>(2) Click the row of the player you wish to trade in.</p>
+          </div>
+        )
+      case 'waiverPicks':
+        return (
+          <div>
+            <h3>Waiver (In)</h3>
+            <p>(2) Click the row of the player you wish to trade in for this waiver pick.</p>
           </div>
         )
     }
@@ -60,9 +65,8 @@ export default class TradePlayersTable extends Component {
   }
 
   onRowSelect (row, isSelected, e) {
-    switch (this.props.action) {
-      case 'tradePlayers':
-        return this.selectPlayerToTrade(row);
+    if (this.props.action == 'tradePlayers' || this.props.action == 'waiverPicks') {
+      return this.selectPlayerToTrade(row);
     }
   }
 
@@ -88,24 +92,24 @@ export default class TradePlayersTable extends Component {
     }
   }
 
-  completeTrade () {
-    this.props.completeTrade(this.state.selected.id);
+  completeTradeAction () {
+    this.props.completeTradeAction(this.state.selected.id);
     this.setState({
       selected: ''
     })
   }
 
-  completeTradeButton () {
-    if (this.props.fpl_team.user_id != this.props.current_user.id || !this.props.round.is_current) {
+  completeTradeActionButton () {
+    if (this.props.fpl_team.user_id != this.props.current_user.id || !this.props.editable) {
       return;
     }
 
     if (this.state.selected && this.props.listPosition) {
       return (
         <div>
-          <p>(3) Click the button to complete the trade</p>
-          <Button onClick={ () => this.completeTrade() }>
-            Complete Trade
+          <p>(3) Click the button below to complete.</p>
+          <Button onClick={ () => this.completeTradeAction() }>
+            Complete
           </Button>
         </div>
       )
@@ -215,7 +219,7 @@ export default class TradePlayersTable extends Component {
             <span data-tip='Status'>S</span>
           </TableHeaderColumn>
         </BootstrapTable>
-        { this.completeTradeButton() }
+        { this.completeTradeActionButton() }
         <ReactTooltip />
       </div>
     )
