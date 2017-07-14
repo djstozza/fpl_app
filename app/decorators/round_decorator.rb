@@ -18,7 +18,7 @@ class RoundDecorator < SimpleDelegator
     if is_current && !data_checked
       fixture_hash_by_game_day
     else
-      Rails.cache.fetch("round/#{id}/fixture_stats_by_game_day") { fixture_hash_by_game_day }
+      fixture_hash_by_game_day
     end
   end
 
