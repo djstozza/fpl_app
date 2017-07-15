@@ -42,7 +42,9 @@ class WaiverPicksController < ApplicationController
         format.json do
           render json: {
             success: 'Waiver pick was successfully created.',
-            waiver_picks: @fpl_team.waiver_picks.where(round: list_position.fpl_team_list.round)
+            waiver_picks: WaiverPicksDecorator.new(
+              @fpl_team.waiver_picks.where(round: list_position.fpl_team_list.round)
+            ).all_data
           }
         end
       else
@@ -54,13 +56,24 @@ class WaiverPicksController < ApplicationController
   # PATCH/PUT /fpl_teams/1/waiver_picks/1
   # PATCH/PUT /fpl_teams/1/waiver_picks/1.json
   def update
+    form = ::FplTeams::UpdateWaiverPickOrderForm.new(
+      fpl_team: @fpl_team,
+      waiver_pick: @waiver_pick,
+      new_pick_number: params[:new_pick_number],
+      current_user: current_user
+    )
     respond_to do |format|
-      if @waiver_pick.update(waiver_pick_params)
-        format.html { redirect_to @waiver_pick, notice: 'Waiver pick was successfully updated.' }
-        format.json { render :show, status: :ok, location: @waiver_pick }
+      if form.save
+        format.json do
+          render json: {
+            success: 'Waiver picks successfully re-ordered',
+            waiver_picks: WaiverPicksDecorator.new(
+              @fpl_team.waiver_picks.where(round_id: @waiver_pick.round.id)
+            ).all_data
+          }
+        end
       else
-        format.html { render :edit }
-        format.json { render json: @waiver_pick.errors, status: :unprocessable_entity }
+        format.json { render json: form.errors.full_messages, status: :unprocessable_entity }
       end
     end
   end
@@ -68,10 +81,24 @@ class WaiverPicksController < ApplicationController
   # DELETE /fpl_teams/1/waiver_picks/1
   # DELETE /fpl_teams/1/waiver_picks/1.json
   def destroy
-    @waiver_pick.destroy
+    form = ::FplTeams::DeleteWaiverPickForm.new(
+      fpl_team: @fpl_team,
+      waiver_pick: @waiver_pick,
+      current_user: current_user
+    )
     respond_to do |format|
-      format.html { redirect_to waiver_picks_url, notice: 'Waiver pick was successfully destroyed.' }
-      format.json { head :no_content }
+      if form.save
+        format.json do
+          render json: {
+            success: 'Waiver pick successfully deleted.',
+            waiver_picks: WaiverPicksDecorator.new(
+              @fpl_team.waiver_picks.where(round_id: @waiver_pick.round.id)
+            ).all_data
+          }
+        end
+      else
+        format.json { render json: form.errors.full_messages, status: :unprocessable_entity }
+      end  
     end
   end
 

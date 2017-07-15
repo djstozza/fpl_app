@@ -40,7 +40,6 @@ class DraftPicks extends Component {
       current_user: nextProps.current_user,
       draft_picks: nextProps.draft_picks,
       current_draft_pick: nextProps.current_draft_pick,
-      picked_players: nextProps.picked_players,
       unpicked_players: nextProps.unpicked_players,
       teams: nextProps.teams,
       fpl_team: nextProps.fpl_team,
@@ -60,8 +59,7 @@ class DraftPicks extends Component {
         self.setState({
           draft_picks: data.draft_picks,
           unpicked_players: data.unpicked_players,
-          current_draft_pick: data.current_draft_pick,
-          picked_players: data.picked_players,
+          current_draft_pick: data.current_draft_pick
         })
         self.showDraftPickInfo(data.info);
       }
@@ -143,7 +141,6 @@ class DraftPicks extends Component {
             fpl_team={ this.state.fpl_team }/>
           <DraftPicksTable
             draft_picks={ this.state.draft_picks }
-            players={ this.state.picked_players }
             fpl_teams={ this.state.fpl_teams }
             positions={ this.state.positions }
             teams={ this.state.teams }/>
@@ -162,7 +159,6 @@ function mapStateToProps(state) {
     current_user: state.LeagueReducer.current_user,
     draft_picks: state.DraftPicksReducer.draft_picks,
     fpl_team: state.DraftPicksReducer.fpl_team,
-    picked_players: state.DraftPicksReducer.picked_players,
     current_draft_pick: state.DraftPicksReducer.current_draft_pick,
     unpicked_players: state.DraftPicksReducer.unpicked_players,
     teams: state.TeamsReducer,

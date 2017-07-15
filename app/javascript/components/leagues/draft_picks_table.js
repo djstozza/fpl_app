@@ -18,14 +18,6 @@ export default class DraftPicksTable extends Component {
       return [obj.id, obj.name]
     }));
 
-    const playerFirstNameText = _.object(_.map(this.props.players, function(obj) {
-      return [obj.id, obj.first_name]
-    }))
-
-    const playerLastNameText = _.object(_.map(this.props.players, function(obj) {
-      return [obj.id, obj.last_name]
-    }))
-
     const teamNameText = _.object(_.map(this.props.teams, function (obj) {
       return [obj.id, obj.short_name]
     }))
@@ -34,36 +26,24 @@ export default class DraftPicksTable extends Component {
       return [obj.id, obj.singular_name_short]
     }))
 
-    const positionIdText = _.object(_.map(this.props.players, (obj) => {
-      return [obj.id, obj.position_id]
-    }))
-
-    const teamIdText = _.object(_.map(this.props.players, (obj) => {
-      return [obj.id, obj.team_id]
-    }))
+    const selectTeamText = _.object(_.map(this.props.teams, function (obj) {
+      return [obj.id, obj.name]
+    }).sort());
 
     const selectFplTeamText = _.object(_.map(this.props.fpl_teams, function (obj) {
       return [obj.id, obj.name]
     }).sort());
 
-    let playerFirstNameCell = (cell, row) => {
-      return playerFirstNameText[cell]
-    }
-
     let fplTeamTextCell = function (cell, row) {
       return fplTeamText[cell]
     }
 
-    let playerLastNameCell = (cell, row) => {
-      return playerLastNameText[cell]
-    }
-
     let teamNameTextCell = (cell, row) => {
-      return teamNameText[teamIdText[cell]]
+      return teamNameText[cell]
     }
 
     let positionTextCell = (cell, row) => {
-      return positionText[positionIdText[cell]]
+      return positionText[cell]
     }
 
     return (
@@ -87,33 +67,35 @@ export default class DraftPicksTable extends Component {
             filter={ { type: 'SelectFilter', placeholder: ' ', options: selectFplTeamText } }
             dataFormat={ fplTeamTextCell }
             dataSort>
-            <span data-tip='Team'>T</span>
+            <span data-tip='Fpl Team'>Fpl T</span>
           </TableHeaderColumn>
           <TableHeaderColumn
-            dataField='player_id'
+            dataField='first_name'
             dataAlign='center'
-            dataFormat= { playerFirstNameCell }
+            filter={ { type: 'TextFilter', placeholder: ' ' } }
             dataSort>
             <span data-tip='First Name'>FN</span>
           </TableHeaderColumn>
           <TableHeaderColumn
-            dataField='player_id'
+            dataField='last_name'
             dataAlign='center'
-            dataFormat= { playerLastNameCell }
+            filter={ { type: 'TextFilter', placeholder: ' ' } }
             dataSort>
             <span data-tip='Last Name'>LN</span>
           </TableHeaderColumn>
           <TableHeaderColumn
-            dataField='player_id'
+            dataField='team_id'
             dataAlign='center'
-            dataFormat= { teamNameTextCell }
+            dataFormat={ teamNameTextCell }
+            filter={ { type: 'SelectFilter', options: selectTeamText, placeholder: ' ', condition: 'eq' } }
             dataSort>
             <span data-tip='Team'>T</span>
           </TableHeaderColumn>
           <TableHeaderColumn
-            dataField='player_id'
+            dataField='position_id'
             dataAlign='center'
-            dataFormat= { positionTextCell }
+            dataFormat={ positionTextCell }
+            filter={ { type: 'SelectFilter', options: positionText, placeholder: ' ', condition: 'eq' } }
             dataSort>
             <span data-tip='Position'>P</span>
           </TableHeaderColumn>

@@ -11,6 +11,7 @@ class FplTeams::CreateWaiverPickForm
     @target = target
     @league = fpl_team.league
     @round = list_position.fpl_team_list.round
+    @waiver_picks = fpl_team.waiver_picks.where(round_id: @round.id)
     @current_user = current_user
   end
 
@@ -21,6 +22,7 @@ class FplTeams::CreateWaiverPickForm
   validate :waiver_pick_occurring_in_valid_period
   validate :identical_player_and_target_positions
   validate :maximum_number_of_players_from_team
+  validate :duplicate_waiver_picks
 
   QUOTAS = {
     team: 3
@@ -82,5 +84,16 @@ class FplTeams::CreateWaiverPickForm
     team_arr << @target.team_id
     return if team_arr.count(@target.team_id) <= QUOTAS[:team]
     errors.add(:base, "You can't have more than #{QUOTAS[:team]} players from the same team (#{@target.team.name}).")
+  end
+
+  def duplicate_waiver_picks
+    existing_waiver_pick = @waiver_picks.find_by(list_position: @list_position, player: @target)
+    return if existing_waiver_pick.nil?
+    errors.add(
+      :base,
+      "Duplicate waiver pick - (Pick number: #{existing_waiver_pick.pick_number} " \
+        "Out: #{existing_waiver_pick.list_position.player.last_name} " \
+        "In: #{existing_waiver_pick.player.last_name})."
+    )
   end
 end

@@ -4,7 +4,16 @@ class RoundDecorator < SimpleDelegator
   end
 
   def fixture_stats
-    cache_or_uncached_fixture_stats
+    arr = []
+    fixture_arr.each do |fixture_group|
+    arr << {
+        game_day: fixture_group[0],
+        fixtures: fixture_group[1].map do |fixture|
+          base_fixture_hash(fixture)
+        end
+      }
+    end
+    arr
   end
 
   private
@@ -30,18 +39,5 @@ class RoundDecorator < SimpleDelegator
       away_team: fixture.away_team,
       stats: fixture.stats
     }
-  end
-
-  def fixture_hash_by_game_day
-      arr = []
-      fixture_arr.each do |fixture_group|
-      arr << {
-          game_day: fixture_group[0],
-          fixtures: fixture_group[1].map do |fixture|
-            base_fixture_hash(fixture)
-          end
-        }
-      end
-      arr
   end
 end

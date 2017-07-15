@@ -38,7 +38,7 @@ class FplTeamsController < ApplicationController
           editable: true,
           fpl_team_lists: fpl_team_lists,
           line_up: line_up,
-          waiver_picks: @fpl_team.waiver_picks.where(round_id: round.id),
+          waiver_picks: WaiverPicksDecorator.new(@fpl_team.waiver_picks.where(round_id: round.id)).all_data,
           unpicked_players: league_decorator.unpicked_players,
           picked_players: league_decorator.picked_players,
           positions: Position.all,

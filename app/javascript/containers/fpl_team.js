@@ -9,6 +9,7 @@ import fetchTeams from '../actions/action_fetch_teams.js';
 import RoundsNav from '../components/rounds/rounds_nav.js';
 import TeamListTable from '../components/fpl_teams/team_list_table.js';
 import TradePlayersTable from '../components/fpl_teams/trade_players_table.js';
+import WaiverPicksTable from '../components/fpl_teams/waiver_picks_table.js';
 import Alert from 'react-s-alert';
 import _ from 'underscore';
 
@@ -24,6 +25,8 @@ class FplTeam extends Component {
     this.tradePlayers = this.tradePlayers.bind(this);
     this.sortWaiverPicks = this.sortWaiverPicks.bind(this);
     this.waiverPicks = this.waiverPicks.bind(this);
+    this.updateWaiverPickOrder = this.updateWaiverPickOrder.bind(this);
+    this.deleteWaiverPick = this.deleteWaiverPick.bind(this);
     this.state = {
       action: 'selectLineUp'
     }
@@ -144,14 +147,77 @@ class FplTeam extends Component {
     }
   }
 
+  updateWaiverPickOrder (waiverPickId, newPickNumber) {
+    axios({
+      method: 'put',
+      url: `/fpl_teams/${this.props.match.params.id}/waiver_picks/${waiverPickId}.json`,
+      data: {
+        new_pick_number: newPickNumber
+      }
+    }).then(res => {
+      this.setState({
+        waiver_picks: res.data.waiver_picks
+      });
+
+      Alert.success(res.data.success, {
+        position: 'top',
+        effect: 'bouncyflip',
+        timeout: 5000
+      });
+
+    }).catch(error => {
+      error.response.data.map((error) => {
+        Alert.error(error, {
+          position: 'top',
+          effect: 'bouncyflip',
+          timeout: 5000
+        });
+      })
+    });
+  }
+
+  deleteWaiverPick (waiverPickId) {
+    axios({
+      method: 'delete',
+      url: `/fpl_teams/${this.props.match.params.id}/waiver_picks/${waiverPickId}.json`
+    }).then(res => {
+      this.setState({
+        waiver_picks: res.data.waiver_picks
+      });
+
+      Alert.success(res.data.success, {
+        position: 'top',
+        effect: 'bouncyflip',
+        timeout: 5000
+      });
+
+    }).catch(error => {
+      error.response.data.map((error) => {
+        Alert.error(error, {
+          position: 'top',
+          effect: 'bouncyflip',
+          timeout: 5000
+        });
+      })
+    });
+  }
+
   sortWaiverPicks () {
-    console.log(this.state.waiver_picks);
     if (this.state.waiver_picks.length == 0 || this.state.fpl_team.user_id != this.state.current_user.id) {
       return;
     }
 
     return (
-      <p>Hello</p>
+      <WaiverPicksTable
+        waiver_picks={ this.state.waiver_picks }
+        editable={ this.state.editable }
+        line_up={ this.state.line_up }
+        positions={ this.state.positions }
+        teams={ this.state.teams }
+        fpl_team={ this.state.fpl_team }
+        updateWaiverPickOrder={ this.updateWaiverPickOrder }
+        deleteWaiverPick={ this.deleteWaiverPick }
+      />
     )
   }
 
@@ -249,9 +315,9 @@ class FplTeam extends Component {
         <div>
           <h2>{ this.state.fpl_team.name }</h2>
 
-          <RoundsNav rounds={ this.state.rounds } round={ this.state.round }  onChange={ this.dataSource } />
+          <RoundsNav rounds={ this.state.rounds } round={ this.state.round } onChange={ this.dataSource } />
           { this.showButtons() }
-          <Row clasName='clearfix'>
+          <Row className='clearfix'>
             <Col sm={ this.setTeamTableCol() } >
               <TeamListTable
                 fpl_team={ this.state.fpl_team }

@@ -15,7 +15,6 @@ class DraftPicksController < ApplicationController
           draft_picks: league_decorator.all_draft_picks,
           current_draft_pick: league_decorator.current_draft_pick,
           unpicked_players: league_decorator.unpicked_players,
-          picked_players: league_decorator.picked_players,
           fpl_team: current_user.fpl_teams.find_by(league_id: league_decorator.id),
           positions: Position.all
         }

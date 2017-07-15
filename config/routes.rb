@@ -1,15 +1,15 @@
 Rails.application.routes.draw do
   mount ActionCable.server => "/cable"
-  resources :list_positions
+  resources :list_positions, only: :show
   resources :fpl_team_lists, only: [:show, :update]
 
-  resources :fpl_teams, except: [:new, :create] do
+  resources :fpl_teams, except: [:new, :create, :destroy] do
     resources :trades, only: :create
-    resources :waiver_picks, only: [:index, :create, :update]
+    resources :waiver_picks, only: [:index, :create, :update, :destroy]
   end
 
-  resources :leagues do
-    resources :draft_picks
+  resources :leagues, except: :destroy do
+    resources :draft_picks, except: :destroy
   end
 
   require 'sidekiq/web'

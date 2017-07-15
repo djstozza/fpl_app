@@ -12,7 +12,7 @@ export default class DraftPlayersTable extends Component {
     super(props)
     this.options = {
       paginationShowsTotal: true,
-      defaultSortName: 'ict_index',
+      defaultSortName: 'total_points',
       defaultSortOrder: 'desc'
     }
 
@@ -119,14 +119,6 @@ export default class DraftPlayersTable extends Component {
       )
     }
 
-    let ictSort = (a, b, order) => {
-      if (order == 'desc') {
-        return b.ict_index - a.ict_index
-      } else {
-        return a.ict_index - b.ict_index
-      }
-    }
-
     return (
       <div>
         <BootstrapTable
@@ -172,12 +164,11 @@ export default class DraftPlayersTable extends Component {
             <span data-tip='Position'>Pos</span>
           </TableHeaderColumn>
           <TableHeaderColumn
-            dataField='ict_index'
+            dataField='total_points'
             dataAlign='center'
             dataSort
-            sortFunc={ ictSort }
-            filter={ { type: 'TextFilter', placeholder: ' ' } }>
-            <span data-tip='ICT Index'>ICT</span>
+            filter={ { type: 'NumberFilter', placeholder: ' ' } }>
+            <span data-tip='Total Points (last season)'>TP</span>
           </TableHeaderColumn>
           <TableHeaderColumn
             dataField='status'

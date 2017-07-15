@@ -231,24 +231,28 @@ export default class TeamListTable extends Component {
           selectRow={ selectRowProp }
           striped
           trClassName={ this.trClassFormat }
-          hover >
+          hover
+        >
           <TableHeaderColumn
             dataField='role'
             dataAlign='center'
-            dataFormat={ roleTextCell }>
+            dataFormat={ roleTextCell }
+          >
             <span data-tip='Role'>R</span>
           </TableHeaderColumn>
           <TableHeaderColumn
             dataField='position_id'
             dataAlign='center'
-            dataFormat={ positionTextCell }>
+            dataFormat={ positionTextCell }
+          >
             <span data-tip='Position'>Pos</span>
           </TableHeaderColumn>
           <TableHeaderColumn
             dataField='last_name'
             dataAlign='center'
             dataFormat={ this.linkCellText }
-            isKey>
+            isKey
+          >
             <span data-tip='Player'>P</span>
           </TableHeaderColumn>
           <TableHeaderColumn
@@ -260,14 +264,16 @@ export default class TeamListTable extends Component {
           <TableHeaderColumn
             dataField='player_fixture_histories'
             dataAlign='center'
-            dataFormat={ pointsText }>
+            dataFormat={ pointsText }
+          >
             <span data-tip='Points'>Pts</span>
           </TableHeaderColumn>
           <TableHeaderColumn
             dataField='status'
             dataAlign='center'
             columnClassName={ columnClassNameFormat }
-            dataFormat={ statusIconCell }>
+            dataFormat={ statusIconCell }
+          >
             <span data-tip='Status'>S</span>
           </TableHeaderColumn>
         </BootstrapTable>

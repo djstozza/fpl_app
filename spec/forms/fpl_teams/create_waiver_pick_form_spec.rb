@@ -70,7 +70,7 @@ RSpec.describe FplTeams::CreateWaiverPickForm, type: :form do
     expect(WaiverPick.second.pick_number).to eq(2)
   end
 
-  it 'fails to process the trade if not authorised' do
+  it 'fails to create the waiver pick if not authorised' do
     form = ::FplTeams::CreateWaiverPickForm.new(
       fpl_team: fpl_team,
       list_position: @list_position,
@@ -101,10 +101,9 @@ RSpec.describe FplTeams::CreateWaiverPickForm, type: :form do
       target: @target,
       current_user: user
     )
-    form.save
+    expect { form.save }.to change(WaiverPick, :count).by(0)
     expect(form.errors.full_messages).to include('The deadline time for making waiver picks this round has passed.')
   end
-
 
   it "fails if the fpl team already has three players that are from the target's team" do
     @target.update(team: team)
@@ -114,10 +113,31 @@ RSpec.describe FplTeams::CreateWaiverPickForm, type: :form do
       target: @target,
       current_user: user
     )
-    form.save
+    expect { form.save }.to change(WaiverPick, :count).by(0)
     expect(form.errors.full_messages).to include(
       "You can't have more than #{::FplTeams::CreateWaiverPickForm::QUOTAS[:team]} players from the same team " \
         "(#{@target.team.name})."
+    )
+  end
+
+  it 'prevents duplicate waiver picks' do
+    ::FplTeams::CreateWaiverPickForm.new(
+      fpl_team: fpl_team,
+      list_position: @list_position,
+      target: @target,
+      current_user: user
+    ).save
+
+    form = ::FplTeams::CreateWaiverPickForm.new(
+      fpl_team: fpl_team,
+      list_position: @list_position,
+      target: @target,
+      current_user: user
+    )
+    expect { form.save }.to change(WaiverPick, :count).by(0)
+    expect(form.errors.full_messages).to include(
+      "Duplicate waiver pick - (Pick number: #{WaiverPick.first.pick_number} " \
+        "Out: #{@list_position.player.last_name} In: #{@target.last_name})."
     )
   end
 end
