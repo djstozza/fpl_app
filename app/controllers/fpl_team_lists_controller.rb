@@ -11,7 +11,7 @@ class FplTeamListsController < ApplicationController
       format.json do
         render json: {
           line_up: ListPositionsDecorator.new(@fpl_team_list.list_positions).list_position_arr,
-          status: rounds_decorator.current_round_status if @fpl_team_list.round.id == rounds_decorator.current_round.id
+          status: (rounds_decorator.current_round_status if @fpl_team_list.round.id == rounds_decorator.current_round.id)
         }
       end
     end
