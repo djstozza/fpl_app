@@ -1,11 +1,13 @@
 Rails.application.routes.draw do
   mount ActionCable.server => "/cable"
   resources :list_positions, only: :show
-  resources :fpl_team_lists, only: [:show, :update]
+
+  resources :fpl_team_lists, only: [:show, :update] do
+    resources :waiver_picks, only: [:index, :create, :update, :destroy]
+  end
 
   resources :fpl_teams, except: [:new, :create, :destroy] do
     resources :trades, only: :create
-    resources :waiver_picks, only: [:index, :create, :update, :destroy]
   end
 
   resources :leagues, except: :destroy do

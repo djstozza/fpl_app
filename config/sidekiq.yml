@@ -4,21 +4,25 @@
     description: 'Update round stats every 3 hours'
 
   RecurringFixtureWorker:
-      cron: '*/3 11-23 * * *'
+      cron: '*/5 11-23 * * *'
       description: 'Update fixture stats every 3 minutes between 11am and 11pm UTC'
 
   RecurringTeamWorker:
-    cron: '*/3 11-23 * * *'
+    cron: '*/5 11-23 * * *'
     description: 'Update team stats ever 3 minutes between 11am and 11pm UTC'
 
   RecurringPlayerWorker:
-    cron: '*/3 11-23 * * *'
+    cron: '*/5 11-23 * * *'
     description: 'Update player stats every 3 minutes between 11am and 11pm UTC'
 
   RecurringPlayerFixtureHistoriesWorker:
-    cron: '*/3 11-23 * * *'
+    cron: '*/5 11-23 * * *'
     description: 'Update player stats every 3 minutes between 11am and 11pm UTC'
 
   RecurringPositionWorker:
     cron: '00 9 * * 5'
     description: 'Update player positions every 9am UTC on Friday'
+
+  RecurringWaiverPicksWorker:
+    cron: '0 */1 * * *'
+    description: 'Check that the date is the same as the waier deadline so that picks can be processed.'

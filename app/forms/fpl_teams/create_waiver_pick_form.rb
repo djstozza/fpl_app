@@ -2,16 +2,16 @@ class FplTeams::CreateWaiverPickForm
   include ActiveModel::Model
   include Virtus.model
 
-  attr_accessor :fpl_team, :list_position, :current_user
+  attr_accessor :fpl_team_list, :current_user
 
-  def initialize(fpl_team:, list_position:, target:, current_user:)
-    @list_position = list_position
-    @fpl_team = fpl_team
-    @player = list_position.player
-    @target = target
-    @league = fpl_team.league
-    @round = list_position.fpl_team_list.round
-    @waiver_picks = fpl_team.waiver_picks.where(round_id: @round.id)
+  def initialize(fpl_team_list:, list_position:, in_player:, current_user:)
+    @fpl_team_list = fpl_team_list
+    @fpl_team = fpl_team_list.fpl_team
+    @out_player = list_position.player
+    @in_player = in_player
+    @league = @fpl_team.league
+    @round = fpl_team_list.round
+    @waiver_picks = fpl_team_list.waiver_picks
     @current_user = current_user
   end
 
@@ -33,12 +33,12 @@ class FplTeams::CreateWaiverPickForm
 
     ActiveRecord::Base.transaction do
       WaiverPick.create!(
-        list_position: @list_position,
-        fpl_team: @fpl_team,
-        player: @target,
-        round: @round,
+        fpl_team_list: @fpl_team_list,
+        out_player: @out_player,
+        in_player: @in_player,
+        round_id: @round.id,
         league: @league,
-        pick_number: @fpl_team.waiver_picks.where(round: @round).count + 1
+        pick_number: @fpl_team_list.waiver_picks.count + 1
       )
     end
 
@@ -53,12 +53,12 @@ class FplTeams::CreateWaiverPickForm
   end
 
   def player_in_fpl_team
-    return if @fpl_team.players.include?(@player)
+    return if @fpl_team.players.include?(@out_player)
     errors.add(:base, 'You can only trade out players that are part of your team.')
   end
 
   def target_unpicked
-    return unless @target.leagues.include?(@league)
+    return unless @in_player.leagues.include?(@league)
     errors.add(:base, 'The player you are trying to trade into your team is owned by another team in your league.')
   end
 
@@ -68,32 +68,35 @@ class FplTeams::CreateWaiverPickForm
     end
   end
 
-  def identical_player_and_target_positions
-    return if @player.position == @target.position
-    errors.add(:base, 'You can only trade players that have the same positions.')
-  end
-
   def round_is_current
     return if @round.id == RoundsDecorator.new(Round.all).current_round.id
     errors.add(:base, "You can only make changes to your squad's line up for the upcoming round.")
   end
 
+  def identical_player_and_target_positions
+    return if @out_player.position == @in_player.position
+    errors.add(:base, 'You can only trade players that have the same positions.')
+  end
+
   def maximum_number_of_players_from_team
-    player_arr = @fpl_team.players.to_a.delete_if { |player| player == @player }
+    player_arr = @fpl_team.players.to_a.delete_if { |player| player == @out_player }
     team_arr = player_arr.map { |player| player.team_id }
-    team_arr << @target.team_id
-    return if team_arr.count(@target.team_id) <= QUOTAS[:team]
-    errors.add(:base, "You can't have more than #{QUOTAS[:team]} players from the same team (#{@target.team.name}).")
+    team_arr << @in_player.team_id
+    return if team_arr.count(@in_player.team_id) <= QUOTAS[:team]
+    errors.add(
+      :base,
+      "You can't have more than #{QUOTAS[:team]} players from the same team (#{@in_player.team.name})."
+    )
   end
 
   def duplicate_waiver_picks
-    existing_waiver_pick = @waiver_picks.find_by(list_position: @list_position, player: @target)
+    existing_waiver_pick = @waiver_picks.find_by(in_player: @in_player, out_player: @out_player)
     return if existing_waiver_pick.nil?
     errors.add(
       :base,
       "Duplicate waiver pick - (Pick number: #{existing_waiver_pick.pick_number} " \
-        "Out: #{existing_waiver_pick.list_position.player.last_name} " \
-        "In: #{existing_waiver_pick.player.last_name})."
+        "Out: #{existing_waiver_pick.out_player.last_name} " \
+        "In: #{existing_waiver_pick.in_player.last_name})."
     )
   end
 end

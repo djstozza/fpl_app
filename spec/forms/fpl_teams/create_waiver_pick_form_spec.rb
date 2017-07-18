@@ -40,8 +40,8 @@ RSpec.describe FplTeams::CreateWaiverPickForm, type: :form do
     Round.create(name: 'Gameweek 1', deadline_time: 3.days.from_now, is_current: true)
     ::FplTeams::ProcessInitialLineUp.run(fpl_team: fpl_team)
     @list_position = ListPosition.midfielders.first
-    @player = @list_position.player
-    @target = FactoryGirl.create(
+    @out_player = @list_position.player
+    @in_player = FactoryGirl.create(
       :player,
       position: Position.find_by(singular_name_short: 'MID'),
       team: FactoryGirl.create(:team)
@@ -50,20 +50,20 @@ RSpec.describe FplTeams::CreateWaiverPickForm, type: :form do
 
   it 'successfully creates the waiver pick, increasing the pick number incrementally' do
     form = ::FplTeams::CreateWaiverPickForm.new(
-      fpl_team: fpl_team,
+      fpl_team_list: FplTeamList.first,
       list_position: @list_position,
-      target: @target,
+      in_player: @in_player,
       current_user: user
     )
     expect { form.save }.to change(WaiverPick, :count).by(1)
     expect(WaiverPick.first.pick_number).to eq(1)
-    expect(WaiverPick.first.list_position.player).to eq(@player)
-    expect(WaiverPick.first.player).to eq(@target)
+    expect(WaiverPick.first.out_player).to eq(@out_player)
+    expect(WaiverPick.first.in_player).to eq(@in_player)
 
     ::FplTeams::CreateWaiverPickForm.new(
-      fpl_team: fpl_team,
+      fpl_team_list: FplTeamList.first,
       list_position: ListPosition.midfielders.second,
-      target: @target,
+      in_player: @in_player,
       current_user: user
     ).save
 
@@ -72,9 +72,9 @@ RSpec.describe FplTeams::CreateWaiverPickForm, type: :form do
 
   it 'fails to create the waiver pick if not authorised' do
     form = ::FplTeams::CreateWaiverPickForm.new(
-      fpl_team: fpl_team,
+      fpl_team_list: FplTeamList.first,
       list_position: @list_position,
-      target: @target,
+      in_player: @in_player,
       current_user: FactoryGirl.create(:user)
     )
     expect { form.save }.to change(WaiverPick, :count).by(0)
@@ -82,11 +82,11 @@ RSpec.describe FplTeams::CreateWaiverPickForm, type: :form do
   end
 
   it 'fails if the player being traded out in the waiver is not a member of the fpl team' do
-    fpl_team.players.delete(@player)
+    fpl_team.players.delete(@out_player)
     form = ::FplTeams::CreateWaiverPickForm.new(
-      fpl_team: fpl_team,
+      fpl_team_list: FplTeamList.first,
       list_position: @list_position,
-      target: @target,
+      in_player: @in_player,
       current_user: user
     )
     expect { form.save }.to change(WaiverPick, :count).by(0)
@@ -96,48 +96,48 @@ RSpec.describe FplTeams::CreateWaiverPickForm, type: :form do
   it 'fails if the waiver cutoff time has passed' do
     Round.first.update(deadline_time: 2.day.from_now - 1.minute)
     form = ::FplTeams::CreateWaiverPickForm.new(
-      fpl_team: fpl_team,
+      fpl_team_list: FplTeamList.first,
       list_position: @list_position,
-      target: @target,
+      in_player: @in_player,
       current_user: user
     )
     expect { form.save }.to change(WaiverPick, :count).by(0)
     expect(form.errors.full_messages).to include('The deadline time for making waiver picks this round has passed.')
   end
 
-  it "fails if the fpl team already has three players that are from the target's team" do
-    @target.update(team: team)
+  it "fails if the fpl team already has three players that are from the in_player's team" do
+    @in_player.update(team: team)
     form = ::FplTeams::CreateWaiverPickForm.new(
-      fpl_team: fpl_team,
+      fpl_team_list: FplTeamList.first,
       list_position: @list_position,
-      target: @target,
+      in_player: @in_player,
       current_user: user
     )
     expect { form.save }.to change(WaiverPick, :count).by(0)
     expect(form.errors.full_messages).to include(
       "You can't have more than #{::FplTeams::CreateWaiverPickForm::QUOTAS[:team]} players from the same team " \
-        "(#{@target.team.name})."
+        "(#{@in_player.team.name})."
     )
   end
 
   it 'prevents duplicate waiver picks' do
     ::FplTeams::CreateWaiverPickForm.new(
-      fpl_team: fpl_team,
+      fpl_team_list: FplTeamList.first,
       list_position: @list_position,
-      target: @target,
+      in_player: @in_player,
       current_user: user
     ).save
 
     form = ::FplTeams::CreateWaiverPickForm.new(
-      fpl_team: fpl_team,
+      fpl_team_list: FplTeamList.first,
       list_position: @list_position,
-      target: @target,
+      in_player: @in_player,
       current_user: user
     )
     expect { form.save }.to change(WaiverPick, :count).by(0)
     expect(form.errors.full_messages).to include(
       "Duplicate waiver pick - (Pick number: #{WaiverPick.first.pick_number} " \
-        "Out: #{@list_position.player.last_name} In: #{@target.last_name})."
+        "Out: #{@out_player.last_name} In: #{@in_player.last_name})."
     )
   end
 end

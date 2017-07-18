@@ -25,7 +25,7 @@ class FplTeamsController < ApplicationController
       line_up = ListPositionsDecorator.new(fpl_team_list.list_positions).list_position_arr
     end
     league_decorator = LeagueDecorator.new(@fpl_team.league)
-
+    waiver_picks_decorator = WaiverPicksDecorator.new(fpl_team_list.waiver_picks)
     respond_to do |format|
       format.html
       format.json do
@@ -35,10 +35,10 @@ class FplTeamsController < ApplicationController
           league: @fpl_team.league,
           round: round,
           rounds: rounds,
-          editable: true,
+          status: rounds_decorator.current_round_status,
           fpl_team_lists: fpl_team_lists,
           line_up: line_up,
-          waiver_picks: WaiverPicksDecorator.new(@fpl_team.waiver_picks.where(round_id: round.id)).all_data,
+          waiver_picks: waiver_picks_decorator.all_data,
           unpicked_players: league_decorator.unpicked_players,
           picked_players: league_decorator.picked_players,
           positions: Position.all,

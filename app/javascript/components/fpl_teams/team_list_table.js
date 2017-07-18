@@ -65,11 +65,7 @@ export default class TeamListTable extends Component {
   }
 
   onRowSelect (row, isSelected, e) {
-    if (!this.props.editable) {
-      return false
-    }
-
-    if (this.props.fpl_team.user_id != this.props.current_user.id) {
+    if (this.props.fpl_team.user_id != this.props.current_user.id || this.props.status == null) {
       return false
     }
 
@@ -91,7 +87,7 @@ export default class TeamListTable extends Component {
   }
 
   descriptionText () {
-    if (this.props.fpl_team.user_id != this.props.current_user.id || !this.props.editable) {
+    if (this.props.fpl_team.user_id != this.props.current_user.id || this.props.status == null) {
       return
     }
 

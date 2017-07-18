@@ -49,20 +49,22 @@ export default class App extends Component {
     return (
       <Provider store={store}>
         <ConnectedRouter history={history}>
-          <Row className='clearfix'>
-            <Col mdOffset={1} md={10} xs={12}>
-              <Alert stack={ { limit: 3 } } />
-              <Route exact path="/" component={ Rounds } />
-              <Route exact path='/rounds' component={ Rounds } />
-              <Route exact path='/rounds/:id(\d+)' component={ Rounds } />
-              <Route path='/teams/:id' component={ Team } />
-              <Route exact path='/players' component={ Players } />
-              <Route exact path='/players/:id' component={ Player } />
-              <Route exact path='/leagues/:id(\d+)' component={ League } />
-              <Route exact path='/leagues/:id/draft_picks' component={ DraftPicks } />
-              <Route exact path='/fpl_teams/:id(\d+)' component={ FplTeam } />
-           </Col>
-          </Row>
+          <div className='container'>
+            <Row className='clearfix'>
+              <Col md={12} xs={12}>
+                <Alert stack={ { limit: 3 } } />
+                <Route exact path="/" component={ Rounds } />
+                <Route exact path='/rounds' component={ Rounds } />
+                <Route exact path='/rounds/:id(\d+)' component={ Rounds } />
+                <Route path='/teams/:id' component={ Team } />
+                <Route exact path='/players' component={ Players } />
+                <Route exact path='/players/:id' component={ Player } />
+                <Route exact path='/leagues/:id(\d+)' component={ League } />
+                <Route exact path='/leagues/:id/draft_picks' component={ DraftPicks } />
+                <Route exact path='/fpl_teams/:id(\d+)' component={ FplTeam } />
+             </Col>
+            </Row>
+          </div>
         </ConnectedRouter>
       </Provider>
     );

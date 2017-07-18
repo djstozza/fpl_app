@@ -23,4 +23,13 @@ class RoundsDecorator < SimpleDelegator
             end
     RoundDecorator.new(round)
   end
+
+  def current_round_status
+    round = current_round
+    if Time.now < round.deadline_time - 2.days && round.id != 1
+      'waiver'
+    elsif Time.now < round.deadline_time
+      'trade'
+    end
+  end
 end

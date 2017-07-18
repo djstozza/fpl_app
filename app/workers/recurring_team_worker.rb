@@ -1,10 +1,7 @@
 require 'sidekiq'
 require 'sidekiq-scheduler'
-require 'httparty'
-FplApp::Application.load_tasks
 
 class RecurringTeamWorker
-  include HTTParty
   include Sidekiq::Worker
   sidekiq_options retry: 2
 

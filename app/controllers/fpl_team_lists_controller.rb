@@ -6,11 +6,12 @@ class FplTeamListsController < ApplicationController
   # GET /fpl_team_lists/1
   # GET /fpl_team_lists/1.json
   def show
+    rounds_decorator = RoundsDecorator.new(Round.all)
     respond_to do |format|
       format.json do
         render json: {
           line_up: ListPositionsDecorator.new(@fpl_team_list.list_positions).list_position_arr,
-          editable: @fpl_team_list.round.id == RoundsDecorator.new(Round.all).current_round.id
+          status: rounds_decorator.current_round_status if @fpl_team_list.round.id == rounds_decorator.current_round.id
         }
       end
     end

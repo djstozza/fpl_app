@@ -1,0 +1,33 @@
+require 'sidekiq'
+
+class ProcessWaiverPicksWorker
+  include Sidekiq::Worker
+  sidekiq_options retry: 2
+
+  def perform
+    round = RoundsDecorator.new(Round.all).current_round
+    League.where(active: true).each do |league|
+      waiver_groups = league.waiver_picks.where(round_id: round.id).group_by { |pick| pick.pick_number }
+      waiver_groups.each do |_k, v|
+        v.sort { |pick| pick.fpl_team.rank }.each do |pick|
+          out_player = pick.out_player
+          in_player = pick.in_player
+          fpl_team_list = pick.fpl_team_list
+          fpl_team = fpl_team_list.fpl_team
+          next if league.players.include?(in_player)
+          next if fpl_team.players.include?(in_player)
+          next unless fpl_team.players.include?(out_player)
+          next if out_player.position != in_player.position
+          fpl_team_list.list_positions.find_by(player: out_player).update(player: in_player)
+          league.players.delete(out_player)
+          league.players << in_player
+          fpl_team.players.delete(out_player)
+          fpl_team.players << in_player
+
+          pick.update(status: 'approved')
+        end
+      end
+      league.waiver_picks.where(round_id: round.id).where.not(status: 'approved').update_all(status: 'declined')
+    end
+  end
+end

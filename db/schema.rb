@@ -272,21 +272,23 @@ ActiveRecord::Schema.define(version: 20170711221047) do
   create_table "waiver_picks", force: :cascade do |t|
     t.integer  "pick_number"
     t.integer  "status",           default: 0
-    t.integer  "list_position_id"
-    t.integer  "player_id"
+    t.integer  "out_player_id"
+    t.integer  "in_player_id"
+    t.integer  "fpl_team_list_id"
     t.integer  "round_id"
-    t.integer  "fpl_team_id"
     t.integer  "league_id"
     t.datetime "created_at",                   null: false
     t.datetime "updated_at",                   null: false
-    t.index ["fpl_team_id"], name: "index_waiver_picks_on_fpl_team_id", using: :btree
+    t.index ["fpl_team_list_id"], name: "index_waiver_picks_on_fpl_team_list_id", using: :btree
+    t.index ["in_player_id"], name: "index_waiver_picks_on_in_player_id", using: :btree
     t.index ["league_id"], name: "index_waiver_picks_on_league_id", using: :btree
-    t.index ["list_position_id"], name: "index_waiver_picks_on_list_position_id", using: :btree
-    t.index ["player_id"], name: "index_waiver_picks_on_player_id", using: :btree
+    t.index ["out_player_id"], name: "index_waiver_picks_on_out_player_id", using: :btree
     t.index ["round_id"], name: "index_waiver_picks_on_round_id", using: :btree
   end
 
   add_foreign_key "fixtures", "teams", column: "team_a_id"
   add_foreign_key "fixtures", "teams", column: "team_h_id"
   add_foreign_key "leagues", "users", column: "commissioner_id"
+  add_foreign_key "waiver_picks", "players", column: "in_player_id"
+  add_foreign_key "waiver_picks", "players", column: "out_player_id"
 end

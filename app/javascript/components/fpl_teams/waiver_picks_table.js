@@ -20,8 +20,12 @@ export default class WaiverPicksTable extends Component {
     }
   }
 
+  columnClassNameFormat (fieldValue, row, rowIdx, colIdx) {
+    return row.status;
+  }
+
   deleteWaiverPickCol () {
-    if (!this.props.editable) {
+    if (this.props.status == null || this.props.status != 'waiver') {
       return;
     }
 
@@ -39,7 +43,7 @@ export default class WaiverPicksTable extends Component {
   }
 
   beforeSaveCell (row, cellName, cellValue) {
-    if (!this.props.editable) {
+    if (this.props.status != 'waiver') {
       return false
     }
     return this.props.updateWaiverPickOrder(row.id, cellValue);
@@ -70,43 +74,25 @@ export default class WaiverPicksTable extends Component {
     this.closeDeleteWaiverDialog();
   }
 
+  waiverPickDescriptionText () {
+    if (this.props.status != 'waiver') {
+      return false;
+    }
+
+    return (
+      <div>
+        <p>
+          You can edit the order of your waiver picks by clicking on the pick number and changing it. Remember to
+            click outside the cell for your change to be saved.
+        </p>
+        <p>
+          You can delete an undesired waiver pick by clicking its 'Delete Pick' button.
+        </p>
+      </div>
+    )
+  }
+
   render () {
-    const teamText = _.object(_.map(this.props.teams, (obj) => {
-      return [obj.id, obj.short_name]
-    }));
-
-    const listPositionIdPlayerId = _.object(_.map(this.props.line_up, (obj) => {
-      return [obj.id, obj.player_id]
-    }));
-
-    const playerLastNameText = _.object(_.map(this.props.line_up, (obj) => {
-      return [obj.id, obj.last_name]
-    }));
-
-    const playerIdTeamId = _.object(_.map(this.props.line_up, (obj) => {
-      return [obj.id, obj.team_id]
-    }))
-
-    const positionText = _.object(_.map(this.props.positions, (obj) => {
-      return [obj.id, obj.singular_name_short]
-    }))
-
-    let positionTextCell = function (cell, row) {
-      return positionText[cell]
-    }
-
-    let inPlayerLastNameCell = (cell, row) => {
-      return playerLastNameText[cell];
-    }
-
-    let inTeamTextCell = (cell, row) => {
-      return teamText[cell];
-    }
-
-    let outTeamTextCell = (cell, row) => {
-      return teamText[playerIdTeamId[cell]]
-    }
-
     let pickNumbers = _.map(this.props.waiver_picks, (obj) => {
       return obj.pick_number;
     });
@@ -145,13 +131,8 @@ export default class WaiverPicksTable extends Component {
         </Modal>
 
         <h3>Waiver Picks</h3>
-        <p>
-          You can edit the order of your waiver picks by clicking on the pick number and changing it. Remember to
-            click outside the cell for your change to be saved.
-        </p>
-        <p>
-          You can delete an undesired waiver pick by clicking its 'Delete Pick' button.
-        </p>
+
+        { this.waiverPickDescriptionText() }
 
         <BootstrapTable
           data={ this.props.waiver_picks }
@@ -169,7 +150,7 @@ export default class WaiverPicksTable extends Component {
             rowSpan='2'
             dataField='pick_number'
             dataAlign='center'
-            editable={ { type: 'select', options: { values: pickNumbers } } }
+            editable={ this.props.status == 'waiver' ? { type: 'select', options: { values: pickNumbers } } : false }
 
           >
             <span data-tip='Pick Number'>PN</span>
@@ -183,9 +164,8 @@ export default class WaiverPicksTable extends Component {
             row='1'
             colSpan='1'
             rowSpan='1'
-            dataField='list_position_id'
+            dataField='out_last_name'
             dataAlign='center'
-            dataFormat={ inPlayerLastNameCell }
             editable={ false }
           >
             <span data-tip='Last Name'>LN</span>
@@ -194,8 +174,7 @@ export default class WaiverPicksTable extends Component {
             row='1'
             colSpan='1'
             rowSpan='1'
-            dataField='list_position_id'
-            dataFormat={ outTeamTextCell }
+            dataField='out_team_short_name'
             dataAlign='center'
             editable={ false }
           >
@@ -209,7 +188,7 @@ export default class WaiverPicksTable extends Component {
           <TableHeaderColumn
             row='1'
             colSpan='1'
-            dataField='last_name'
+            dataField='in_last_name'
             dataAlign='center'
             editable={ false }
           >
@@ -218,9 +197,8 @@ export default class WaiverPicksTable extends Component {
           <TableHeaderColumn
             row='1'
             colSpan='1'
-            dataField='team_id'
+            dataField='in_team_short_name'
             dataAlign='center'
-            dataFormat={ inTeamTextCell }
             editable={ false }
           >
             <span data-tip='Team'>T</span>
@@ -228,9 +206,8 @@ export default class WaiverPicksTable extends Component {
           <TableHeaderColumn
             row='0'
             rowSpan='2'
-            dataField='position_id'
+            dataField='position'
             dataAlign='center'
-            dataFormat={ positionTextCell }
             editable={ false }
           >
             <span data-tip='Position'>Pos</span>
@@ -241,6 +218,7 @@ export default class WaiverPicksTable extends Component {
             dataField='status'
             dataAlign='center'
             editable={ false }
+            columnClassName={ this.columnClassNameFormat }
           >
             <span data-tip='Status'>S</span>
           </TableHeaderColumn>

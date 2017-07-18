@@ -111,7 +111,7 @@ class FplTeam extends Component {
   waiverPicks (targetId) {
     axios({
       method: 'post',
-      url: `/fpl_teams/${this.props.match.params.id}/waiver_picks.json`,
+      url: `/fpl_team_lists/${this.state.fpl_team_list.id}/waiver_picks.json`,
       data: {
         list_position_id: this.state.listPosition.id,
         target_id: targetId
@@ -150,7 +150,7 @@ class FplTeam extends Component {
   updateWaiverPickOrder (waiverPickId, newPickNumber) {
     axios({
       method: 'put',
-      url: `/fpl_teams/${this.props.match.params.id}/waiver_picks/${waiverPickId}.json`,
+      url: `/fpl_team_lists/${this.state.fpl_team_list.id}/waiver_picks/${waiverPickId}.json`,
       data: {
         new_pick_number: newPickNumber
       }
@@ -179,7 +179,7 @@ class FplTeam extends Component {
   deleteWaiverPick (waiverPickId) {
     axios({
       method: 'delete',
-      url: `/fpl_teams/${this.props.match.params.id}/waiver_picks/${waiverPickId}.json`
+      url: `/fpl_team_lists/${this.state.fpl_team_list.id}/waiver_picks/${waiverPickId}.json`
     }).then(res => {
       this.setState({
         waiver_picks: res.data.waiver_picks
@@ -210,11 +210,12 @@ class FplTeam extends Component {
     return (
       <WaiverPicksTable
         waiver_picks={ this.state.waiver_picks }
-        editable={ this.state.editable }
+        status={ this.state.status }
         line_up={ this.state.line_up }
         positions={ this.state.positions }
         teams={ this.state.teams }
         fpl_team={ this.state.fpl_team }
+        round={ this.state.round }
         updateWaiverPickOrder={ this.updateWaiverPickOrder }
         deleteWaiverPick={ this.deleteWaiverPick }
       />
@@ -241,7 +242,7 @@ class FplTeam extends Component {
       picked_players: nextProps.picked_players,
       fpl_team_list: nextProps.fpl_team_list,
       fpl_team_lists: nextProps.fpl_team_lists,
-      editable: nextProps.editable,
+      status: nextProps.status,
       waiver_picks: nextProps.waiver_picks,
       line_up: nextProps.line_up,
       positions: nextProps.positions,
@@ -276,7 +277,7 @@ class FplTeam extends Component {
             current_user={ this.state.current_user }
             fpl_team={ this.state.fpl_team }
             round={ this.state.round }
-            editable={ this.state.editable }
+            status={ this.state.status }
             action={ this.state.action }
             listPosition={ this.state.listPosition }
             completeTradeAction={ this.completeTradeAction }
@@ -286,21 +287,28 @@ class FplTeam extends Component {
     }
   }
 
+  tradeButtons () {
+    switch (this.state.status) {
+      case 'trade':
+        return (<Button onClick={ () => this.setAction('tradePlayers') }>Trade Players</Button>);
+      case 'waiver':
+        return (<Button onClick={ () => this.setAction('waiverPicks') }>Trade Players (Waiver)</Button>);
+      default: null
+
+    }
+  }
+
   showButtons () {
-    if (!this.state.editable) {
+    if (this.state.status == null) {
       return;
     }
-    if (this.state.line_up == '') {
-      return;
-    }
-    if (this.state.fpl_team.user_id != this.state.current_user.id) {
+    if (this.state.fpl_team.user_id != this.state.current_user.id || this.state.line_up == '') {
       return;
     }
     return (
       <div>
         <Button onClick={ () => this.setAction('selectLineUp') }>Select starting line up</Button>
-        <Button onClick={ () => this.setAction('tradePlayers') }>Trade Players</Button>
-        <Button onClick={ () => this.setAction('waiverPicks') }>Trade Players (Waiver)</Button>
+        { this.tradeButtons() }
       </div>
     )
   }
@@ -326,7 +334,7 @@ class FplTeam extends Component {
                 positions={ this.state.positions }
                 teams={ this.state.teams }
                 round={ this.state.round }
-                editable={ this.state.editable }
+                status={ this.state.status }
                 action={ this.state.action }
                 substitutePlayer={ this.substitutePlayer }
                 setlistPosition={ this.setlistPosition }
@@ -355,7 +363,7 @@ function mapStateToProps(state) {
     fpl_team_list: state.FplTeamReducer.fpl_team_list,
     fpl_team_lists: state.FplTeamReducer.fpl_team_lists,
     line_up: state.FplTeamReducer.line_up,
-    editable: state.FplTeamReducer.editable,
+    status: state.FplTeamReducer.status,
     waiver_picks: state.FplTeamReducer.waiver_picks,
     positions: state.FplTeamReducer.positions,
     round: state.FplTeamReducer.round,

@@ -5,10 +5,10 @@
 #  id               :integer          not null, primary key
 #  pick_number      :integer
 #  status           :integer          default("pending")
-#  list_position_id :integer
-#  player_id        :integer
+#  out_player_id    :integer
+#  in_player_id     :integer
+#  fpl_team_list_id :integer
 #  round_id         :integer
-#  fpl_team_id      :integer
 #  league_id        :integer
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
@@ -16,11 +16,11 @@
 
 class WaiverPick < ApplicationRecord
   belongs_to :league
+  belongs_to :fpl_team_list
+  belongs_to :out_player, class_name: Player, foreign_key: :out_player_id
+  belongs_to :in_player, class_name: Player, foreign_key: :in_player_id
   belongs_to :round
-  belongs_to :player
-  belongs_to :fpl_team
-  belongs_to :list_position
-  validates :list_position_id, :status, :fpl_team_id, :player_id, :league_id, presence: true
-  validates_uniqueness_of :pick_number, scope: [:fpl_team_id, :round_id], on: :create
+  validates :status, :fpl_team_list_id, :in_player_id, :out_player_id, :league_id, :round_id, presence: true
+  validates_uniqueness_of :pick_number, scope: :fpl_team_list_id, on: :create
   enum status: %w[pending approved declined]
 end

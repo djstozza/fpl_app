@@ -52,7 +52,7 @@ export default class TradePlayersTable extends Component {
       this.setState({
         selected: ''
       })
-      return
+      return;
     }
 
     this.refs.positionId.applyFilter(nextProps.listPosition.position_id);
@@ -65,6 +65,9 @@ export default class TradePlayersTable extends Component {
   }
 
   onRowSelect (row, isSelected, e) {
+    if (this.props.status != 'trade') {
+      return;
+    }
     if (this.props.action == 'tradePlayers' || this.props.action == 'waiverPicks') {
       return this.selectPlayerToTrade(row);
     }
@@ -78,7 +81,7 @@ export default class TradePlayersTable extends Component {
 
   selectPlayerToTrade (row) {
     if (this.props.listPosition == null) {
-      return
+      return;
     }
 
     if (this.state.selected != row) {
@@ -100,7 +103,7 @@ export default class TradePlayersTable extends Component {
   }
 
   completeTradeActionButton () {
-    if (this.props.fpl_team.user_id != this.props.current_user.id || !this.props.editable) {
+    if (this.props.fpl_team.user_id != this.props.current_user.id || this.props.status == null) {
       return;
     }
 

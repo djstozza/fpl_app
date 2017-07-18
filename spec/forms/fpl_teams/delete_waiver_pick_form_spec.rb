@@ -41,9 +41,9 @@ RSpec.describe FplTeams::DeleteWaiverPickForm, type: :form do
     ::FplTeams::ProcessInitialLineUp.run(fpl_team: fpl_team)
     3.times do
       ::FplTeams::CreateWaiverPickForm.new(
-        fpl_team: fpl_team,
+        fpl_team_list: FplTeamList.first,
         list_position: ListPosition.midfielders.first,
-        target: FactoryGirl.create(
+        in_player: FactoryGirl.create(
           :player,
           position: Position.find_by(singular_name_short: 'MID'),
           team: FactoryGirl.create(:team)
@@ -58,7 +58,7 @@ RSpec.describe FplTeams::DeleteWaiverPickForm, type: :form do
     second_waiver_pick = WaiverPick.second
     third_waiver_pick = WaiverPick.third
     form = ::FplTeams::DeleteWaiverPickForm.new(
-      fpl_team: fpl_team,
+      fpl_team_list: FplTeamList.first,
       waiver_pick: waiver_pick,
       current_user: user
     )
@@ -71,7 +71,7 @@ RSpec.describe FplTeams::DeleteWaiverPickForm, type: :form do
   it 'fails to delete the waiver pick if not authorised' do
     waiver_pick = WaiverPick.last
     form = ::FplTeams::DeleteWaiverPickForm.new(
-      fpl_team: fpl_team,
+      fpl_team_list: FplTeamList.first,
       waiver_pick: waiver_pick,
       current_user: FactoryGirl.create(:user)
     )
@@ -84,7 +84,7 @@ RSpec.describe FplTeams::DeleteWaiverPickForm, type: :form do
     Round.first.update(deadline_time: 2.day.from_now - 1.minute)
     waiver_pick = WaiverPick.last
     form = ::FplTeams::DeleteWaiverPickForm.new(
-      fpl_team: fpl_team,
+      fpl_team_list: FplTeamList.first,
       waiver_pick: waiver_pick,
       current_user: user
     )
@@ -98,7 +98,7 @@ RSpec.describe FplTeams::DeleteWaiverPickForm, type: :form do
     Round.create(name: 'Gameweek 2', deadline_time: 3.days.from_now, is_current: true)
     waiver_pick = WaiverPick.last
     form = ::FplTeams::DeleteWaiverPickForm.new(
-      fpl_team: fpl_team,
+      fpl_team_list: FplTeamList.first,
       waiver_pick: waiver_pick,
       current_user: user
     )
@@ -113,7 +113,7 @@ RSpec.describe FplTeams::DeleteWaiverPickForm, type: :form do
     WaiverPick.update_all(status: 'approved')
     waiver_pick = WaiverPick.last
     form = ::FplTeams::DeleteWaiverPickForm.new(
-      fpl_team: fpl_team,
+      fpl_team_list: FplTeamList.first,
       waiver_pick: waiver_pick,
       current_user: user
     )

@@ -2,20 +2,21 @@ class FplTeams::UpdateWaiverPickOrderForm
   include ActiveModel::Model
   include Virtus.model
 
-  attr_accessor :waiver_pick, :fpl_team
+  attr_accessor :waiver_pick, :fpl_team_list
 
-  def initialize(fpl_team:, waiver_pick:, new_pick_number:, current_user:)
-    @fpl_team = fpl_team
+  def initialize(fpl_team_list:, waiver_pick:, new_pick_number:, current_user:)
+    @fpl_team_list = fpl_team_list
+    @fpl_team = fpl_team_list.fpl_team
     @waiver_pick = waiver_pick
-    @round = waiver_pick.round
-    @waiver_picks = fpl_team.waiver_picks.where(round_id: @round.id)
+    @round = fpl_team_list.round
+    @waiver_picks = fpl_team_list.waiver_picks
     @new_pick_number = new_pick_number.to_i
     @current_user = current_user
   end
 
   validate :authorised_user
   validate :pending_waiver_pick
-  validate :fpl_team_waiver_pick
+  validate :fpl_team_list_waiver_pick
   validate :round_is_current
   validate :waiver_pick_update_occurring_in_valid_period
   validate :valid_pick_number
@@ -54,8 +55,8 @@ class FplTeams::UpdateWaiverPickOrderForm
     errors.add(:base, 'You are not authorised to make changes to this team.')
   end
 
-  def fpl_team_waiver_pick
-    return if @fpl_team.waiver_picks.include?(@waiver_pick)
+  def fpl_team_list_waiver_pick
+    return if @fpl_team_list.waiver_picks.include?(@waiver_pick)
     errors.add(:base, 'This waiver pick does not belong to your team.')
   end
 
