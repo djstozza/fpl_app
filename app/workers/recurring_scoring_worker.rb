@@ -9,9 +9,8 @@ class RecurringScoringWorker
     round = Round.find_by(is_current: true)
     return unless round.data_checked
     next_round = Round.find_by(is_next: true)
-
     League.where(active: true).each do |league|
-      next if league.fpl_team_lists.where(round: @round).all? { |list| list.rank.present? }
+      next if league.fpl_team_lists.where(round: round).all? { |list| list.rank.present? }
       ::Leagues::ProcessScoringService.run!(league: league, round: round)
       ::Leagues::ProcessRankingService.run!(league: league, round: round)
       league.fpl_teams.each do |fpl_team|
