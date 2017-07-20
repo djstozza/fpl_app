@@ -15,7 +15,9 @@ class RecurringScoringWorker
       ::Leagues::ProcessScoringService.run!(league: league, round: round)
       ::Leagues::ProcessRankingService.run!(league: league, round: round)
       league.fpl_teams.each do |fpl_team|
-        FplTeams::ProcessNextLineUp.run!(fpl_team: fpl_team, current_round: round, next_round: next_round)
+        if next_round
+          ::FplTeams::ProcessNextLineUp.run!(fpl_team: fpl_team, current_round: round, next_round: next_round)
+        end
       end
     end
   end

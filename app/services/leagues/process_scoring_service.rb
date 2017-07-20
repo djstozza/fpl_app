@@ -26,28 +26,25 @@ class Leagues::ProcessScoringService < ActiveInteraction::Base
   private
 
   def player_fixture_history(player)
-    player.player_fixture_histories.where { |pfh| pfh['round'] == round.id }
+    player.player_fixture_histories.select { |pfh| pfh['round'] == round.id }
   end
 
   def kickoff_time_parser(player)
     pfh = player_fixture_history(player)
     return 0 if pfh.empty?
-    total = pfh.inject(0) { |sum, x| Time.parse(pfh['kickoff_time']).to_i }
-    total
+    pfh.sort { |a, b| a['kickoff_time'] <=> b['kickoff_time'] }.first['kickoff_time']
   end
 
   def player_score(player)
     pfh = player_fixture_history(player)
     return 0 if pfh.empty?
-    total = pfh.inject(0) { |sum, x| Time.parse(pfh['total_points']).to_i }
-    total
+    pfh.inject(0) { |sum, x| sum +  x['total_points'].to_i }
   end
 
   def minutes_parser(player)
     pfh = player_fixture_history(player)
     return 0 if pfh.nil?
-    total = pfh.inject(0) { |sum, x| Time.parse(pfh['minutes']).to_i }
-    total
+    pfh.inject(0) { |sum, x| sum + x['minutes'].to_i }
   end
 
   def starting_field_line_up

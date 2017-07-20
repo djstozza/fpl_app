@@ -35,5 +35,5 @@ class Team < ApplicationRecord
   has_many :home_fixtures, class_name: 'Fixture', foreign_key: :team_h_id
   has_many :away_fixtures, class_name: 'Fixture', foreign_key: :team_a_id
 
-  validates :code, presence: true, uniqueness: true
+  validates :code, :name, :short_name, presence: true, uniqueness: true
 end
