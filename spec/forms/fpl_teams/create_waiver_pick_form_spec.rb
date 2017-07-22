@@ -37,8 +37,10 @@ RSpec.describe FplTeams::CreateWaiverPickForm, type: :form do
 
     fpl_team.players << Player.all
     league.players << Player.all
-    Round.create(name: 'Gameweek 1', deadline_time: 3.days.from_now, is_current: true)
+    Round.create(name: 'Gameweek 1', deadline_time: 7.days.ago, is_current: true, data_checked: true)
+    Round.create(name: 'Gameweek 2', deadline_time: 3.days.from_now, is_next: true, data_checked: false)
     ::FplTeams::ProcessInitialLineUp.run(fpl_team: fpl_team)
+    FplTeamList.first.update(round: Round.second)
     @list_position = ListPosition.midfielders.first
     @out_player = @list_position.player
     @in_player = FactoryGirl.create(
@@ -94,7 +96,7 @@ RSpec.describe FplTeams::CreateWaiverPickForm, type: :form do
   end
 
   it 'fails if the waiver cutoff time has passed' do
-    Round.first.update(deadline_time: 2.day.from_now - 1.minute)
+    Round.second.update(deadline_time: 2.day.from_now - 1.minute)
     form = ::FplTeams::CreateWaiverPickForm.new(
       fpl_team_list: FplTeamList.first,
       list_position: @list_position,
@@ -139,5 +141,17 @@ RSpec.describe FplTeams::CreateWaiverPickForm, type: :form do
       "Duplicate waiver pick - (Pick number: #{WaiverPick.first.pick_number} " \
         "Out: #{@out_player.last_name} In: #{@in_player.last_name})."
     )
+  end
+
+  it 'prevents picks occuring during the first round' do
+    FplTeamList.first.update(round: Round.first)
+    form = ::FplTeams::CreateWaiverPickForm.new(
+      fpl_team_list: FplTeamList.first,
+      list_position: @list_position,
+      in_player: @in_player,
+      current_user: user
+    )
+    expect { form.save }.to change(WaiverPick, :count).by(0)
+    expect(form.errors.full_messages).to include('There are no waiver picks during the first round.')
   end
 end

@@ -52,9 +52,8 @@ RSpec.describe RecurringScoringWorker do
           }]
         )
       end
-
-      League.first.update(active: true)
     end
+    League.first.update(active: true)
   end
 
   it 'scores and ranks the fpl team lists and fpl teams' do
@@ -72,5 +71,22 @@ RSpec.describe RecurringScoringWorker do
       expect(fpl_team.fpl_team_lists.find_by(round: next_round).rank).to be_nil
       i += 1
     end
+  end
+
+  it 'does not perform scoring if the the round is not data checked' do
+    Round.first.update(data_checked: false)
+    RecurringScoringWorker.new.perform
+    expect(FplTeam.all.all? { |fpl_team| fpl_team.rank.nil? }).to be_truthy
+    expect(FplTeam.all.all? { |fpl_team| fpl_team.fpl_team_lists.count == 1}).to be_truthy
+    expect(FplTeamList.all.all? { |fpl_team_list| fpl_team_list.rank.nil? }).to be_truthy
+  end
+
+  it 'does not peform scoring if already processed' do
+    FplTeam.all.sort.each_with_index { |fpl_team, i| fpl_team.update(rank: i + 1) }
+    FplTeamList.all.sort.each_with_index { |fpl_team_list, i| fpl_team_list.update(rank: i + 1) }
+    FplTeam.order(rank: :desc).each_with_index { |fpl_team, i| fpl_team.update(total_score: i) }
+    FplTeamList.order(rank: :desc).each_with_index { |fpl_team_list, i| fpl_team_list.update(total_score: i) }
+    RecurringScoringWorker.new.perform
+    expect(FplTeam.all.all? { |fpl_team| fpl_team.fpl_team_lists.count == 1}).to be_truthy
   end
 end

@@ -57,7 +57,7 @@ class FplTeams::ProcessTradeForm
   end
 
   def trade_occurring_in_valid_period
-    if Time.now < @round.deadline_time - 1.day
+    if Time.now < @round.deadline_time - 1.day && @round.id != Round.first.id
       errors.add(:base, 'You cannot trade players until the waiver cutoff time has passed.')
     elsif Time.now > @round.deadline_time
       errors.add(:base, 'The deadline time for making trades has passed.')

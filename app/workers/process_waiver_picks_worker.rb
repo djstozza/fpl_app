@@ -8,8 +8,8 @@ class ProcessWaiverPicksWorker
     round = RoundsDecorator.new(Round.all).current_round
     League.where(active: true).each do |league|
       waiver_groups = league.waiver_picks.where(round_id: round.id).group_by { |pick| pick.pick_number }
-      waiver_groups.each do |_k, v|
-        v.sort { |pick| pick.fpl_team.rank }.each do |pick|
+      waiver_groups.sort.each do |_k, v|
+        v.sort { |a, b| b.fpl_team_list.fpl_team.rank <=> a.fpl_team_list.fpl_team.rank }.each do |pick|
           out_player = pick.out_player
           in_player = pick.in_player
           fpl_team_list = pick.fpl_team_list

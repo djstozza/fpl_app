@@ -84,6 +84,7 @@ class FplTeam extends Component {
         target_id: targetId
       }
     }).then(res => {
+      console.log(res);
       this.setState({
         line_up: res.data.line_up,
         unpicked_players: res.data.unpicked_players,
@@ -141,6 +142,7 @@ class FplTeam extends Component {
   completeTradeAction (targetId) {
     switch (this.state.action) {
       case 'tradePlayers':
+        console.log(targetId);
         return this.tradePlayers(targetId);
       case 'waiverPicks':
         return this.waiverPicks(targetId);
@@ -266,7 +268,8 @@ class FplTeam extends Component {
     }
   }
 
-  tradePlayers () {
+  tradePlayersTable () {
+    console.log('hello')
     if (this.state.action == 'tradePlayers' || this.state.action == 'waiverPicks') {
       return (
         <Col sm={6}>
@@ -340,7 +343,7 @@ class FplTeam extends Component {
                 setlistPosition={ this.setlistPosition }
               />
             </Col>
-            { this.tradePlayers() }
+            { this.tradePlayersTable() }
           </Row>
           <Row className='clearfix'>
             <Col sm={12}>

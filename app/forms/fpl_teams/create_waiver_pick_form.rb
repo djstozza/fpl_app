@@ -19,6 +19,7 @@ class FplTeams::CreateWaiverPickForm
   validate :player_in_fpl_team
   validate :target_unpicked
   validate :round_is_current
+  validate :not_first_round
   validate :waiver_pick_occurring_in_valid_period
   validate :identical_player_and_target_positions
   validate :maximum_number_of_players_from_team
@@ -71,6 +72,11 @@ class FplTeams::CreateWaiverPickForm
   def round_is_current
     return if @round.id == RoundsDecorator.new(Round.all).current_round.id
     errors.add(:base, "You can only make changes to your squad's line up for the upcoming round.")
+  end
+
+  def not_first_round
+    return if @round.id != Round.first.id
+    errors.add(:base, 'There are no waiver picks during the first round.')
   end
 
   def identical_player_and_target_positions

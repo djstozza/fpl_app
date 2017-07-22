@@ -140,14 +140,6 @@ export default class TeamListTable extends Component {
   render () {
     const self = this;
 
-    const positionText = _.object(_.map(this.props.positions, function (obj) {
-      return [obj.id, obj.singular_name_short]
-    }))
-
-    let positionTextCell = function (cell, row) {
-      return positionText[cell]
-    }
-
     let playerLastNameText = _.object(_.map(this.props.line_up, function(obj) {
       return [obj.id, obj.last_name]
     }))
@@ -185,14 +177,6 @@ export default class TeamListTable extends Component {
 
     let roleTextCell = (cell, row) => {
       return roleText[cell]
-    }
-
-    const teamText = _.object(_.map(this.props.teams, function (obj) {
-      return [obj.id, obj.short_name]
-    }));
-
-    let teamTextCell = function (cell, row) {
-      return teamText[cell]
     }
 
     let playerFixtureHistories = _.object(_.map(this.props.line_up, (obj) => {
@@ -237,9 +221,8 @@ export default class TeamListTable extends Component {
             <span data-tip='Role'>R</span>
           </TableHeaderColumn>
           <TableHeaderColumn
-            dataField='position_id'
+            dataField='singular_name_short'
             dataAlign='center'
-            dataFormat={ positionTextCell }
           >
             <span data-tip='Position'>Pos</span>
           </TableHeaderColumn>
@@ -252,9 +235,9 @@ export default class TeamListTable extends Component {
             <span data-tip='Player'>P</span>
           </TableHeaderColumn>
           <TableHeaderColumn
-            dataField='team_id'
+            dataField='short_name'
             dataAlign='center'
-            dataFormat={ teamTextCell }>
+          >
             <span data-tip='Team'>T</span>
           </TableHeaderColumn>
           <TableHeaderColumn

@@ -18,6 +18,7 @@ class FplTeams::DeleteWaiverPickForm
   validate :fpl_team_list_waiver_pick
   validate :round_is_current
   validate :waiver_pick_deletion_occurring_in_valid_period
+  validate :not_first_round
 
   def save
     return false unless valid?
@@ -57,5 +58,10 @@ class FplTeams::DeleteWaiverPickForm
     if Time.now > @round.deadline_time - 2.days
       errors.add(:base, 'The deadline time for updating waiver picks this round has passed.')
     end
+  end
+
+  def not_first_round
+    return if @round.id != Round.first.id
+    errors.add(:base, 'There are no waiver picks during the first round.')
   end
 end

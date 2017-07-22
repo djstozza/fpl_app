@@ -105,11 +105,32 @@ RSpec.describe FplTeams::ProcessTradeForm, type: :form do
     expect(form.errors.full_messages).to include('You can only trade out players that are part of your team.')
   end
 
-  it 'fails if the trade occurs before the waiver cutoff time has passed' do
+  it 'allows trades if there round has no waiver cutoff (i.e. Round 1)' do
     Round.first.update(deadline_time: 2.days.from_now)
-    form = ::FplTeams::ProcessTradeForm.new(
+    ::FplTeams::ProcessTradeForm.new(
       fpl_team: fpl_team,
       list_position: @list_position,
+      target: @target,
+      current_user: user
+    ).save
+    expect(FplTeam.first.players.include?(@player)).to be_falsey
+    expect(FplTeam.first.players.include?(@target)).to be_truthy
+    expect(League.first.players.include?(@player)).to be_falsey
+    expect(League.first.players.include?(@target)).to be_truthy
+    expect(@list_position.player).to eq(@target)
+  end
+
+  it 'fails if the round has a waiver cutoff' do
+    Round.first.update(data_checked: true)
+    Round.create(name: 'Gameweek 2', is_next: true, deadline_time: 7.days.from_now, data_checked: false)
+    ::FplTeams::ProcessNextLineUp.run!(
+      fpl_team: fpl_team,
+      current_round: Round.find_by(is_current: true),
+      next_round: Round.find_by(is_next: true)
+    )
+    form = ::FplTeams::ProcessTradeForm.new(
+      fpl_team: fpl_team,
+      list_position: fpl_team.fpl_team_lists.second.list_positions.find_by(player: @list_position.player),
       target: @target,
       current_user: user
     )

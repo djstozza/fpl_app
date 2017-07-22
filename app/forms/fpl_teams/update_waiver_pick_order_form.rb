@@ -18,6 +18,7 @@ class FplTeams::UpdateWaiverPickOrderForm
   validate :pending_waiver_pick
   validate :fpl_team_list_waiver_pick
   validate :round_is_current
+  validate :not_first_round
   validate :waiver_pick_update_occurring_in_valid_period
   validate :valid_pick_number
   validate :change_in_pick_number
@@ -84,5 +85,10 @@ class FplTeams::UpdateWaiverPickOrderForm
   def change_in_pick_number
     return if @waiver_pick.pick_number != @new_pick_number
     errors.add(:base, 'No change in pick number.')
+  end
+
+  def not_first_round
+    return if @round.id != Round.first.id
+    errors.add(:base, 'There are no waiver picks during the first round.')
   end
 end

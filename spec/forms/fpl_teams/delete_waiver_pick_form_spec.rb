@@ -37,8 +37,10 @@ RSpec.describe FplTeams::DeleteWaiverPickForm, type: :form do
 
     fpl_team.players << Player.all
     league.players << Player.all
-    Round.create(name: 'Gameweek 1', deadline_time: 3.days.from_now, is_current: true)
+    Round.create(name: 'Gameweek 1', deadline_time: 7.days.ago, is_current: true, data_checked: true)
+    Round.create(name: 'Gameweek 2', deadline_time: 3.days.from_now, is_next: true, data_checked: false)
     ::FplTeams::ProcessInitialLineUp.run(fpl_team: fpl_team)
+    FplTeamList.first.update(round: Round.second)
     3.times do
       ::FplTeams::CreateWaiverPickForm.new(
         fpl_team_list: FplTeamList.first,
@@ -81,7 +83,7 @@ RSpec.describe FplTeams::DeleteWaiverPickForm, type: :form do
   end
 
   it 'fails if the waiver cutoff time has passed' do
-    Round.first.update(deadline_time: 2.day.from_now - 1.minute)
+    Round.second.update(deadline_time: 2.day.from_now - 1.minute)
     waiver_pick = WaiverPick.last
     form = ::FplTeams::DeleteWaiverPickForm.new(
       fpl_team_list: FplTeamList.first,
@@ -94,8 +96,9 @@ RSpec.describe FplTeams::DeleteWaiverPickForm, type: :form do
   end
 
   it 'fails if the round is not current' do
-    Round.first.update(is_current: false)
-    Round.create(name: 'Gameweek 2', deadline_time: 3.days.from_now, is_current: true)
+    Round.first.update(is_current: false, is_previous: true)
+    Round.second.update(is_current: true, is_next: false, data_checked: true, deadline_time: 1.day.ago)
+    Round.create(name: 'Gameweek 3', deadline_time: 3.days.from_now, is_next: true, data_checked: false)
     waiver_pick = WaiverPick.last
     form = ::FplTeams::DeleteWaiverPickForm.new(
       fpl_team_list: FplTeamList.first,
