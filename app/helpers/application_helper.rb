@@ -1,9 +1,9 @@
 module ApplicationHelper
   def session_link
     if current_user
-      link_to('Logout', destroy_user_session_path, :method => :delete)
+      link_to('Log out', destroy_user_session_path, :method => :delete)
     else
-      link_to('Login', new_user_session_path)
+      link_to('Log in', new_user_session_path)
     end
   end
 

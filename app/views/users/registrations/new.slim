@@ -1,29 +1,27 @@
-h2 Sign up
+.container: .row: .col-sm-offset-3.col-sm-6
+  = form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f|
+    h2 Sign up
+    = devise_error_messages!
 
-= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f|
-  = devise_error_messages!
+    .form_group
+      = f.label :email
+      = f.email_field :email, class: 'form-control', autofocus: true
 
-  .form_group
-    = f.label :email
-    = f.email_field :email, autofocus: true
+    .form_group
+      = f.label :username
+      = f.text_field :username, class: 'form-control'
 
-  .field
-    = f.label :username
-    = f.text_field :username
+    .field
+      = f.label :password
+      - if @minimum_password_length
+        em ()(#{@minimum_password_length} characters minimum)
+      = f.password_field :password, class: 'form-control', autocomplete: 'off'
 
-  .field
-    = f.label :password
-    - if @minimum_password_length
-    em ()( #{@minimum_password_length} characters minimum)
-    br
-    = f.password_field :password, autocomplete: 'off'
+    .field
+      = f.label :password_confirmation
+      = f.password_field :password_confirmation, class: 'form-control', autocomplete: 'off'
 
-  .field
-    = f.label :password_confirmation
-    = f.password_field :password_confirmation, autocomplete: 'off'
-  </div>
+    .actions
+      = f.submit 'Sign up', class: 'btn btn-primary'
 
-  .actions
-    = f.submit 'Sign up'
-
-= render 'users/shared/links'
+  = render 'users/shared/links'
