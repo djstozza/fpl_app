@@ -7,6 +7,9 @@ import PlayerReducer from './reducer_player';
 import LeagueReducer from './reducer_league';
 import DraftPicksReducer from './reducer_draft_picks';
 import FplTeamReducer from './reducer_fpl_team';
+import FplTeamListsReducer from './reducer_fpl_team_lists';
+import TradePlayersReducer from './reducer_trade_players';
+import WaiverPicksReducer from './reducer_waiver_picks';
 
 const rootReducer = combineReducers({
   TeamsReducer: TeamsReducer,
@@ -16,7 +19,10 @@ const rootReducer = combineReducers({
   PlayerReducer: PlayerReducer,
   LeagueReducer: LeagueReducer,
   DraftPicksReducer: DraftPicksReducer,
-  FplTeamReducer: FplTeamReducer
+  FplTeamReducer: FplTeamReducer,
+  FplTeamListsReducer: FplTeamListsReducer,
+  TradePlayersReducer: TradePlayersReducer,
+  WaiverPicksReducer: WaiverPicksReducer
 });
 
 export default rootReducer;

@@ -30,7 +30,7 @@ class TradesController < ApplicationController
           }
         end
       else
-        format.json { render json: form.errors.full_messages, status: :unprocessable_entity }
+        format.json { render json: { errors: form.errors.full_messages }, status: :unprocessable_entity }
       end
     end
   end

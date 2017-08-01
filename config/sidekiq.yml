@@ -9,7 +9,7 @@
 
   RecurringTeamWorker:
     cron: '*/5 11-23 * * *'
-    description: 'Update team stats ever 5 minutes between 11am and 11pm UTC'
+    description: 'Update team stats every 5 minutes between 11am and 11pm UTC'
 
   RecurringPlayerWorker:
     cron: '*/5 11-23 * * *'

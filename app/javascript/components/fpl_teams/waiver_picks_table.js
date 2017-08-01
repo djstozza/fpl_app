@@ -26,7 +26,7 @@ export default class WaiverPicksTable extends Component {
 
   deleteWaiverPickCol () {
     if (this.props.status == null || this.props.status != 'waiver') {
-      return;
+     return;
     }
 
     return (
@@ -46,6 +46,7 @@ export default class WaiverPicksTable extends Component {
     if (this.props.status != 'waiver') {
       return false
     }
+
     return this.props.updateWaiverPickOrder(row.id, cellValue);
   }
 
@@ -123,7 +124,7 @@ export default class WaiverPicksTable extends Component {
                     bsStyle='success'
                     onClick={ () => this.deleteWaiverPick() }
                   >
-                    Delete Draft Pick
+                    Delete Waiver Pick
                   </Button>
                 </Col>
               </Row>
@@ -150,7 +151,7 @@ export default class WaiverPicksTable extends Component {
             rowSpan='2'
             dataField='pick_number'
             dataAlign='center'
-            editable={ this.props.status == 'waiver' ? { type: 'select', options: { values: pickNumbers } } : false }
+            editable={ { type: 'select', options: { values: pickNumbers } } }
 
           >
             <span data-tip='Pick Number'>PN</span>

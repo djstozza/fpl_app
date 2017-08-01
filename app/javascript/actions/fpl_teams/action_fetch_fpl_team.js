@@ -1,4 +1,4 @@
-import { FETCH_FPL_TEAM } from './types';
+import { FETCH_FPL_TEAM } from '../types';
 import axios from 'axios';
 
 export default function fetchFplTeam (fplTeamId) {

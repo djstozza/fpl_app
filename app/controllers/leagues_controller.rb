@@ -12,14 +12,17 @@ class LeaguesController < ApplicationController
   # GET /leagues/1
   # GET /leagues/1.json
   def show
+    league_decorator = LeagueDecorator.new(@league)
     respond_to do |format|
       format.html
       format.json do
         render json: {
-          league: @league,
-          fpl_teams: @league.fpl_teams,
-          users: @league.users,
-          commissioner: @league.commissioner,
+          league: league_decorator,
+          fpl_teams: league_decorator.fpl_teams,
+          users: league_decorator.users,
+          commissioner: league_decorator.commissioner,
+          picked_players: league_decorator.picked_players,
+          unpicked_players: league_decorator.unpicked_players,
           current_user: current_user
         }
       end

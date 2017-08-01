@@ -17,7 +17,7 @@ class LeagueDecorator < SimpleDelegator
   end
 
   def unpicked_players
-    PlayersDecorator.new(Player.all).all_data - picked_players
+    PlayersDecorator.new(Player.where.not(id: players.pluck(:id))).all_data
   end
 
   def current_draft_pick

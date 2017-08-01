@@ -3,10 +3,12 @@ Rails.application.routes.draw do
   resources :list_positions, only: :show
 
   resources :fpl_team_lists, only: [:show, :update] do
-    resources :waiver_picks, only: [:index, :create, :update, :destroy]
+    resources :waiver_picks, only: [:create, :update, :destroy]
   end
 
   resources :fpl_teams, except: [:new, :create, :destroy] do
+    resources :fpl_team_lists, only: [:index, :update]
+    resources :waiver_picks, only: :index
     resources :trades, only: :create
   end
 
