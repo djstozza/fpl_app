@@ -5,7 +5,10 @@ class FplTeamsController < ApplicationController
   # GET /fpl_teams
   # GET /fpl_teams.json
   def index
-    @fpl_teams = FplTeam.all
+    respond_to do |format|
+      format.html
+      format.json { render json: UserDecorator.new(current_user).fpl_team_league_statuses }
+    end
   end
 
   # GET /fpl_teams/1
@@ -43,16 +46,6 @@ class FplTeamsController < ApplicationController
         format.html { render :edit }
         format.json { render json: @fpl_team.errors, status: :unprocessable_entity }
       end
-    end
-  end
-
-  # DELETE /fpl_teams/1
-  # DELETE /fpl_teams/1.json
-  def destroy
-    @fpl_team.destroy
-    respond_to do |format|
-      format.html { redirect_to fpl_teams_url, notice: 'Fpl team was successfully destroyed.' }
-      format.json { head :no_content }
     end
   end
 

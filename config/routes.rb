@@ -12,7 +12,7 @@ Rails.application.routes.draw do
     resources :trades, only: :create
   end
 
-  resources :leagues, except: :destroy do
+  resources :leagues, except: [:index, :destroy] do
     resources :draft_picks, except: :destroy
   end
 

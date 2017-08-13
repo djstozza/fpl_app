@@ -21,6 +21,7 @@ import Player from '../containers/player.js';
 import League from '../containers/league.js';
 import DraftPicks from '../containers/draft_picks.js';
 import FplTeam from '../containers/fpl_team.js';
+import FplTeams from '../containers/fpl_teams.js';
 import thunk from 'redux-thunk';
 import reducers from '../reducers';
 import axios from 'axios';
@@ -56,11 +57,12 @@ export default class App extends Component {
                 <Route exact path="/" component={ Rounds } />
                 <Route exact path='/rounds' component={ Rounds } />
                 <Route exact path='/rounds/:id(\d+)' component={ Rounds } />
-                <Route path='/teams/:id' component={ Team } />
+                <Route path='/teams/:id(\d+)' component={ Team } />
                 <Route exact path='/players' component={ Players } />
-                <Route exact path='/players/:id' component={ Player } />
+                <Route exact path='/players/:id(\d+)' component={ Player } />
                 <Route exact path='/leagues/:id(\d+)' component={ League } />
                 <Route exact path='/leagues/:id/draft_picks' component={ DraftPicks } />
+                <Route exact path='/fpl_teams' component={ FplTeams } />
                 <Route exact path='/fpl_teams/:id(\d+)' component={ FplTeam } />
              </Col>
             </Row>

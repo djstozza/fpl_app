@@ -266,7 +266,7 @@ class FplTeam extends Component {
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps (state) {
   return {
     league: state.FplTeamReducer.league,
     fpl_team: state.FplTeamReducer.fpl_team,

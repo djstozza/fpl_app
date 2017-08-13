@@ -3,12 +3,6 @@ class LeaguesController < ApplicationController
   before_action :set_fpl_team, only: [:edit, :update]
   before_action :authenticate_user!
 
-  # GET /leagues
-  # GET /leagues.json
-  def index
-    @leagues = current_user.leagues
-  end
-
   # GET /leagues/1
   # GET /leagues/1.json
   def show

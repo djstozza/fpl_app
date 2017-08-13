@@ -3,10 +3,9 @@ import axios from 'axios';
 
 export default function fetchFplTeam (fplTeamId) {
   return dispatch => {
-    axios.get(`/fpl_teams/${fplTeamId}.json`)
-      .then(res => {
-        dispatch(fetchFplTeamAsync(res.data));
-      });
+    axios.get(`/fpl_teams/${fplTeamId}.json`).then(res => {
+      dispatch(fetchFplTeamAsync(res.data));
+    });
   }
 }
 
