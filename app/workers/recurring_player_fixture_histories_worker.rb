@@ -11,7 +11,7 @@ class RecurringPlayerFixtureHistoriesWorker
       pfhs = HTTParty.get("https://fantasy.premierleague.com/drf/element-summary/#{player.id}")['history']
                      .select { |pfh| pfh['minutes'] > 0 }
       next unless pfhs
-
+      player.update(player_fixture_histories: pfhs)
       player_stats_arr.each do |stat|
         player.update(stat =>  pfhs.inject(0) { |sum, pfh| sum + pfh[stat] })
       end

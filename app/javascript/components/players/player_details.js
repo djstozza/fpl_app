@@ -11,22 +11,27 @@ export default class PlayerDetails extends Component {
     let player = this.props.player
     let previousRound = _.find(this.props.rounds, function(obj) {
       return obj.is_previous == true
-    })
+    });
+
     let currentRound = _.find(this.props.rounds, function (obj) {
       return obj.is_current == true
-    })
+    });
+
     let previousFixtureHistory = _.find(player.player_fixture_histories, function (obj) {
-      return obj.round == previousRound.id
-    })
+      if (previousRound != null) {
+        return obj.round == previousRound.id
+      }
+    });
+
     let currentFixtureHistory = _.find(player.player_fixture_histories, function (obj) {
       return obj.round == currentRound.id
-    })
+    });
 
     let previousRoundLink = () => {
       if (previousFixtureHistory != null) {
         return (
           <Link to={ `/rounds/${previousFixtureHistory.round}` }>{ previousFixtureHistory.round }</Link>
-        )
+        );
       }
     }
 
