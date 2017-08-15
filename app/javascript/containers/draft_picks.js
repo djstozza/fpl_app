@@ -45,7 +45,22 @@ class DraftPicks extends Component {
       fpl_team: nextProps.fpl_team,
       positions: nextProps.positions
     })
-    this.showAlerts(nextProps);
+
+    if (this.props.success != nextProps.success) {
+      this.successMesssage(nextProps.success);
+    }
+
+    if (this.props.errors != nextProps.errors) {
+      this.errorMessages(nextProps.errors);
+    }
+
+    if (nextProps.current_draft_pick != this.props.current_draft_pick) {
+      this.yourTurn(nextProps.current_draft_pick, nextProps.fpl_team);
+    }
+
+    if (nextProps.league && nextProps.league.active && !this.state.alertShown) {
+      this.successMessage('The draft has been completed.');
+    }
   }
 
   shouldComponentUpdate (nextProps, nextState) {
@@ -63,19 +78,7 @@ class DraftPicks extends Component {
         })
         self.showDraftPickInfo(data.info);
       }
-    })
-  }
-
-  showAlerts (nextProps) {
-    if (nextProps.errors) {
-      this.errorMessages(nextProps.errors)
-    } else if (nextProps.success) {
-      this.successMessage(nextProps.success);
-    } else if (nextProps.current_draft_pick && nextProps.fpl_team) {
-      this.yourTurn(nextProps.current_draft_pick.fpl_team_id, nextProps.fpl_team.id);
-    } else if (nextProps.league && nextProps.league.active && !this.state.alertShown) {
-      this.successMessage('The draft has been completed.');
-    }
+    });
   }
 
   errorMessages (errors) {
@@ -96,13 +99,10 @@ class DraftPicks extends Component {
       effect: 'bouncyflip',
       timeout: 5000
     });
-    this.setState({
-      alertShown: true
-    })
   }
 
-  yourTurn (curren_pick_fpl_team_id, fpl_team_id) {
-    if (curren_pick_fpl_team_id == fpl_team_id) {
+  yourTurn (curren_pick_fpl_team, fpl_team) {
+    if (curren_pick_fpl_team.id == fpl_team.id) {
       return (
         Alert.info("It's your turn to pick a player", {
           position: 'top',
