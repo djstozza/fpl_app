@@ -9,6 +9,7 @@ class RecurringPlayerFixtureHistoriesWorker
   def perform
     Player.all.each do |player|
       player_json = HTTParty.get("https://fantasy.premierleague.com/drf/element-summary/#{player.id}")
+      next unless player_json
       player.update(player_past_histories: player_json['history_past'])
       fixture_histories = player_json['history'].select { |pfh| pfh['minutes'] > 0 }
       next unless fixture_histories

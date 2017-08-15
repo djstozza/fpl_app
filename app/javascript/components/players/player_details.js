@@ -55,6 +55,14 @@ export default class PlayerDetails extends Component {
       }
     }
 
+    let chanceOfPlayingRound = (roundChance) => {
+      if (roundChance != null) {
+        return roundChance
+      } else if (roundChance == null && player.status == 'a') {
+        return 100
+      }
+    }
+
     const statuses = {
       a: { name: 'check', title: 'Available' },
       n: { name: 'warning', title: 'Unavailable' },
@@ -105,9 +113,9 @@ export default class PlayerDetails extends Component {
               <tr>
                 <th>Availability</th>
               <th>This Round</th>
-                <td>{ player.chance_of_playing_this_round }%</td>
+                <td>{ chanceOfPlayingRound(player.chance_of_playing_this_round) }%</td>
                 <th>Next Round</th>
-                <td>{ player.chance_of_playing_next_round }%</td>
+                <td>{ chanceOfPlayingRound(player.chance_of_playing_next_round) }%</td>
               </tr>
               <tr>
                 <th>Influence</th>
