@@ -19,6 +19,9 @@ class DraftPicks extends Component {
   constructor(props) {
     super(props)
     this.draftPlayer = this.draftPlayer.bind(this);
+    this.successMesssage = this.successMessage.bind(this);
+    this.errorMessages = this.errorMessages.bind(this);
+    this.yourTurn = this.yourTurn.bind(this);
   }
 
   draftPlayer (playerId) {
