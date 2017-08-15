@@ -1,6 +1,6 @@
 class LeagueDecorator < SimpleDelegator
   def all_draft_picks
-    draft_picks.order(:pick_number).joins(:player).pluck_to_hash(
+    draft_picks.order(:pick_number).includes(:player).pluck_to_hash(
       :id,
       :pick_number,
       :fpl_team_id,
