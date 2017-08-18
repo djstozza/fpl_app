@@ -47,7 +47,8 @@ class FplTeam extends Component {
     axios.get(`/fpl_team_lists/${fplTeamList.id}.json`).then((res) => {
       this.setState({
         line_up: res.data.line_up,
-        editable: res.data.editable
+        editable: res.data.editable,
+        round: res.data.round
       })
     })
   }
