@@ -31,7 +31,7 @@ class Rounds extends Component {
     }
     this.props.fetchRounds();
     this.props.fetchTeams();
-
+    const self = this;
     setInterval(function () {
       if (this.state.round.is_current && !this.state.round.data_checked) {
         self.dataSource();

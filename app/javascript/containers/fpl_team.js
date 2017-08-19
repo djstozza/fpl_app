@@ -47,10 +47,10 @@ class FplTeam extends Component {
     axios.get(`/fpl_team_lists/${fplTeamList.id}.json`).then((res) => {
       this.setState({
         line_up: res.data.line_up,
-        editable: res.data.editable,
+        status: res.data.status,
         round: res.data.round
-      })
-    })
+      });
+    });
   }
 
   substitutePlayer (playerId, targetId) {
@@ -219,6 +219,7 @@ class FplTeam extends Component {
     if (this.state.fpl_team.user_id != this.state.current_user.id || this.state.line_up == '') {
       return;
     }
+
     return (
       <div>
         <Button onClick={ () => this.setAction('selectLineUp') }>Select starting line up</Button>
