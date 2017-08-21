@@ -1,7 +1,7 @@
 :schedule:
   RecurringRoundWorker:
-    cron: '0 */3 * * *'
-    description: 'Update round stats every 3 hours'
+    cron: '0 */1 * * *'
+    description: 'Update round stats every hour'
 
   RecurringFixtureWorker:
       cron: '*/5 11-23 * * *'
@@ -26,3 +26,7 @@
   RecurringWaiverPicksWorker:
     cron: '0 */1 * * *'
     description: 'Check that the date is the same as the waier deadline so that picks can be processed.'
+
+  RecurringScoringWorker:
+    cron: '0 */1 * * *'
+    description: 'Update scoring every hour'
