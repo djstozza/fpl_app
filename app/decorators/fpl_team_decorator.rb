@@ -8,7 +8,7 @@ class FplTeamDecorator < SimpleDelegator
 
   def fpl_team_list_rounds
     return [] if fpl_team_lists.empty?
-    RoundsDecorator.new(Round.where(id: fpl_team_lists.pluck(:round_id)))
+    RoundsDecorator.new(Round.where(id: fpl_team_lists.pluck(:round_id)).sort)
   end
 
   def current_fpl_team_list
