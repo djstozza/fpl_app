@@ -55,7 +55,7 @@ RSpec.describe ProcessWaiverPicksWorker do
     end
 
     League.first.update(active: true)
-    RecurringScoringWorker.new.perform
+    ScoringWorker.new.perform
     i = 10
     10.times do
       instance_variable_set(

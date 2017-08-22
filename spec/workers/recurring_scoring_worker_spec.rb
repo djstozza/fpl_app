@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe RecurringScoringWorker do
+RSpec.describe ScoringWorker do
   before do
     Round.create(name: 'Gameweek 1', is_current: true, data_checked: true, deadline_time: 4.days.ago)
     Round.create(
@@ -57,7 +57,7 @@ RSpec.describe RecurringScoringWorker do
   end
 
   it 'scores and ranks the fpl team lists and fpl teams' do
-    RecurringScoringWorker.new.perform
+    ScoringWorker.new.perform
     10.times do
       i = 0
       j = i + 1
@@ -75,7 +75,7 @@ RSpec.describe RecurringScoringWorker do
 
   it 'does not perform scoring if the the round is not data checked' do
     Round.first.update(data_checked: false)
-    RecurringScoringWorker.new.perform
+    ScoringWorker.new.perform
     expect(FplTeam.all.all? { |fpl_team| fpl_team.rank.nil? }).to be_truthy
     expect(FplTeam.all.all? { |fpl_team| fpl_team.fpl_team_lists.count == 1}).to be_truthy
     expect(FplTeamList.all.all? { |fpl_team_list| fpl_team_list.rank.nil? }).to be_truthy
@@ -86,7 +86,7 @@ RSpec.describe RecurringScoringWorker do
     FplTeamList.all.sort.each_with_index { |fpl_team_list, i| fpl_team_list.update(rank: i + 1) }
     FplTeam.order(rank: :desc).each_with_index { |fpl_team, i| fpl_team.update(total_score: i) }
     FplTeamList.order(rank: :desc).each_with_index { |fpl_team_list, i| fpl_team_list.update(total_score: i) }
-    RecurringScoringWorker.new.perform
+    ScoringWorker.new.perform
     expect(FplTeam.all.all? { |fpl_team| fpl_team.fpl_team_lists.count == 1}).to be_truthy
   end
 end

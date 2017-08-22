@@ -7,6 +7,7 @@ import axios from 'axios';
 import fetchFplTeam from '../actions/fpl_teams/action_fetch_fpl_team.js';
 import fetchTeams from '../actions/action_fetch_teams.js';
 import fetchFplTeamLists from '../actions/fpl_team_lists/action_fetch_fpl_team_lists.js';
+import fetchFplTeamList from '../actions/fpl_team_lists/action_fetch_fpl_team_list.js';
 import updateFplTeamList from '../actions/fpl_team_lists/action_update_fpl_team_list.js';
 import createWaiverPick from '../actions/waiver_picks/action_create_waiver_pick.js';
 import fetchWaiverPicks from '../actions/waiver_picks/action_fetch_waiver_picks.js';
@@ -33,6 +34,7 @@ class FplTeam extends Component {
     this.waiverPicks = this.waiverPicks.bind(this);
     this.updateWaiverPickOrder = this.updateWaiverPickOrder.bind(this);
     this.deleteWaiverPick = this.deleteWaiverPick.bind(this);
+    this.dataSource = this.dataSource.bind(this);
     this.state = {
       action: 'selectLineUp',
       fplTeamId: this.props.match.params.id
@@ -42,15 +44,9 @@ class FplTeam extends Component {
   dataSource (roundId) {
     let fplTeamList = _.find(this.state.fpl_team_lists, (obj) => {
       return obj.round_id == roundId
-    })
-
-    axios.get(`/fpl_team_lists/${fplTeamList.id}.json`).then((res) => {
-      this.setState({
-        line_up: res.data.line_up,
-        status: res.data.status,
-        round: res.data.round
-      });
     });
+
+    this.props.fetchFplTeamList(this.props.match.params.id, fplTeamList.id);
   }
 
   substitutePlayer (playerId, targetId) {
@@ -84,6 +80,9 @@ class FplTeam extends Component {
   }
 
   sortWaiverPicks () {
+    if (this.state.waiver_picks == null) {
+      return;
+    }
     if (this.state.waiver_picks.length == 0 || this.state.fpl_team.user_id != this.state.current_user.id) {
       return;
     }
@@ -115,6 +114,7 @@ class FplTeam extends Component {
   }
 
   componentWillReceiveProps (nextProps) {
+    console.log(nextProps);
     this.setState({
       league: nextProps.league,
       fpl_team: nextProps.fpl_team,
@@ -129,7 +129,8 @@ class FplTeam extends Component {
       positions: nextProps.positions,
       round: nextProps.round,
       rounds: nextProps.rounds,
-      teams: nextProps.teams
+      teams: nextProps.teams,
+      score: nextProps.score
     });
     if (this.props.success != nextProps.success) {
       this.successMesssage(nextProps.success);
@@ -216,6 +217,11 @@ class FplTeam extends Component {
     if (this.state.status == null) {
       return;
     }
+
+    if (new Date(this.state.round.deadline_time) < new Date()) {
+      return;
+    }
+
     if (this.state.fpl_team.user_id != this.state.current_user.id || this.state.line_up == '') {
       return;
     }
@@ -226,6 +232,18 @@ class FplTeam extends Component {
         { this.tradeButtons() }
       </div>
     )
+  }
+
+  roundScore () {
+    if (this.state.score == null) {
+      return;
+    }
+
+    if (!this.state.round.data_checked) {
+      return `Provisional round score: ${this.state.score}`
+    } else {
+      return `Round score: ${this.state.score}`
+    }
   }
 
   render () {
@@ -240,6 +258,7 @@ class FplTeam extends Component {
 
           <RoundsNav rounds={ this.state.rounds } round={ this.state.round } onChange={ this.dataSource } />
           { this.showButtons() }
+          <h4>{ this.roundScore() }</h4>
           <Row className='clearfix'>
             <Col sm={ this.setTeamTableCol() } >
               <TeamListTable
@@ -283,6 +302,7 @@ function mapStateToProps (state) {
     positions: state.FplTeamReducer.positions,
     round: state.FplTeamListsReducer.round,
     rounds: state.FplTeamListsReducer.rounds,
+    score: state.FplTeamListsReducer.score,
     teams: state.TeamsReducer,
     success: state.FplTeamListsReducer.success || state.TradePlayersReducer.success || state.WaiverPicksReducer.success,
     errors: state.FplTeamListsReducer.errors || state.TradePlayersReducer.errors || state.WaiverPicksReducer.errors
@@ -294,6 +314,7 @@ function mapDispatchToProps(dispatch) {
     fetchFplTeam: fetchFplTeam,
     fetchTeams: fetchTeams,
     fetchFplTeamLists: fetchFplTeamLists,
+    fetchFplTeamList: fetchFplTeamList,
     updateFplTeamList: updateFplTeamList,
     tradePlayers: tradePlayers,
     createWaiverPick: createWaiverPick,

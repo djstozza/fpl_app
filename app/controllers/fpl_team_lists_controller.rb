@@ -2,7 +2,7 @@ class FplTeamListsController < ApplicationController
   before_action :authenticate_user!
   skip_before_action :verify_authenticity_token
   before_action :set_fpl_team_list, only: [:show, :update]
-  before_action :set_fpl_team, only: [:index, :update]
+  before_action :set_fpl_team, only: [:index, :show, :update]
 
   # GET /fpl_teams/1/fpl_team_lists
   # GET /fpl_teams/1/fpl_team_lists.json
@@ -10,7 +10,6 @@ class FplTeamListsController < ApplicationController
     fpl_team_decorator = FplTeamDecorator.new(@fpl_team)
     rounds_decorator = fpl_team_decorator.fpl_team_list_rounds
     respond_to do |format|
-      format.html
       format.json { render json: fpl_team_list_hash }
     end
   end
@@ -20,13 +19,7 @@ class FplTeamListsController < ApplicationController
   def show
     rounds_decorator = RoundsDecorator.new(Round.all)
     respond_to do |format|
-      format.json do
-        render json: {
-          line_up: ListPositionsDecorator.new(@fpl_team_list.list_positions).list_position_arr,
-          status: (rounds_decorator.current_round_status if @fpl_team_list.round.id == rounds_decorator.current_round.id),
-          round: @fpl_team_list.round
-        }
-      end
+      format.json { render json: fpl_team_list_hash }
     end
   end
 
@@ -71,16 +64,22 @@ class FplTeamListsController < ApplicationController
 
   def fpl_team_list_hash
     fpl_team_decorator = FplTeamDecorator.new(@fpl_team)
+    fpl_team_list_decorator = FplTeamListDecorator.new(@fpl_team_list || fpl_team_decorator.current_fpl_team_list)
     rounds_decorator = fpl_team_decorator.fpl_team_list_rounds
+    line_up = if @fpl_team_list
+                ListPositionsDecorator.new(@fpl_team_list.list_positions).list_position_arr
+              else
+                fpl_team_decorator.current_line_up
+              end
     {
       rounds: rounds_decorator,
-      round: (rounds_decorator.current_round if rounds_decorator),
-      current_round_status: (rounds_decorator.current_round_status if rounds_decorator),
+      round: fpl_team_list_decorator.round,
       fpl_team_lists: fpl_team_decorator.fpl_team_lists,
-      fpl_team_list: fpl_team_decorator.current_fpl_team_list,
-      line_up: fpl_team_decorator.current_line_up,
+      fpl_team_list: fpl_team_list_decorator,
+      line_up: line_up,
       status: rounds_decorator.current_round_status,
-      unpicked_players: LeagueDecorator.new(@fpl_team.league).unpicked_players
+      unpicked_players: LeagueDecorator.new(@fpl_team.league).unpicked_players,
+      score: fpl_team_list_decorator.score
     }
   end
 end

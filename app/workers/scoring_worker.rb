@@ -1,6 +1,6 @@
 require 'sidekiq'
 
-class RecurringScoringWorker
+class ScoringWorker
   include HTTParty
   include Sidekiq::Worker
   sidekiq_options retry: 2
