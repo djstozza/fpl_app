@@ -38,7 +38,9 @@ export default class TradePlayersTable extends Component {
             <h3>Waiver (In)</h3>
             <p>(2) Click the row of the player you wish to trade in for this waiver pick.</p>
           </div>
-        )
+        );
+      case 'pastRound':
+        return;
     }
   }
 
@@ -65,7 +67,7 @@ export default class TradePlayersTable extends Component {
   }
 
   onRowSelect (row, isSelected, e) {
-    if (this.props.status != 'trade') {
+    if (this.props.status != 'trade' || this.props.action == 'pastRound') {
       return;
     }
     if (this.props.action == 'tradePlayers' || this.props.action == 'waiverPicks') {

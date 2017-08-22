@@ -83,6 +83,7 @@ class FplTeam extends Component {
     if (this.state.waiver_picks == null) {
       return;
     }
+
     if (this.state.waiver_picks.length == 0 || this.state.fpl_team.user_id != this.state.current_user.id) {
       return;
     }
@@ -114,7 +115,6 @@ class FplTeam extends Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    console.log(nextProps);
     this.setState({
       league: nextProps.league,
       fpl_team: nextProps.fpl_team,
@@ -132,6 +132,17 @@ class FplTeam extends Component {
       teams: nextProps.teams,
       score: nextProps.score
     });
+
+    if (nextProps.round != null && new Date(nextProps.round.deadline_time) < new Date()) {
+      this.setState({
+        action: 'pastRound'
+      });
+    } else {
+      this.setState({
+        action: 'selectLineUp'
+      });
+    }
+
     if (this.props.success != nextProps.success) {
       this.successMesssage(nextProps.success);
     }
@@ -218,7 +229,7 @@ class FplTeam extends Component {
       return;
     }
 
-    if (new Date(this.state.round.deadline_time) < new Date()) {
+    if (this.state.action == 'pastRound') {
       return;
     }
 
