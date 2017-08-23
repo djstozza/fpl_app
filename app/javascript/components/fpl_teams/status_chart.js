@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Bar } from 'react-chartjs-2';
+import { Line } from 'react-chartjs-2';
 import _ from 'underscore';
 
 export default class StatusChart extends Component {
@@ -23,7 +23,7 @@ export default class StatusChart extends Component {
         pointHoverBorderColor: '#ff4d4d',
         yAxisID: 'y-axis-2'
       },{
-        type: 'bar',
+        type: 'line',
         label: 'Score',
         data: _.map(this.props.fpl_team_lists, (obj) => { return obj.total_score} ),
         fill: false,
@@ -79,6 +79,9 @@ export default class StatusChart extends Component {
               display: true,
               labelString: 'Score',
             },
+            ticks: {
+              beginAtZero: true
+            }
           },
           {
             type: 'linear',
@@ -110,7 +113,7 @@ export default class StatusChart extends Component {
     return (
       <div>
         <h2>Team Status</h2>
-        <Bar
+        <Line
           data={ this.data() }
           options={ this.options() }
         />
