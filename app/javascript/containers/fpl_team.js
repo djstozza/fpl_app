@@ -18,6 +18,7 @@ import RoundsNav from '../components/rounds/rounds_nav.js';
 import TeamListTable from '../components/fpl_teams/team_list_table.js';
 import TradePlayersTable from '../components/fpl_teams/trade_players_table.js';
 import WaiverPicksTable from '../components/fpl_teams/waiver_picks_table.js';
+import StatusChart from '../components/fpl_teams/status_chart.js';
 import Alert from 'react-s-alert';
 import _ from 'underscore';
 
@@ -118,6 +119,7 @@ class FplTeam extends Component {
     this.setState({
       league: nextProps.league,
       fpl_team: nextProps.fpl_team,
+      fpl_teams: nextProps.fpl_teams,
       current_user: nextProps.current_user,
       unpicked_players: nextProps.unpicked_players,
       picked_players: nextProps.picked_players,
@@ -292,6 +294,15 @@ class FplTeam extends Component {
               { this.sortWaiverPicks() }
             </Col>
           </Row>
+          <Row className='clearfix'>
+            <Col sm={12}>
+              <StatusChart
+                fpl_team_lists={ this.state.fpl_team_lists }
+                rounds={ this.state.rounds }
+                fpl_teams={ this.state.fpl_teams }
+              />
+            </Col>
+          </Row>
         </div>
       )
     }
@@ -302,6 +313,7 @@ function mapStateToProps (state) {
   return {
     league: state.FplTeamReducer.league,
     fpl_team: state.FplTeamReducer.fpl_team,
+    fpl_teams: state.FplTeamReducer.fpl_teams,
     current_user: state.FplTeamReducer.current_user,
     picked_players: state.FplTeamReducer.picked_players,
     unpicked_players: state.FplTeamListsReducer.unpicked_players,

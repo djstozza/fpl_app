@@ -22,7 +22,8 @@ class FplTeamsController < ApplicationController
       format.json do
         render json: {
           fpl_team: @fpl_team,
-          league: @fpl_team.league,
+          fpl_teams: league_decorator.fpl_teams,
+          league: league_decorator,
           picked_players: league_decorator.picked_players,
           positions: Position.all,
           current_user: current_user
