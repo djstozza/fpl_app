@@ -11,7 +11,7 @@ export default class StatusChart extends Component {
     return {
       labels: _.map(this.props.rounds, (obj) => { return obj.id }),
       datasets: [{
-        label: 'Rank',
+        label: 'Round Rank',
         type:'line',
         data: _.map(this.props.fpl_team_lists, (obj) => { return obj.rank }),
         fill: false,
@@ -22,7 +22,21 @@ export default class StatusChart extends Component {
         pointHoverBackgroundColor: '#ff4d4d',
         pointHoverBorderColor: '#ff4d4d',
         yAxisID: 'y-axis-2'
-      },{
+      },
+      {
+        label: 'Overall Rank',
+        type:'line',
+        data: _.map(this.props.fpl_team_lists, (obj) => { return obj.overall_rank }),
+        fill: false,
+        borderColor: '#3366ff',
+        backgroundColor: '#3366ff',
+        pointBorderColor: '#3366ff',
+        pointBackgroundColor: '#3366ff',
+        pointHoverBackgroundColor: '#3366ff',
+        pointHoverBorderColor: '#3366ff',
+        yAxisID: 'y-axis-2'
+      },
+      {
         type: 'line',
         label: 'Score',
         data: _.map(this.props.fpl_team_lists, (obj) => { return obj.total_score} ),

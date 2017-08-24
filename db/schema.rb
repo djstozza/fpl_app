@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170711221047) do
+ActiveRecord::Schema.define(version: 20170824054541) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -56,9 +56,10 @@ ActiveRecord::Schema.define(version: 20170711221047) do
     t.integer  "round_id"
     t.integer  "total_score"
     t.integer  "rank"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
     t.boolean  "active"
+    t.integer  "overall_rank"
     t.index ["fpl_team_id"], name: "index_fpl_team_lists_on_fpl_team_id", using: :btree
     t.index ["round_id"], name: "index_fpl_team_lists_on_round_id", using: :btree
   end
