@@ -80,26 +80,13 @@ export default class PlayersTable extends Component {
   }
 
   render () {
-    const positionText={ 1: 'GKP', 2: 'DEF', 3: 'MID', 4: 'FWD' }
-    const teamText = _.object(_.map(this.props.teams, function (obj) {
-      return [obj.id, obj.short_name]
+    const selectPositionText = _.object(_.map(this.props.positions, function (obj) {
+      return [obj.singular_name_short, obj.singular_name_short]
     }));
 
     const selectTeamText = _.object(_.map(this.props.teams, function (obj) {
       return [obj.short_name, obj.name]
     }).sort());
-
-    let positionTextCell = function (cell, row) {
-      return positionText[cell]
-    }
-
-    let teamTextCell = function (cell, row) {
-      return teamText[cell]
-    }
-
-    function filterType (cell, row) {
-      return teamText[cell]
-    }
 
     return (
       <div>
@@ -220,21 +207,18 @@ export default class PlayersTable extends Component {
           </TableHeaderColumn>
           <TableHeaderColumn dataField='id' isKey={ true } hidden/>
           <TableHeaderColumn
-            dataField='team_id'
+            dataField='short_name'
             dataAlign='center'
             dataSort
             hidden={ this.props.teams == null }
-            dataFormat={ teamTextCell }
-            filterValue={ filterType }
             filter={ { type: 'SelectFilter', options: selectTeamText, placeholder: ' ' } }>
             <span data-tip='Team'>T</span>
           </TableHeaderColumn>
           <TableHeaderColumn
-            dataField='position_id'
+            dataField='singular_name_short'
             dataAlign='center'
             dataSort
-            dataFormat={ positionTextCell }
-            filter={ { type: 'SelectFilter', options: positionText, placeholder: ' ' } }>
+            filter={ { type: 'SelectFilter', options: selectPositionText, placeholder: ' ' } }>
             <span data-tip='Position'>Pos</span>
           </TableHeaderColumn>
           <TableHeaderColumn

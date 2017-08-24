@@ -123,24 +123,12 @@ export default class TradePlayersTable extends Component {
 
   render () {
     const positionText= _.object(_.map(this.props.positions, function (obj) {
-      return [obj.id, obj.singular_name_short]
+      return [obj.singular_name_short, obj.singular_name_short]
     }));
 
     const selectTeamText = _.object(_.map(this.props.teams, function (obj) {
       return [obj.short_name, obj.name]
     }).sort());
-
-    const teamText = _.object(_.map(this.props.teams, function (obj) {
-      return [obj.id, obj.short_name]
-    }));
-
-    let positionTextCell = function (cell, row) {
-      return positionText[cell]
-    }
-
-    let teamTextCell = function (cell, row) {
-      return teamText[cell]
-    }
 
     const statuses = {
       a: { name: 'check', title: 'Available' },
@@ -193,20 +181,16 @@ export default class TradePlayersTable extends Component {
             <span data-tip='Name'>N</span>
           </TableHeaderColumn>
           <TableHeaderColumn
-            dataField='team_id'
+            dataField='short_name'
             dataAlign='center'
             dataSort
-            dataFormat={ teamTextCell }
-            filterValue={ teamTextCell }
             filter={ { type: 'SelectFilter', options: selectTeamText, placeholder: ' ' } }>
             <span data-tip='Team'>T</span>
           </TableHeaderColumn>
           <TableHeaderColumn
-            ref='positionId'
-            dataField='position_id'
+            dataField='singular_name_short'
             dataAlign='center'
             dataSort
-            dataFormat={ positionTextCell }
             filter={ {
               type: 'SelectFilter',
               options: positionText,
@@ -214,6 +198,14 @@ export default class TradePlayersTable extends Component {
             }
           }>
             <span data-tip='Position'>Pos</span>
+          </TableHeaderColumn>
+          <TableHeaderColumn
+            dataField='total_points'
+            dataAlign='center'
+            dataSort
+            filter={ { type: 'NumberFilter', placeholder: ' ' } }
+          >
+            <span data-tip='Total Points (last season)'>TP</span>
           </TableHeaderColumn>
           <TableHeaderColumn
             dataField='status'

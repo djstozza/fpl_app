@@ -14,24 +14,16 @@ export default class DraftPicksTable extends Component {
   }
 
   render () {
-    const fplTeamText = _.object(_.map(this.props.fpl_teams, function (obj) {
-      return [obj.id, obj.name]
-    }));
-
-    const teamNameText = _.object(_.map(this.props.teams, function (obj) {
-      return [obj.id, obj.short_name]
-    }))
-
-    const positionText = _.object(_.map(this.props.positions, function (obj) {
-      return [obj.id, obj.singular_name_short]
+    const selectPositionText = _.object(_.map(this.props.positions, function (obj) {
+      return [obj.singular_name_short, obj.singular_name_short]
     }))
 
     const selectTeamText = _.object(_.map(this.props.teams, function (obj) {
-      return [obj.id, obj.name]
+      return [obj.short_name, obj.name]
     }).sort());
 
     const selectFplTeamText = _.object(_.map(this.props.fpl_teams, function (obj) {
-      return [obj.id, obj.name]
+      return [obj.name, obj.name]
     }).sort());
 
     let fplTeamTextCell = function (cell, row) {
@@ -62,10 +54,9 @@ export default class DraftPicksTable extends Component {
             <span data-tip='Pick Number'>PN</span>
           </TableHeaderColumn>
           <TableHeaderColumn
-            dataField='fpl_team_id'
+            dataField='fpl_team_name'
             dataAlign='center'
             filter={ { type: 'SelectFilter', placeholder: ' ', options: selectFplTeamText } }
-            dataFormat={ fplTeamTextCell }
             dataSort>
             <span data-tip='Fpl Team'>Fpl T</span>
           </TableHeaderColumn>
@@ -84,18 +75,16 @@ export default class DraftPicksTable extends Component {
             <span data-tip='Last Name'>LN</span>
           </TableHeaderColumn>
           <TableHeaderColumn
-            dataField='team_id'
+            dataField='short_name'
             dataAlign='center'
-            dataFormat={ teamNameTextCell }
             filter={ { type: 'SelectFilter', options: selectTeamText, placeholder: ' ', condition: 'eq' } }
             dataSort>
             <span data-tip='Team'>T</span>
           </TableHeaderColumn>
           <TableHeaderColumn
-            dataField='position_id'
+            dataField='singular_name_short'
             dataAlign='center'
-            dataFormat={ positionTextCell }
-            filter={ { type: 'SelectFilter', options: positionText, placeholder: ' ', condition: 'eq' } }
+            filter={ { type: 'SelectFilter', options: selectPositionText, placeholder: ' ', condition: 'eq' } }
             dataSort>
             <span data-tip='Position'>P</span>
           </TableHeaderColumn>

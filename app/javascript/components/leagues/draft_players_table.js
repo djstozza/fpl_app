@@ -76,29 +76,13 @@ export default class DraftPlayersTable extends Component {
   }
 
   render () {
-    const positionText = _.object(_.map(this.props.positions, function (obj) {
-      return [obj.id, obj.singular_name_short]
+    const selectPositionText = _.object(_.map(this.props.positions, function (obj) {
+      return [obj.singular_name_short, obj.singular_name_short]
     }))
-
-    const teamText = _.object(_.map(this.props.teams, function (obj) {
-      return [obj.id, obj.short_name]
-    }));
 
     const selectTeamText = _.object(_.map(this.props.teams, function (obj) {
       return [obj.short_name, obj.name]
     }).sort());
-
-    let positionTextCell = function (cell, row) {
-      return positionText[cell]
-    }
-
-    let teamTextCell = function (cell, row) {
-      return teamText[cell]
-    }
-
-    function filterType (cell, row) {
-      return teamText[cell]
-    }
 
     const statuses = {
       a: { name: 'check', title: 'Available' },
@@ -147,20 +131,17 @@ export default class DraftPlayersTable extends Component {
           </TableHeaderColumn>
           <TableHeaderColumn dataField='id' isKey={ true } hidden/>
           <TableHeaderColumn
-            dataField='team_id'
+            dataField='short_name'
             dataAlign='center'
             dataSort
-            dataFormat={ teamTextCell }
-            filterValue={ filterType }
             filter={ { type: 'SelectFilter', options: selectTeamText, placeholder: ' ' } }>
             <span data-tip='Team'>T</span>
           </TableHeaderColumn>
           <TableHeaderColumn
-            dataField='position_id'
+            dataField='singular_name_short'
             dataAlign='center'
             dataSort
-            dataFormat={ positionTextCell }
-            filter={ { type: 'SelectFilter', options: positionText, placeholder: ' ' } }>
+            filter={ { type: 'SelectFilter', options: selectPositionText, placeholder: ' ' } }>
             <span data-tip='Position'>Pos</span>
           </TableHeaderColumn>
           <TableHeaderColumn
@@ -168,7 +149,7 @@ export default class DraftPlayersTable extends Component {
             dataAlign='center'
             dataSort
             filter={ { type: 'NumberFilter', placeholder: ' ' } }>
-            <span data-tip='Total Points (last season)'>TP</span>
+            <span data-tip='Total Point'>TP</span>
           </TableHeaderColumn>
           <TableHeaderColumn
             dataField='status'

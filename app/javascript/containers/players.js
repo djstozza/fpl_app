@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import { Provider } from 'react-redux';
 import fetchPlayers from '../actions/action_fetch_players.js';
 import fetchTeams from '../actions/action_fetch_teams.js';
+import fetchPositions from '../actions/action_fetch_positions.js';
 import PlayersTable from '../components/players/players_table.js';
 
 class Players extends Component {
@@ -12,6 +13,7 @@ class Players extends Component {
   }
 
   componentWillMount () {
+    this.props.fetchPositions();
     this.props.fetchTeams();
     this.props.fetchPlayers();
   }
@@ -19,7 +21,8 @@ class Players extends Component {
   componentWillReceiveProps(nextProps) {
     this.setState({
       players: nextProps.players,
-      teams: nextProps.teams
+      teams: nextProps.teams,
+      positions: nextProps.positions
     })
   }
 
@@ -32,7 +35,7 @@ class Players extends Component {
       return (
         <div>
           <h2>Players</h2>
-          <PlayersTable players={this.state.players} teams={this.state.teams} />
+          <PlayersTable players={this.state.players} teams={this.state.teams} positions={ this.state.positions }/>
         </div>
       );
     }
@@ -42,13 +45,15 @@ class Players extends Component {
 function mapStateToProps(state) {
   return {
     players: state.PlayersReducer,
-    teams: state.TeamsReducer
+    teams: state.TeamsReducer,
+    positions: state.PositionsReducer
   }
 }
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     fetchPlayers: fetchPlayers,
-    fetchTeams: fetchTeams
+    fetchTeams: fetchTeams,
+    fetchPositions: fetchPositions
   }, dispatch);
 }
 

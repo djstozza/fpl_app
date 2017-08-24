@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   mount ActionCable.server => "/cable"
   resources :list_positions, only: :show
+  resources :positions, only: :index
 
   resources :fpl_team_lists, only: [:update] do
     resources :waiver_picks, only: [:create, :update, :destroy]

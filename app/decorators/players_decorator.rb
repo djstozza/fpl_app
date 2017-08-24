@@ -1,6 +1,6 @@
 class PlayersDecorator < SimpleDelegator
   def all_data
-    pluck_to_hash(
+    joins(:position).joins(:team).pluck_to_hash(
       :id,
       :first_name,
       :last_name,
@@ -42,7 +42,10 @@ class PlayersDecorator < SimpleDelegator
       :offside,
       :target_missed,
       :points_per_game,
-      :total_points
+      :total_points,
+      :singular_name_short,
+      :short_name,
+      :name
     )
   end
 end
