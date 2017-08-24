@@ -74,7 +74,7 @@ class FplTeamListsController < ApplicationController
     {
       rounds: rounds_decorator,
       round: fpl_team_list_decorator.round,
-      fpl_team_lists: fpl_team_decorator.fpl_team_lists,
+      fpl_team_lists: fpl_team_decorator.fpl_team_lists.order(:round_id),
       fpl_team_list: fpl_team_list_decorator,
       line_up: line_up,
       status: rounds_decorator.current_round_status,
