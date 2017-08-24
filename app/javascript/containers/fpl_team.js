@@ -48,6 +48,7 @@ class FplTeam extends Component {
     });
 
     this.props.fetchFplTeamList(this.props.match.params.id, fplTeamList.id);
+    this.props.fetchWaiverPicks(this.state.fplTeamId, roundId);
   }
 
   substitutePlayer (playerId, targetId) {

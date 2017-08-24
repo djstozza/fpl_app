@@ -3,10 +3,8 @@ import axios from 'axios';
 
 export default function fetchWaiverPicks (fplTeamId, roundId) {
   return dispatch => {
-    axios({
-      method: 'get',
-      url: `/fpl_teams/${fplTeamId}/waiver_picks.json`,
-      data: {
+    axios.get(`/fpl_teams/${fplTeamId}/waiver_picks.json`, {
+      params: {
         round_id: roundId
       }
     }).then(res => {

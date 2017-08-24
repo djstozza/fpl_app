@@ -57,9 +57,12 @@ export default class TradePlayersTable extends Component {
       return;
     }
 
-    this.refs.positionId.applyFilter(nextProps.listPosition.position_id);
+    this.refs.position.applyFilter(nextProps.listPosition.singular_name_short);
 
-    if (this.props.listPosition && this.props.listPosition.position_id != nextProps.listPosition.position_id) {
+    if (
+        this.props.listPosition &&
+        this.props.listPosition.singular_name_short != nextProps.listPosition.singular_name_short
+      ) {
       this.setState({
         selected: ''
       })
@@ -67,9 +70,10 @@ export default class TradePlayersTable extends Component {
   }
 
   onRowSelect (row, isSelected, e) {
-    if (this.props.status != 'trade' || this.props.action == 'pastRound') {
+    if (this.props.action == 'pastRound') {
       return;
     }
+
     if (this.props.action == 'tradePlayers' || this.props.action == 'waiverPicks') {
       return this.selectPlayerToTrade(row);
     }
@@ -189,6 +193,7 @@ export default class TradePlayersTable extends Component {
           </TableHeaderColumn>
           <TableHeaderColumn
             dataField='singular_name_short'
+            ref='position'
             dataAlign='center'
             dataSort
             filter={ {

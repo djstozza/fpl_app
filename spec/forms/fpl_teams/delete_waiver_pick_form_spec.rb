@@ -83,7 +83,7 @@ RSpec.describe FplTeams::DeleteWaiverPickForm, type: :form do
   end
 
   it 'fails if the waiver cutoff time has passed' do
-    Round.second.update(deadline_time: 2.day.from_now - 1.minute)
+    Round.second.update(deadline_time: 1.day.from_now - 1.minute)
     waiver_pick = WaiverPick.last
     form = ::FplTeams::DeleteWaiverPickForm.new(
       fpl_team_list: FplTeamList.first,

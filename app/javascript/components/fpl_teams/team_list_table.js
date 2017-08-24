@@ -205,7 +205,16 @@ export default class TeamListTable extends Component {
           >
             <span data-tip='Last Round'>LR</span>
           </TableHeaderColumn>
-        )
+        );
+      } else if (this.props.action == 'tradePlayers' || this.props.action == 'waiverPicks') {
+        return (
+          <TableHeaderColumn
+            dataField='total_points'
+            dataAlign='center'
+          >
+            <span data-tip='Total Points'>TP</span>
+          </TableHeaderColumn>
+        );
       } else {
         return (
           <TableHeaderColumn
@@ -215,7 +224,7 @@ export default class TeamListTable extends Component {
           >
             <span data-tip='Points'>Pts</span>
           </TableHeaderColumn>
-        )
+        );
       }
     }
 

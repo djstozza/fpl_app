@@ -67,7 +67,7 @@ class FplTeams::UpdateWaiverPickOrderForm
   end
 
   def waiver_pick_update_occurring_in_valid_period
-    if Time.now > @round.deadline_time - 2.days
+    if Time.now > @round.deadline_time - 1.days
       errors.add(:base, 'The deadline time for updating waiver picks this round has passed.')
     end
   end

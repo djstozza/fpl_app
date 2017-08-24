@@ -6,7 +6,7 @@ export default function updateWaiverPickOrder (fplTeamListId, waiverPickId, newP
     axios({
       method: 'put',
       url: `/fpl_team_lists/${fplTeamListId}/waiver_picks/${waiverPickId}.json`,
-      data: {
+      params: {
         new_pick_number: newPickNumber
       }
     }).then(res => {

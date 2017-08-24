@@ -64,7 +64,7 @@ class FplTeams::CreateWaiverPickForm
   end
 
   def waiver_pick_occurring_in_valid_period
-    if Time.now > @round.deadline_time - 2.days
+    if Time.now > @round.deadline_time - 1.day
       errors.add(:base, 'The deadline time for making waiver picks this round has passed.')
     end
   end
