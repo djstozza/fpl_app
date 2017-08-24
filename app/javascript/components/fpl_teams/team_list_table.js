@@ -196,6 +196,29 @@ export default class TeamListTable extends Component {
       );
     }
 
+    let pointsColumn = () => {
+      if (this.props.action == 'selectLineUp') {
+        return (
+          <TableHeaderColumn
+            dataField='event_points'
+            dataAlign='center'
+          >
+            <span data-tip='Last Round'>LR</span>
+          </TableHeaderColumn>
+        )
+      } else {
+        return (
+          <TableHeaderColumn
+            dataField='player_fixture_histories'
+            dataAlign='center'
+            dataFormat={ pointsText }
+          >
+            <span data-tip='Points'>Pts</span>
+          </TableHeaderColumn>
+        )
+      }
+    }
+
     const selectRowProp = {
       mode: 'checkbox',
       hideSelectColumn: true,
@@ -240,13 +263,7 @@ export default class TeamListTable extends Component {
           >
             <span data-tip='Team'>T</span>
           </TableHeaderColumn>
-          <TableHeaderColumn
-            dataField='player_fixture_histories'
-            dataAlign='center'
-            dataFormat={ pointsText }
-          >
-            <span data-tip='Points'>Pts</span>
-          </TableHeaderColumn>
+          { pointsColumn() }
           <TableHeaderColumn
             dataField='status'
             dataAlign='center'
