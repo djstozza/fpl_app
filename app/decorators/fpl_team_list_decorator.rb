@@ -8,6 +8,6 @@ class FplTeamListDecorator < SimpleDelegator
       list_position.player.player_fixture_histories.find { |history| history['round'] == round.id }
     end
     return if arr.all? { |x| x.nil? }
-    arr.inject(0) { |sum, x| sum + x }
+    arr.inject(0) { |sum, x| sum + x['total_points'] }
   end
 end
