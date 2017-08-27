@@ -20,7 +20,7 @@ export default class UserFplTeamsTable extends Component {
     return (
       <div>
         <BootstrapTable data={ this.props.fpl_teams } striped hover>
-          <TableHeaderColumn dataField='name' dataAlign='center' dataFormat={ this.leagueLinkCellText } isKey >
+          <TableHeaderColumn dataField='name' dataAlign='center' dataFormat={ this.fplTeamLinkCellText } isKey >
             <span data-tip='Team Name'>TN</span>
           </TableHeaderColumn>
           <TableHeaderColumn dataField='league_name' dataAlign='center' dataFormat={ this.leagueLinkCellText } >
