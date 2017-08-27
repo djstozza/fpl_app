@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import { Provider } from 'react-redux';
 import { Row, Col, Button } from 'react-bootstrap';
 import axios from 'axios';
+import UserFplTeamsTable from '../components/fpl_teams/user_fpl_teams_table.js';
 import fetchFplTeams from '../actions/fpl_teams/action_fetch_fpl_teams.js';
 
 class FplTeams extends Component {
@@ -17,18 +18,21 @@ class FplTeams extends Component {
 
   componentWillReceiveProps (nextProps) {
     this.setState({
-      fpl_teams_data: nextProps.fpl_teams_data
+      fpl_teams: nextProps.fpl_teams_data
     });
   }
 
   render () {
-    if (this.state == null) {
+    if (this.state == null || this.state.fpl_teams == null) {
       return (
         <p>Loading...</p>
       );
     } else {
       return (
-        <h2>My Teams</h2>
+        <div>
+          <h2>My Teams</h2>
+          <UserFplTeamsTable fpl_teams={ this.state.fpl_teams }/>
+        </div>
       );
     }
   }

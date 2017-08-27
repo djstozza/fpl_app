@@ -199,29 +199,19 @@ export default class TeamListTable extends Component {
     let pointsColumn = () => {
       if (this.props.action == 'selectLineUp') {
         return (
-          <TableHeaderColumn
-            dataField='event_points'
-            dataAlign='center'
-          >
+          <TableHeaderColumn dataField='event_points' dataAlign='center' >
             <span data-tip='Last Round'>LR</span>
           </TableHeaderColumn>
         );
       } else if (this.props.action == 'tradePlayers' || this.props.action == 'waiverPicks') {
         return (
-          <TableHeaderColumn
-            dataField='total_points'
-            dataAlign='center'
-          >
+          <TableHeaderColumn dataField='total_points' dataAlign='center' >
             <span data-tip='Total Points'>TP</span>
           </TableHeaderColumn>
         );
       } else {
         return (
-          <TableHeaderColumn
-            dataField='player_fixture_histories'
-            dataAlign='center'
-            dataFormat={ pointsText }
-          >
+          <TableHeaderColumn dataField='player_fixture_histories' dataAlign='center' dataFormat={ pointsText } >
             <span data-tip='Points'>Pts</span>
           </TableHeaderColumn>
         );
@@ -245,31 +235,16 @@ export default class TeamListTable extends Component {
           trClassName={ this.trClassFormat }
           hover
         >
-          <TableHeaderColumn
-            dataField='role'
-            dataAlign='center'
-            dataFormat={ roleTextCell }
-          >
+          <TableHeaderColumn dataField='role' dataAlign='center' dataFormat={ roleTextCell }>
             <span data-tip='Role'>R</span>
           </TableHeaderColumn>
-          <TableHeaderColumn
-            dataField='singular_name_short'
-            dataAlign='center'
-          >
+          <TableHeaderColumn dataField='singular_name_short' dataAlign='center' >
             <span data-tip='Position'>Pos</span>
           </TableHeaderColumn>
-          <TableHeaderColumn
-            dataField='last_name'
-            dataAlign='center'
-            dataFormat={ this.linkCellText }
-            isKey
-          >
+          <TableHeaderColumn dataField='last_name' dataAlign='center' dataFormat={ this.linkCellText } isKey >
             <span data-tip='Player'>P</span>
           </TableHeaderColumn>
-          <TableHeaderColumn
-            dataField='short_name'
-            dataAlign='center'
-          >
+          <TableHeaderColumn dataField='short_name' dataAlign='center' >
             <span data-tip='Team'>T</span>
           </TableHeaderColumn>
           { pointsColumn() }
