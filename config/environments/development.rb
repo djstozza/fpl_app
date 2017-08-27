@@ -44,7 +44,6 @@ Rails.application.configure do
   config.action_cable.url = 'ws://localhost:3000/cable'
   # Suppress logger output for asset requests.
   config.assets.quiet = true
-  ENV["REDISTOGO_URL"] = 'redis://redistogo:c92eec09b8c230afd5b9ab272925dddd@koi.redistogo.com:11002/'
 
   config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
 
