@@ -1,19 +1,29 @@
 class WaiverPicksDecorator < SimpleDelegator
   def all_data
-    order(:pick_number).map do |waiver_pick|
-      {
-        id: waiver_pick.id,
-        in_player_id: waiver_pick.in_player_id,
-        out_player_id: waiver_pick.out_player_id,
-        status: waiver_pick.status,
-        pick_number: waiver_pick.pick_number,
-        in_last_name: waiver_pick.in_player.last_name,
-        in_team_short_name: waiver_pick.in_player.team.short_name,
-        out_last_name: waiver_pick.out_player.last_name,
-        out_team_short_name: waiver_pick.out_player.team.short_name,
-        position: waiver_pick.in_player.position.singular_name_short
-      }
-    end
+    order(:pick_number).joins(
+      'JOIN players AS in_players ON waiver_picks.in_player_id = in_players.id'
+    ).joins(
+      'JOIN players AS out_players ON waiver_picks.out_player_id = out_players.id'
+    ).joins(
+      'JOIN teams AS in_teams ON in_players.team_id = in_teams.id'
+    ).joins(
+      'JOIN teams AS out_teams ON out_players.team_id = out_teams.id'
+    ).joins(
+      'JOIN positions ON in_players.position_id = positions.id'
+    ).pluck_to_hash(
+      :id,
+      :pick_number,
+      :status,
+      :singular_name_short,
+      'in_players.id as in_player_id',
+      'in_players.first_name as in_first_name',
+      'in_players.last_name as in_last_name',
+      'in_teams.short_name as in_team_short_name',
+      'out_players.id as out_players_id',
+      'out_players.first_name as out_first_name',
+      'out_players.last_name as out_last_name',
+      'out_teams.short_name as out_team_short_name'
+    )
   end
 
   def can_waiver_pick
