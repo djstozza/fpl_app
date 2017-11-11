@@ -68,9 +68,6 @@ export default class StatusChart extends Component {
             gridLines: {
               display: false
             },
-            labels: {
-              show: true
-            },
             scaleLabel: {
               display: true,
               labelString: 'Rounds',

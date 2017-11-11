@@ -127,7 +127,7 @@ class DraftPicks extends Component {
   }
 
   render () {
-    if (this.state == null || this.state.draft_picks == null) {
+    if (this.state == null || this.state.league == null || this.state.draft_picks == null) {
       return (
         <p>Loading...</p>
       )
