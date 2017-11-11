@@ -3,7 +3,7 @@ class RoundsController < ApplicationController
   # GET /rounds.json
   def index
     rounds_decorator = RoundsDecorator.new(Round.all)
-    current_round = rounds_decorator.current_round
+    current_round = Round.current_round
     respond_to do |format|
       format.html
       format.json do

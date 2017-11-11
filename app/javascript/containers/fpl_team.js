@@ -61,7 +61,12 @@ class FplTeam extends Component {
   }
 
   waiverPicks (targetId) {
-    this.props.createWaiverPick(this.state.fpl_team_list.id, this.state.listPosition.id, targetId);
+    this.props.createWaiverPick(
+      this.state.fplTeamId,
+      this.state.fpl_team_list.id,
+      this.state.listPosition.id,
+      targetId
+    );
   }
 
   completeTradeAction (targetId) {
@@ -74,11 +79,11 @@ class FplTeam extends Component {
   }
 
   updateWaiverPickOrder (waiverPickId, newPickNumber) {
-    this.props.updateWaiverPickOrder(this.state.fpl_team_list.id, waiverPickId, newPickNumber);
+    this.props.updateWaiverPickOrder(this.state.fplTeamId, this.state.fpl_team_list.id, waiverPickId, newPickNumber);
   }
 
   deleteWaiverPick (waiverPickId) {
-    this.props.deleteWaiverPick(this.state.fpl_team_list.id, waiverPickId);
+    this.props.deleteWaiverPick(this.state.fplTeamId, this.state.fpl_team_list.id, waiverPickId);
   }
 
   sortWaiverPicks () {
@@ -198,7 +203,7 @@ class FplTeam extends Component {
   tradePlayersTable () {
     if (this.state.action == 'tradePlayers' || this.state.action == 'waiverPicks') {
       return (
-        <Col sm={6}>
+        <Col sm={6} xs={12}>
           <TradePlayersTable
             unpicked_players={ this.state.unpicked_players }
             teams={ this.state.teams }
@@ -222,6 +227,8 @@ class FplTeam extends Component {
         return (<Button onClick={ () => this.setAction('tradePlayers') }>Trade Players</Button>);
       case 'waiver':
         return (<Button onClick={ () => this.setAction('waiverPicks') }>Trade Players (Waiver)</Button>);
+      case 'mini_draft':
+        return (<Button href={`/leagues/${this.state.league.id}/mini_draft_picks`}>Go to Mini Draft</Button>)
       default: null
 
     }

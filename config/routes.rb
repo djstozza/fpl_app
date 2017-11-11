@@ -3,18 +3,18 @@ Rails.application.routes.draw do
   resources :list_positions, only: :show
   resources :positions, only: :index
 
-  resources :fpl_team_lists, only: [:update] do
-    resources :waiver_picks, only: [:create, :update, :destroy]
-  end
-
   resources :fpl_teams, except: [:new, :create, :destroy] do
-    resources :fpl_team_lists, only: [:index, :show, :update]
+    resources :fpl_team_lists, only: [:index, :show, :update] do
+      resources :waiver_picks, only: [:create, :update, :destroy]
+    end
     resources :waiver_picks, only: :index
     resources :trades, only: :create
   end
 
   resources :leagues, except: [:index, :destroy] do
-    resources :draft_picks, except: :destroy
+    resources :draft_picks, only: [:index, :create, :update]
+    resources :mini_draft_picks, only: [:index, :create]
+    resources :pass_mini_draft_picks, only: :create
   end
 
   require 'sidekiq/web'

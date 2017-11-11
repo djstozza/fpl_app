@@ -1,11 +1,11 @@
 import { CREATE_WAIVER_PICK, SHOW_ERRORS } from '../types';
 import axios from 'axios';
 
-export default function createWaiverPick (fplTeamListId, listPositionId, targetId) {
+export default function createWaiverPick (fplTeamId, fplTeamListId, listPositionId, targetId) {
   return dispatch => {
     axios({
       method: 'post',
-      url: `/fpl_team_lists/${fplTeamListId}/waiver_picks.json`,
+      url: `/fpl_teams/${fplTeamId}/fpl_team_lists/${fplTeamListId}/waiver_picks.json`,
       data: {
         list_position_id: listPositionId,
         target_id: targetId

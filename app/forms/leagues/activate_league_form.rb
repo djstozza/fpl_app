@@ -6,7 +6,7 @@ class Leagues::ActivateLeagueForm
 
   def initialize(league:)
     @league = league
-    @league_decorator = LeagueDecorator.new(league)
+    @league_decorator = LeagueDraftPicksDecorator.new(league)
   end
 
   validate :all_draft_picks_filled

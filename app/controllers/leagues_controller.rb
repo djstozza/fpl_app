@@ -6,7 +6,7 @@ class LeaguesController < ApplicationController
   # GET /leagues/1
   # GET /leagues/1.json
   def show
-    league_decorator = LeagueDecorator.new(@league)
+    league_decorator = LeagueDraftPicksDecorator.new(@league)
     respond_to do |format|
       format.html
       format.json do

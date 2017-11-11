@@ -71,7 +71,7 @@ export default class TeamListTable extends Component {
 
     if (this.props.action == 'selectLineUp') {
       return this.selectLineUp(row);
-    } else if (this.props.action == 'tradePlayers' || this.props.action == 'waiverPicks') {
+    } else if (this.props.action == 'tradePlayers' || this.props.action == 'waiverPicks' || this.props.action == 'miniDraft') {
       return this.tradePlayers(row);
     }
   }
@@ -121,6 +121,14 @@ export default class TeamListTable extends Component {
           <div>
             <h3>Waiver (Out)</h3>
             <p>(1) Click the row of the player you wish to trade out for this waiver pick</p>
+          </div>
+        );
+
+      case 'miniDraft':
+        return (
+          <div>
+            <h3>Mini Draft (Out)</h3>
+            <p>(1) Click the row of the player you wish to trade out for this mini draft pick</p>
           </div>
         );
 
@@ -209,10 +217,34 @@ export default class TeamListTable extends Component {
             <span data-tip='Total Points'>TP</span>
           </TableHeaderColumn>
         );
+      } else if (this.props.action == 'miniDraft') {
+        return [
+          <TableHeaderColumn dataField='event_points' dataAlign='center' >
+            <span data-tip='Last Round'>LR</span>
+          </TableHeaderColumn>,
+          <TableHeaderColumn dataField='total_points' dataAlign='center' >
+            <span data-tip='Total Points'>TP</span>
+          </TableHeaderColumn>
+        ]
       } else {
         return (
           <TableHeaderColumn dataField='player_fixture_histories' dataAlign='center' dataFormat={ pointsText } >
             <span data-tip='Points'>Pts</span>
+          </TableHeaderColumn>
+        );
+      }
+    }
+
+    let statusColumn = () => {
+      if (this.props.round.is_current || this.props.action != 'pastRound') {
+        return (
+          <TableHeaderColumn
+            dataField='status'
+            dataAlign='center'
+            columnClassName={ columnClassNameFormat }
+            dataFormat={ statusIconCell }
+          >
+            <span data-tip='Status'>S</span>
           </TableHeaderColumn>
         );
       }
@@ -248,14 +280,7 @@ export default class TeamListTable extends Component {
             <span data-tip='Team'>T</span>
           </TableHeaderColumn>
           { pointsColumn() }
-          <TableHeaderColumn
-            dataField='status'
-            dataAlign='center'
-            columnClassName={ columnClassNameFormat }
-            dataFormat={ statusIconCell }
-          >
-            <span data-tip='Status'>S</span>
-          </TableHeaderColumn>
+          { statusColumn() }
         </BootstrapTable>
         <ReactTooltip />
       </div>

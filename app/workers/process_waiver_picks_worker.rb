@@ -5,7 +5,7 @@ class ProcessWaiverPicksWorker
   sidekiq_options retry: 2
 
   def perform
-    round = RoundsDecorator.new(Round.all).current_round
+    round = Round.current_round
     League.where(active: true).each do |league|
       waiver_groups = league.waiver_picks.where(round_id: round.id).group_by { |pick| pick.pick_number }
       waiver_groups.sort.each do |_k, v|

@@ -14,9 +14,4 @@ class ListPositionsController < ApplicationController
   def set_list_position
     @list_position = ListPosition.find(params[:id])
   end
-
-  # Never trust parameters from the scary internet, only allow the white list through.
-  def list_position_params
-    params.fetch(:list_position, {})
-  end
 end

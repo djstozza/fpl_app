@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :fpl_team, class: FplTeam do
-    name { Faker::Team.unique.name }
-    user {}
-    league {}
+    name { Faker::Name.unique.name }
+    association :user, factory: :user
+    association :league, factory: :league
   end
 end

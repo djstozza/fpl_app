@@ -15,7 +15,7 @@ class Leagues::ActivateLeagueService < ActiveInteraction::Base
   private
 
   def all_draft_picks_filled
-    return if LeagueDecorator.new(league).all_draft_picks.all? { |pick| pick['player_id'].present? }
+    return if LeagueDraftPicksDecorator.new(league).all_draft_picks.all? { |pick| pick['player_id'].present? }
     errors.add(:base, 'All draft picks need to be filled before the league is activated')
   end
 end

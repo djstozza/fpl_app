@@ -1,11 +1,11 @@
 import { UPDATE_WAIVER_PICK_ORDER, SHOW_ERRORS } from '../types';
 import axios from 'axios';
 
-export default function updateWaiverPickOrder (fplTeamListId, waiverPickId, newPickNumber) {
+export default function updateWaiverPickOrder (fplTeamId, fplTeamListId, waiverPickId, newPickNumber) {
   return dispatch => {
     axios({
       method: 'put',
-      url: `/fpl_team_lists/${fplTeamListId}/waiver_picks/${waiverPickId}.json`,
+      url: `/fpl_teams/${fplTeamId}/fpl_team_lists/${fplTeamListId}/waiver_picks/${waiverPickId}.json`,
       params: {
         new_pick_number: newPickNumber
       }

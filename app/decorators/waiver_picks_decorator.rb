@@ -15,11 +15,11 @@ class WaiverPicksDecorator < SimpleDelegator
       :pick_number,
       :status,
       :singular_name_short,
-      'in_players.id as in_player_id',
+      :in_player_id,
       'in_players.first_name as in_first_name',
       'in_players.last_name as in_last_name',
       'in_teams.short_name as in_team_short_name',
-      'out_players.id as out_players_id',
+      :out_player_id,
       'out_players.first_name as out_first_name',
       'out_players.last_name as out_last_name',
       'out_teams.short_name as out_team_short_name'
@@ -28,7 +28,7 @@ class WaiverPicksDecorator < SimpleDelegator
 
   def can_waiver_pick
     return false if round.id == 1
-    current_round = RoundsDecorator.new(Round.all).current_round
+    current_round = Round.current_round
     return false unless round.id == current_round.id
     return false if Time.now > current_round.deadline_time - 2.days
     true

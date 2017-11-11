@@ -7,7 +7,7 @@ class DraftPicksController < ApplicationController
   # GET /draft_picks
   # GET /draft_picks.json
   def index
-    league_decorator = LeagueDecorator.new(@league)
+    league_decorator = LeagueDraftPicksDecorator.new(@league)
     respond_to do |format|
       format.html
       format.json do
@@ -20,19 +20,6 @@ class DraftPicksController < ApplicationController
         }
       end
     end
-  end
-
-  # GET /draft_picks/1
-  # GET /draft_picks/1.json
-  def show
-  end
-
-  # GET /draft_picks/new
-  def new
-  end
-
-  # GET /draft_picks/1/edit
-  def edit
   end
 
   # POST /draft_picks
@@ -51,7 +38,7 @@ class DraftPicksController < ApplicationController
   # PATCH/PUT /draft_picks/1
   # PATCH/PUT /draft_picks/1.json
   def update
-    league_decorator = LeagueDecorator.new(@league)
+    league_decorator = LeagueDraftPicksDecorator.new(@league)
     form = Leagues::UpdateDraftPickForm.new(
       league: @league,
       player: Player.find_by(id: params[:player_id]),
@@ -69,7 +56,7 @@ class DraftPicksController < ApplicationController
             picked_players: league_decorator.picked_players,
             unpicked_players: league_decorator.unpicked_players,
             positions: Position.all,
-            success: "You have successfully drafted #{form.player.name}."
+            success: "You have successfully drafted #{form.player.name}.",
           }
         end
       else
@@ -88,24 +75,9 @@ class DraftPicksController < ApplicationController
     end
   end
 
-  # DELETE /draft_picks/1
-  # DELETE /draft_picks/1.json
-  def destroy
-    @draft_pick.destroy
-    respond_to do |format|
-      format.html { redirect_to draft_picks_url, notice: 'Draft pick was successfully destroyed.' }
-      format.json { head :no_content }
-    end
-  end
-
   private
 
-    def set_league
-      @league = League.find_by(id: params[:league_id])
-    end
-
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def draft_pick_params
-      params.fetch(:draft_pick, {})
-    end
+  def set_league
+    @league = League.find_by(id: params[:league_id])
+  end
 end

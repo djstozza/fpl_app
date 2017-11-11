@@ -86,7 +86,11 @@ class Player < ApplicationRecord
   has_and_belongs_to_many :leagues
   has_and_belongs_to_many :fpl_teams
   has_and_belongs_to_many :fpl_team_lists
-  scope :position, -> { Position.find_by(id: position_id)  }
+  scope :position, -> { Position.find_by(id: position_id) }
+  scope :no_fpl_teams, -> do
+    Player.joins('LEFT JOIN fpl_teams_players ON fpl_teams_players.player_id = players.id')
+          .where(fpl_teams_players: { player_id: nil })
+  end
 
   validates :code, presence: true, uniqueness: true
 

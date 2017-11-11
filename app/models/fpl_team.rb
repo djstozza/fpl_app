@@ -25,4 +25,7 @@ class FplTeam < ApplicationRecord
   validates_presence_of :user
   validates_presence_of :league
   validates :name, presence: true, uniqueness: { case_sensitive: false }
+  has_many :mini_draft_picks
+
+  QUOTAS = { team: 3, goalkeepers: 2, midfielders: 5, defenders: 5, forwards: 3 }.freeze
 end

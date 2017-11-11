@@ -13,11 +13,11 @@ class FplTeamDecorator < SimpleDelegator
 
   def current_fpl_team_list
     return if fpl_team_lists.empty?
-    fpl_team_lists.find_by(round_id: fpl_team_list_rounds.current_round.id)
+    fpl_team_lists.find_by(round_id: Round.current_round.id)
   end
 
   def current_line_up
-    return [] if  current_fpl_team_list.nil?
+    return [] if current_fpl_team_list.nil?
     ListPositionsDecorator.new(current_fpl_team_list.list_positions).list_position_arr
   end
 end

@@ -37,7 +37,7 @@ export default class WaiverPicksTable extends Component {
         dataAlign='center'
         dataFormat={ this.deletePickButton }
       >
-        <span data-tip='Delete Pick'>D</span>
+        <span data-tip='Delete'>D</span>
       </TableHeaderColumn>
     );
   }
@@ -52,7 +52,7 @@ export default class WaiverPicksTable extends Component {
 
   deletePickButton (cell, row) {
     return (
-      <Button bsStyle='danger' onClick={ () => this.openDeleteWaiverDialog(row.id) }>Delete Pick</Button>
+      <Button bsStyle='danger' onClick={ () => this.openDeleteWaiverDialog(row.id) }>Delete</Button>
     )
   }
 
@@ -207,7 +207,7 @@ export default class WaiverPicksTable extends Component {
           <TableHeaderColumn
             row='0'
             rowSpan='2'
-            dataField='position'
+            dataField='singular_name_short'
             dataAlign='center'
             editable={ false }
           >

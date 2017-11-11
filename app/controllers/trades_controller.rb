@@ -16,7 +16,7 @@ class TradesController < ApplicationController
       target: target,
       current_user: current_user
     )
-    league_decorator = LeagueDecorator.new(@fpl_team.league)
+    league_decorator = LeagueDraftPicksDecorator.new(@fpl_team.league)
     respond_to do |format|
       if form.save
         format.json do

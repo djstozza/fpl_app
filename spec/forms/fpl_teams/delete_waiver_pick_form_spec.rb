@@ -42,16 +42,17 @@ RSpec.describe FplTeams::DeleteWaiverPickForm, type: :form do
     ::FplTeams::ProcessInitialLineUp.run(fpl_team: fpl_team)
     FplTeamList.first.update(round: Round.second)
     3.times do
-      ::FplTeams::CreateWaiverPickForm.new(
+      ::FplTeams::CreateWaiverPickForm.run!(
+        fpl_team: fpl_team,
         fpl_team_list: FplTeamList.first,
-        list_position: ListPosition.midfielders.first,
-        in_player: FactoryGirl.create(
+        list_position_id: ListPosition.midfielders.first.id,
+        target_id: FactoryGirl.create(
           :player,
           position: Position.find_by(singular_name_short: 'MID'),
           team: FactoryGirl.create(:team)
-        ),
+        ).id,
         current_user: user
-      ).save
+      )
     end
   end
 
@@ -59,12 +60,15 @@ RSpec.describe FplTeams::DeleteWaiverPickForm, type: :form do
     waiver_pick = WaiverPick.first
     second_waiver_pick = WaiverPick.second
     third_waiver_pick = WaiverPick.third
-    form = ::FplTeams::DeleteWaiverPickForm.new(
-      fpl_team_list: FplTeamList.first,
-      waiver_pick: waiver_pick,
-      current_user: user
-    )
-    expect { form.save }.to change(WaiverPick, :count).by(-1)
+
+    expect {
+      described_class.run(
+        fpl_team: fpl_team,
+        fpl_team_list: FplTeamList.first,
+        waiver_pick: waiver_pick,
+        current_user: user
+      )
+    }.to change(WaiverPick, :count).by(-1)
     expect(fpl_team.waiver_picks).not_to include(waiver_pick)
     expect(WaiverPick.find_by(id: second_waiver_pick.id).pick_number).to eq(1)
     expect(WaiverPick.find_by(id: third_waiver_pick.id).pick_number).to eq(2)
@@ -72,12 +76,13 @@ RSpec.describe FplTeams::DeleteWaiverPickForm, type: :form do
 
   it 'fails to delete the waiver pick if not authorised' do
     waiver_pick = WaiverPick.last
-    form = ::FplTeams::DeleteWaiverPickForm.new(
+    form = described_class.run(
+      fpl_team: fpl_team,
       fpl_team_list: FplTeamList.first,
       waiver_pick: waiver_pick,
       current_user: FactoryGirl.create(:user)
     )
-    expect { form.save }.to change(WaiverPick, :count).by(0)
+    expect(form).not_to be_valid
     expect(form.errors.full_messages).to include('You are not authorised to make changes to this team.')
     expect(fpl_team.waiver_picks).to include(waiver_pick)
   end
@@ -85,12 +90,13 @@ RSpec.describe FplTeams::DeleteWaiverPickForm, type: :form do
   it 'fails if the waiver cutoff time has passed' do
     Round.second.update(deadline_time: 1.day.from_now - 1.minute)
     waiver_pick = WaiverPick.last
-    form = ::FplTeams::DeleteWaiverPickForm.new(
+    form = described_class.run(
+      fpl_team: fpl_team,
       fpl_team_list: FplTeamList.first,
       waiver_pick: waiver_pick,
       current_user: user
     )
-    expect { form.save }.to change(WaiverPick, :count).by(0)
+    expect(form).not_to be_valid
     expect(form.errors.full_messages).to include('The deadline time for updating waiver picks this round has passed.')
     expect(fpl_team.waiver_picks).to include(waiver_pick)
   end
@@ -100,12 +106,13 @@ RSpec.describe FplTeams::DeleteWaiverPickForm, type: :form do
     Round.second.update(is_current: true, is_next: false, data_checked: true, deadline_time: 1.day.ago)
     Round.create(name: 'Gameweek 3', deadline_time: 3.days.from_now, is_next: true, data_checked: false)
     waiver_pick = WaiverPick.last
-    form = ::FplTeams::DeleteWaiverPickForm.new(
+    form = described_class.run(
+      fpl_team: fpl_team,
       fpl_team_list: FplTeamList.first,
       waiver_pick: waiver_pick,
       current_user: user
     )
-    expect { form.save }.to change(WaiverPick, :count).by(0)
+    expect(form).not_to be_valid
     expect(form.errors.full_messages).to include(
       "You can only make changes to your squad's line up for the upcoming round."
     )
@@ -115,12 +122,13 @@ RSpec.describe FplTeams::DeleteWaiverPickForm, type: :form do
   it 'fails if the waiver picks have already been processed' do
     WaiverPick.update_all(status: 'approved')
     waiver_pick = WaiverPick.last
-    form = ::FplTeams::DeleteWaiverPickForm.new(
+    form = described_class.run(
+      fpl_team: fpl_team,
       fpl_team_list: FplTeamList.first,
       waiver_pick: waiver_pick,
       current_user: user
     )
-    expect { form.save }.to change(WaiverPick, :count).by(0)
+    expect(form).not_to be_valid
     expect(form.errors.full_messages).to include('You can only delete pending waiver picks.')
     expect(fpl_team.waiver_picks).to include(waiver_pick)
   end

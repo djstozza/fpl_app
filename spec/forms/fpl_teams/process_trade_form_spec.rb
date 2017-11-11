@@ -160,7 +160,7 @@ RSpec.describe FplTeams::ProcessTradeForm, type: :form do
     )
     form.save
     expect(form.errors.full_messages).to include(
-      "You can't have more than #{::FplTeams::ProcessTradeForm::QUOTAS[:team]} players from the same team " \
+      "You can't have more than #{::FplTeam::QUOTAS[:team]} players from the same team " \
         "(#{@target.team.name})."
     )
   end

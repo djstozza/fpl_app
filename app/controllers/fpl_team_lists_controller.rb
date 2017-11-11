@@ -7,8 +7,6 @@ class FplTeamListsController < ApplicationController
   # GET /fpl_teams/1/fpl_team_lists
   # GET /fpl_teams/1/fpl_team_lists.json
   def index
-    fpl_team_decorator = FplTeamDecorator.new(@fpl_team)
-    rounds_decorator = fpl_team_decorator.fpl_team_list_rounds
     respond_to do |format|
       format.json { render json: fpl_team_list_hash }
     end
@@ -17,7 +15,6 @@ class FplTeamListsController < ApplicationController
   # GET /fpl_team_lists/1
   # GET /fpl_team_lists/1.json
   def show
-    rounds_decorator = RoundsDecorator.new(Round.all)
     respond_to do |format|
       format.json { render json: fpl_team_list_hash }
     end
@@ -26,8 +23,6 @@ class FplTeamListsController < ApplicationController
   # PATCH/PUT /fpl_team_lists/1
   # PATCH/PUT /fpl_team_lists/1.json
   def update
-    fpl_team_decorator = FplTeamDecorator.new(@fpl_team)
-    rounds_decorator = fpl_team_decorator.fpl_team_list_rounds
     player = Player.find_by(id: params[:player_id])
     target = Player.find_by(id: params[:target_id])
     form = ::FplTeams::ProcessSubstitutionForm.new(
@@ -77,8 +72,8 @@ class FplTeamListsController < ApplicationController
       fpl_team_lists: fpl_team_decorator.fpl_team_lists.order(:round_id),
       fpl_team_list: fpl_team_list_decorator,
       line_up: line_up,
-      status: rounds_decorator.current_round_status,
-      unpicked_players: LeagueDecorator.new(@fpl_team.league).unpicked_players,
+      status: Round.current_round_status,
+      unpicked_players: LeagueDraftPicksDecorator.new(@fpl_team.league).unpicked_players,
       score: fpl_team_list_decorator.score
     }
   end

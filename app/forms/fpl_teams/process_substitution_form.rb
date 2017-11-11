@@ -34,7 +34,7 @@ class FplTeams::ProcessSubstitutionForm
   private
 
   def round_is_current
-    return if @round.id == RoundsDecorator.new(Round.all).current_round.id
+    return if @round.id == Round.current_round.id
     errors.add(:base, "You can only make changes to your squad's line up for the upcoming round.")
   end
 

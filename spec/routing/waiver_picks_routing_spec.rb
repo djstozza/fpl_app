@@ -1,39 +1,41 @@
-require "rails_helper"
+require 'rails_helper'
 
 RSpec.describe WaiverPicksController, type: :routing do
-  describe "routing" do
-
-    it "routes to #index" do
-      expect(:get => "/waiver_picks").to route_to("waiver_picks#index")
+  describe 'routing' do
+    it 'only routes to #index' do
+      expect(get: 'fpl_teams/1/waiver_picks').to route_to('waiver_picks#index', fpl_team_id: '1')
     end
 
-    it "routes to #new" do
-      expect(:get => "/waiver_picks/new").to route_to("waiver_picks#new")
+    xit 'does not route to #new' do
+      expect(get: '/fpl_teams/1/fpl_team_lists/1/waiver_picks/new').to route_to('waiver_picks#new')
     end
 
-    it "routes to #show" do
-      expect(:get => "/waiver_picks/1").to route_to("waiver_picks#show", :id => "1")
+    it 'only routes to #show' do
+      expect(get: '/fpl_teams/1/fpl_team_lists/1/waiver_picks/1').not_to be_routable
     end
 
-    it "routes to #edit" do
-      expect(:get => "/waiver_picks/1/edit").to route_to("waiver_picks#edit", :id => "1")
+    it 'does not route to #edit' do
+      expect(get: '/fpl_teams/1/fpl_team_lists/1/waiver_picks/1/edit').not_to be_routable
     end
 
-    it "routes to #create" do
-      expect(:post => "/waiver_picks").to route_to("waiver_picks#create")
+    it 'only routes to #create' do
+      expect(post: '/fpl_teams/1/fpl_team_lists/1/waiver_picks')
+        .to route_to('waiver_picks#create', fpl_team_id: '1', fpl_team_list_id: '1')
     end
 
-    it "routes to #update via PUT" do
-      expect(:put => "/waiver_picks/1").to route_to("waiver_picks#update", :id => "1")
+    it 'only routes to #update via PUT' do
+      expect(put: '/fpl_teams/1/fpl_team_lists/1/waiver_picks/1')
+        .to route_to('waiver_picks#update', id: '1', fpl_team_id: '1', fpl_team_list_id: '1')
     end
 
-    it "routes to #update via PATCH" do
-      expect(:patch => "/waiver_picks/1").to route_to("waiver_picks#update", :id => "1")
+    it 'only routes to #update via PATCH' do
+      expect(patch: '/fpl_teams/1/fpl_team_lists/1/waiver_picks/1')
+        .to route_to('waiver_picks#update', id: '1', fpl_team_list_id: '1', fpl_team_id: '1')
     end
 
-    it "routes to #destroy" do
-      expect(:delete => "/waiver_picks/1").to route_to("waiver_picks#destroy", :id => "1")
+    it 'only routes to #destroy for fpl_team_lsits' do
+      expect(delete: '/fpl_teams/1/fpl_team_lists/1/waiver_picks/1')
+        .to route_to('waiver_picks#destroy', id: '1', fpl_team_id: '1', fpl_team_list_id: '1')
     end
-
   end
 end

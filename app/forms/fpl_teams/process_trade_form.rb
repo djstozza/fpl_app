@@ -22,10 +22,6 @@ class FplTeams::ProcessTradeForm
   validate :identical_player_and_target_positions
   validate :maximum_number_of_players_from_team
 
-  QUOTAS = {
-    team: 3
-  }.freeze
-
   def save
     return false unless valid?
 
@@ -70,7 +66,7 @@ class FplTeams::ProcessTradeForm
   end
 
   def round_is_current
-    return if @round.id == RoundsDecorator.new(Round.all).current_round.id
+    return if @round.id == Round.current_round.id
     errors.add(:base, "You can only make changes to your squad's line up for the upcoming round.")
   end
 
@@ -78,7 +74,10 @@ class FplTeams::ProcessTradeForm
     player_arr = @fpl_team.players.to_a.delete_if { |player| player == @player }
     team_arr = player_arr.map { |player| player.team_id }
     team_arr << @target.team_id
-    return if team_arr.count(@target.team_id) <= QUOTAS[:team]
-    errors.add(:base, "You can't have more than #{QUOTAS[:team]} players from the same team (#{@target.team.name}).")
+    return if team_arr.count(@target.team_id) <= FplTeam::QUOTAS[:team]
+    errors.add(
+      :base,
+      "You can't have more than #{FplTeam::QUOTAS[:team]} players from the same team (#{@target.team.name})."
+    )
   end
 end

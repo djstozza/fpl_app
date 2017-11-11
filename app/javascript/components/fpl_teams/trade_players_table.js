@@ -17,6 +17,7 @@ export default class TradePlayersTable extends Component {
       hideSizePerPage: true,
       paginationShowsTotal: true,
     }
+
     this.onRowSelect = this.onRowSelect.bind(this);
     this.trClassFormat = this.trClassFormat.bind(this);
     this.completeTradeActionButton = this.completeTradeActionButton.bind(this);
@@ -39,6 +40,16 @@ export default class TradePlayersTable extends Component {
             <p>(2) Click the row of the player you wish to trade in for this waiver pick.</p>
           </div>
         );
+      case 'miniDraft':
+        if (this.props.listPosition != null && this.props.fpl_team.id == this.props.current_draft_pick.fpl_team_id) {
+          return (
+            <div>
+              <h3>Mini Draft (In)</h3>
+              <p>(2) Click the row of the player you wish to trade in for this mini draft pick.</p>
+            </div>
+          );
+        }
+
       case 'pastRound':
         return;
     }
@@ -50,7 +61,10 @@ export default class TradePlayersTable extends Component {
 
   componentWillReceiveProps (nextProps) {
     if (nextProps.listPosition == null) {
-      this.refs.positionId.cleanFiltered();
+      if (this.refs.positionId) {
+        this.refs.positionId.cleanFiltered();
+      }
+
       this.setState({
         selected: ''
       })
@@ -74,7 +88,7 @@ export default class TradePlayersTable extends Component {
       return;
     }
 
-    if (this.props.action == 'tradePlayers' || this.props.action == 'waiverPicks') {
+    if (this.props.action == 'tradePlayers' || this.props.action == 'waiverPicks' || this.props.action == 'miniDraft') {
       return this.selectPlayerToTrade(row);
     }
   }

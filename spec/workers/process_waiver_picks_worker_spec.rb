@@ -98,11 +98,12 @@ RSpec.describe ProcessWaiverPicksWorker do
   def create_waiver_pick(fpl_team, player)
     current_round_id = RoundsDecorator.new(Round.all).current_round.id
     fpl_team_list = fpl_team.fpl_team_lists.find_by(round_id: current_round_id)
-    ::FplTeams::CreateWaiverPickForm.new(
+    ::FplTeams::CreateWaiverPickForm.run!(
+      fpl_team: fpl_team,
       fpl_team_list: fpl_team_list,
-      list_position: fpl_team_list.list_positions.forwards.first,
-      in_player: player,
+      list_position_id: fpl_team_list.list_positions.forwards.first.id,
+      target_id: player.id,
       current_user: fpl_team.user
-    ).save
+    )
   end
 end

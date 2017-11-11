@@ -92,8 +92,8 @@ class DraftPicks extends Component {
           effect: 'bouncyflip',
           timeout: 5000
         })
-      )
-    })
+      );
+    });
   }
 
   successMessage (success) {
@@ -112,7 +112,7 @@ class DraftPicks extends Component {
           effect: 'bouncyflip',
           timeout: 5000
         })
-      )
+      );
     }
   }
 
@@ -123,7 +123,7 @@ class DraftPicks extends Component {
         effect: 'bouncyflip',
         timeout: 5000
       })
-    )
+    );
   }
 
   render () {
@@ -141,12 +141,14 @@ class DraftPicks extends Component {
             fpl_teams={ this.state.fpl_teams }
             positions={ this.state.positions }
             current_draft_pick={ this.state.current_draft_pick }
-            fpl_team={ this.state.fpl_team }/>
+            fpl_team={ this.state.fpl_team }
+          />
           <DraftPicksTable
             draft_picks={ this.state.draft_picks }
             fpl_teams={ this.state.fpl_teams }
             positions={ this.state.positions }
-            teams={ this.state.teams }/>
+            teams={ this.state.teams }
+          />
         </div>
       )
     }

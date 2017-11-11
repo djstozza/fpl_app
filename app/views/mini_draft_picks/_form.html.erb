@@ -1,0 +1,17 @@
+<%= form_for(mini_draft_pick) do |f| %>
+  <% if mini_draft_pick.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(mini_draft_pick.errors.count, "error") %> prohibited this mini_draft_pick from being saved:</h2>
+
+      <ul>
+      <% mini_draft_pick.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

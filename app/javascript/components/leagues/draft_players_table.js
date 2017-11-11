@@ -33,7 +33,7 @@ export default class DraftPlayersTable extends Component {
   }
 
   draftButton (cell, row) {
-    return <Button onClick={ () => this.draftPlayer(row.id) }>Draft Player</Button>
+    return <Button onClick={ () => this.draftPlayer(row.id) }>Draft</Button>
   }
 
   showDraftCol () {
@@ -55,8 +55,8 @@ export default class DraftPlayersTable extends Component {
     }
   }
 
-  yourTurn (curren_pick_fpl_team_id, fpl_team_id) {
-    if (curren_pick_fpl_team_id == fpl_team_id) {
+  yourTurn (current_pick_fpl_team_id, fpl_team_id) {
+    if (current_pick_fpl_team_id == fpl_team_id) {
       return (
         Alert.info("It's your turn to pick a player", {
           position: 'top',

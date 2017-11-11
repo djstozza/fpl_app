@@ -1,30 +1,20 @@
 class LeagueDecorator < SimpleDelegator
-  def all_draft_picks
-    draft_picks.order(:pick_number).includes(:player, :fpl_team, player: [:team, :position]).pluck_to_hash(
-      :id,
-      :pick_number,
-      :fpl_team_id,
-      'fpl_teams.name as fpl_team_name',
-      :player_id,
-      :position_id,
-      :singular_name_short,
-      :team_id,
-      :short_name,
-      'teams.name as team_name',
-      :first_name,
-      :last_name
-    )
-  end
-
   def picked_players
     PlayersDecorator.new(players).all_data
   end
 
   def unpicked_players
-    PlayersDecorator.new(Player.where.not(id: players.pluck(:id))).all_data
-  end
+    deadline_time =
+      if Time.now < Round::SUMMER_MINI_DRAFT_DEADLINE
+        Round.first.deadline_time
+      elsif Time.now < Round::WINTER_MINI_DRAFT_DEALINE
+        Round::SUMMER_MINI_DRAFT_DEADLINE
+      else
+        Round::WINTER_MINI_DRAFT_DEALINE
+      end
 
-  def current_draft_pick
-    draft_picks.order(:pick_number).where(player_id: nil).first
+    PlayersDecorator.new(
+      Player.where.not(id: players.pluck(:id)).where('players.created_at < ?', deadline_time)
+    ).all_data
   end
 end

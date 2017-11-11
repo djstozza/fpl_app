@@ -14,7 +14,7 @@ class FplTeamsController < ApplicationController
   # GET /fpl_teams/1
   # GET /fpl_teams/1.json
   def show
-    league_decorator = LeagueDecorator.new(@fpl_team.league)
+    league_decorator = LeagueDraftPicksDecorator.new(@fpl_team.league)
     respond_to do |format|
       format.html
       format.json do
