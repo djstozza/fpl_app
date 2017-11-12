@@ -11,34 +11,34 @@ RSpec.describe ProcessWaiverPicksWorker do
       data_checked: false
     )
     10.times do
-      user = FactoryGirl.create(:user)
-      FactoryGirl.create(:league, commissioner: user) if user == User.first
-      fpl_team = FactoryGirl.create(:fpl_team, league: League.first, user: user)
+      user = FactoryBot.create(:user)
+      FactoryBot.create(:league, commissioner: user) if user == User.first
+      fpl_team = FactoryBot.create(:fpl_team, league: League.first, user: user)
       3.times do
-        fpl_team.players << FactoryGirl.create(:player, position: Position.find_by(singular_name_short: 'FWD'))
+        fpl_team.players << FactoryBot.create(:player, position: Position.find_by(singular_name_short: 'FWD'))
       end
 
       5.times do
-        fpl_team.players << FactoryGirl.create(
+        fpl_team.players << FactoryBot.create(
           :player,
           position: Position.find_by(singular_name_short: 'MID'),
-          team: FactoryGirl.create(:team)
+          team: FactoryBot.create(:team)
         )
       end
 
       5.times do
-        fpl_team.players << FactoryGirl.create(
+        fpl_team.players << FactoryBot.create(
           :player,
           position: Position.find_by(singular_name_short: 'DEF'),
-          team: FactoryGirl.create(:team)
+          team: FactoryBot.create(:team)
         )
       end
 
       2.times do
-        fpl_team.players << FactoryGirl.create(
+        fpl_team.players << FactoryBot.create(
           :player,
           position: Position.find_by(singular_name_short: 'GKP'),
-          team: FactoryGirl.create(:team)
+          team: FactoryBot.create(:team)
         )
       end
       ::FplTeams::ProcessInitialLineUp.run!(fpl_team: fpl_team)
@@ -59,7 +59,7 @@ RSpec.describe ProcessWaiverPicksWorker do
     i = 10
     10.times do
       instance_variable_set(
-        "@waiver_player_#{i}", FactoryGirl.create(:player, position: Position.find_by(singular_name_short: 'FWD'))
+        "@waiver_player_#{i}", FactoryBot.create(:player, position: Position.find_by(singular_name_short: 'FWD'))
       )
 
       j = 1

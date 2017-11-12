@@ -1,37 +1,37 @@
 require 'rails_helper'
 
 RSpec.describe FplTeams::ProcessTradeForm, type: :form do
-  let!(:user) { FactoryGirl.create(:user) }
-  let!(:league) { FactoryGirl.create(:league, commissioner: user) }
-  let!(:fpl_team) { FactoryGirl.create(:fpl_team, user: user, league: league) }
-  let!(:team) { FactoryGirl.create(:team) }
+  let!(:user) { FactoryBot.create(:user) }
+  let!(:league) { FactoryBot.create(:league, commissioner: user) }
+  let!(:fpl_team) { FactoryBot.create(:fpl_team, user: user, league: league) }
+  let!(:team) { FactoryBot.create(:team) }
 
   before do
     3.times do
-      FactoryGirl.create(:player, position: Position.find_by(singular_name_short: 'FWD'), team: team)
+      FactoryBot.create(:player, position: Position.find_by(singular_name_short: 'FWD'), team: team)
     end
 
     5.times do
-      FactoryGirl.create(
+      FactoryBot.create(
         :player,
         position: Position.find_by(singular_name_short: 'MID'),
-        team: FactoryGirl.create(:team)
+        team: FactoryBot.create(:team)
       )
     end
 
     5.times do
-      FactoryGirl.create(
+      FactoryBot.create(
         :player,
         position: Position.find_by(singular_name_short: 'DEF'),
-        team: FactoryGirl.create(:team)
+        team: FactoryBot.create(:team)
       )
     end
 
     2.times do
-      FactoryGirl.create(
+      FactoryBot.create(
         :player,
         position: Position.find_by(singular_name_short: 'GKP'),
-        team: FactoryGirl.create(:team)
+        team: FactoryBot.create(:team)
       )
     end
 
@@ -41,10 +41,10 @@ RSpec.describe FplTeams::ProcessTradeForm, type: :form do
     ::FplTeams::ProcessInitialLineUp.run(fpl_team: fpl_team)
     @list_position = ListPosition.midfielders.first
     @player = @list_position.player
-    @target = FactoryGirl.create(
+    @target = FactoryBot.create(
       :player,
       position: Position.find_by(singular_name_short: 'MID'),
-      team: FactoryGirl.create(:team)
+      team: FactoryBot.create(:team)
     )
   end
 
@@ -68,7 +68,7 @@ RSpec.describe FplTeams::ProcessTradeForm, type: :form do
       fpl_team: fpl_team,
       list_position: @list_position,
       target: @target,
-      current_user: FactoryGirl.create(:user)
+      current_user: FactoryBot.create(:user)
     )
     form.save
     expect(form.errors.full_messages).to include('You are not authorised to make changes to this team.')

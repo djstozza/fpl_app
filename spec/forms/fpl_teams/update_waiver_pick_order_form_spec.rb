@@ -1,37 +1,37 @@
 require 'rails_helper'
 
 RSpec.describe FplTeams::UpdateWaiverPickOrderForm, type: :form do
-  let!(:user) { FactoryGirl.create(:user) }
-  let!(:league) { FactoryGirl.create(:league, commissioner: user) }
-  let!(:fpl_team) { FactoryGirl.create(:fpl_team, user: user, league: league) }
-  let!(:team) { FactoryGirl.create(:team) }
+  let!(:user) { FactoryBot.create(:user) }
+  let!(:league) { FactoryBot.create(:league, commissioner: user) }
+  let!(:fpl_team) { FactoryBot.create(:fpl_team, user: user, league: league) }
+  let!(:team) { FactoryBot.create(:team) }
 
   before do
     3.times do
-      FactoryGirl.create(:player, position: Position.find_by(singular_name_short: 'FWD'), team: team)
+      FactoryBot.create(:player, position: Position.find_by(singular_name_short: 'FWD'), team: team)
     end
 
     5.times do
-      FactoryGirl.create(
+      FactoryBot.create(
         :player,
         position: Position.find_by(singular_name_short: 'MID'),
-        team: FactoryGirl.create(:team)
+        team: FactoryBot.create(:team)
       )
     end
 
     5.times do
-      FactoryGirl.create(
+      FactoryBot.create(
         :player,
         position: Position.find_by(singular_name_short: 'DEF'),
-        team: FactoryGirl.create(:team)
+        team: FactoryBot.create(:team)
       )
     end
 
     2.times do
-      FactoryGirl.create(
+      FactoryBot.create(
         :player,
         position: Position.find_by(singular_name_short: 'GKP'),
-        team: FactoryGirl.create(:team)
+        team: FactoryBot.create(:team)
       )
     end
 
@@ -46,10 +46,10 @@ RSpec.describe FplTeams::UpdateWaiverPickOrderForm, type: :form do
         fpl_team_list: FplTeamList.first,
         fpl_team: fpl_team,
         list_position_id: ListPosition.midfielders.first.id,
-        target_id: FactoryGirl.create(
+        target_id: FactoryBot.create(
           :player,
           position: Position.find_by(singular_name_short: 'MID'),
-          team: FactoryGirl.create(:team)
+          team: FactoryBot.create(:team)
         ).id,
         current_user: user
       )
@@ -113,7 +113,7 @@ RSpec.describe FplTeams::UpdateWaiverPickOrderForm, type: :form do
       fpl_team_list: FplTeamList.first,
       waiver_pick: waiver_pick,
       new_pick_number: 2,
-      current_user: FactoryGirl.create(:user)
+      current_user: FactoryBot.create(:user)
     )
 
     expect(form.errors.full_messages).to include('You are not authorised to make changes to this team.')

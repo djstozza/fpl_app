@@ -4,15 +4,15 @@ RSpec.describe Leagues::UpdateDraftPickForm, type: :form do
   before :each do
     10.times do |i|
       i += 1
-      user = FactoryGirl.create(:user, username: "#{Faker::Name.first_name} #{i}")
-      FactoryGirl.create(:league, commissioner: User.first) if i == 1
-      FactoryGirl.create(:fpl_team, name: "#{Faker::Team.name} #{i}", user: user, league: League.first)
+      user = FactoryBot.create(:user, username: "#{Faker::Name.first_name} #{i}")
+      FactoryBot.create(:league, commissioner: User.first) if i == 1
+      FactoryBot.create(:fpl_team, name: "#{Faker::Team.name} #{i}", user: user, league: League.first)
     end
     20.times do
-      FactoryGirl.create(:team)
+      FactoryBot.create(:team)
     end
     1000.times do
-      FactoryGirl.create(:player, team: Team.all.sample, position: Position.all.sample)
+      FactoryBot.create(:player, team: Team.all.sample, position: Position.all.sample)
     end
     Leagues::CreateDraftForm.new(league: League.first, current_user: League.first.commissioner).save
   end

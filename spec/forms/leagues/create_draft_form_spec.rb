@@ -1,12 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe Leagues::CreateDraftForm, type: :form do
-  let(:league) { FactoryGirl.create(:league, commissioner: FactoryGirl.create(:user)) }
+  let(:league) { FactoryBot.create(:league, commissioner: FactoryBot.create(:user)) }
 
   before do
-    FactoryGirl.create(:fpl_team, league: league, user: league.commissioner)
+    FactoryBot.create(:fpl_team, league: league, user: league.commissioner)
     9.times do
-      FactoryGirl.create(:fpl_team, league: league, user: FactoryGirl.create(:user))
+      FactoryBot.create(:fpl_team, league: league, user: FactoryBot.create(:user))
     end
   end
 

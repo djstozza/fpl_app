@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Leagues::ProcessLeagueForm, type: :form do
-  let(:user) { FactoryGirl.create(:user) }
+  let(:user) { FactoryBot.create(:user) }
   let(:form_attributes) do
     { league_name: Faker::GameOfThrones.house, code: SecureRandom.hex(6), fpl_team_name: Faker::Team.name }
   end
@@ -32,21 +32,21 @@ RSpec.describe Leagues::ProcessLeagueForm, type: :form do
     end
 
     it 'requires a unique league name' do
-      league = FactoryGirl.create(:league, commissioner: FactoryGirl.create(:user))
+      league = FactoryBot.create(:league, commissioner: FactoryBot.create(:user))
       invalid_record(attribute: :league_name, value: league.name, method: 'save', message: 'has already been taken')
     end
 
     it 'requires a unique fpl team name' do
-      league = FactoryGirl.create(:league, commissioner: FactoryGirl.create(:user))
-      fpl_team = FactoryGirl.create(:fpl_team, user: FactoryGirl.create(:user), league: league)
+      league = FactoryBot.create(:league, commissioner: FactoryBot.create(:user))
+      fpl_team = FactoryBot.create(:fpl_team, user: FactoryBot.create(:user), league: league)
       invalid_record(attribute: :fpl_team_name, value: fpl_team.name, method: 'save', message: 'has already been taken')
     end
   end
 
   context 'update' do
     before do
-      @league = FactoryGirl.create(:league, commissioner: user)
-      @fpl_team = FactoryGirl.create(:fpl_team, user: user, league: @league)
+      @league = FactoryBot.create(:league, commissioner: user)
+      @fpl_team = FactoryBot.create(:fpl_team, user: user, league: @league)
       @league_name = @league.name
       @league_code = @league.code
       @fpl_team_name = @fpl_team.name
@@ -70,12 +70,12 @@ RSpec.describe Leagues::ProcessLeagueForm, type: :form do
     end
 
     it 'does not update if the user is not the commissioner' do
-      @user = FactoryGirl.create(:user)
+      @user = FactoryBot.create(:user)
       invalid_record(method: 'update', message: 'You are not authorised to make changes to this league')
     end
 
     it 'requires a unique league name' do
-      league_1 = FactoryGirl.create(:league, commissioner: user)
+      league_1 = FactoryBot.create(:league, commissioner: user)
       form = Leagues::ProcessLeagueForm.new(league: @league, current_user: user, fpl_team: @fpl_team)
       form_attributes[:league_name] = league_1.name
       form.attributes = form_attributes
@@ -85,7 +85,7 @@ RSpec.describe Leagues::ProcessLeagueForm, type: :form do
     end
 
     it 'requires a unique fpl team name' do
-      fpl_team_1 = FactoryGirl.create(:fpl_team, user: FactoryGirl.create(:user), league: @league)
+      fpl_team_1 = FactoryBot.create(:fpl_team, user: FactoryBot.create(:user), league: @league)
       form = Leagues::ProcessLeagueForm.new(league: @league, current_user: user, fpl_team: @fpl_team)
       form_attributes[:fpl_team_name] = fpl_team_1.name
       form.attributes = form_attributes

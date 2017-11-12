@@ -66,6 +66,6 @@ end
 
 group :test do
   gem 'faker'
-  gem 'factory_girl_rails', require: false
+  gem 'factory_bot_rails', require: false
   gem 'database_cleaner'
 end

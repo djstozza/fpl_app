@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :round, class: Round do
     name { 'Gameweek 1' }
     deadline_time { 7.days.from_now }

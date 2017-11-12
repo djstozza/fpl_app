@@ -1,15 +1,15 @@
 require 'rails_helper'
 
 RSpec.describe Leagues::PassMiniDraftPickForm, type: :form do
-  let(:user) { FactoryGirl.create(:user) }
-  let(:league) { FactoryGirl.create(:league, commissioner: user) }
-  let!(:fpl_team1) { FactoryGirl.create(:fpl_team, user: user, league: league, rank: 4) }
-  let!(:fpl_team2) { FactoryGirl.create(:fpl_team, league: league, rank: 3) }
-  let!(:fpl_team3) { FactoryGirl.create(:fpl_team, league: league, rank: 2) }
-  let!(:fpl_team4) { FactoryGirl.create(:fpl_team, league: league, rank: 1) }
+  let(:user) { FactoryBot.create(:user) }
+  let(:league) { FactoryBot.create(:league, commissioner: user) }
+  let!(:fpl_team1) { FactoryBot.create(:fpl_team, user: user, league: league, rank: 4) }
+  let!(:fpl_team2) { FactoryBot.create(:fpl_team, league: league, rank: 3) }
+  let!(:fpl_team3) { FactoryBot.create(:fpl_team, league: league, rank: 2) }
+  let!(:fpl_team4) { FactoryBot.create(:fpl_team, league: league, rank: 1) }
 
   before do
-    FactoryGirl.create(
+    FactoryBot.create(
       :round,
       deadline_time: (Round::SUMMER_MINI_DRAFT_DEADLINE + 3.days),
       is_current: true,
@@ -17,19 +17,19 @@ RSpec.describe Leagues::PassMiniDraftPickForm, type: :form do
     )
     FplTeam.all.each do |fpl_team|
       3.times do
-        FactoryGirl.create(:player, position: Position.find_by(singular_name_short: 'FWD'))
+        FactoryBot.create(:player, position: Position.find_by(singular_name_short: 'FWD'))
       end
 
       5.times do
-        FactoryGirl.create(:player, position: Position.find_by(singular_name_short: 'MID'))
+        FactoryBot.create(:player, position: Position.find_by(singular_name_short: 'MID'))
       end
 
       5.times do
-        FactoryGirl.create(:player, position: Position.find_by(singular_name_short: 'DEF'))
+        FactoryBot.create(:player, position: Position.find_by(singular_name_short: 'DEF'))
       end
 
       2.times do
-        FactoryGirl.create(:player, position: Position.find_by(singular_name_short: 'GKP'))
+        FactoryBot.create(:player, position: Position.find_by(singular_name_short: 'GKP'))
       end
 
       fpl_team.players << Player.no_fpl_teams
@@ -49,7 +49,7 @@ RSpec.describe Leagues::PassMiniDraftPickForm, type: :form do
     expect(outcome).to be_valid
     expect(outcome.league_decorator.next_fpl_team).to eq(fpl_team2)
 
-    in_player = FactoryGirl.create(:player, position: Position.find_by(singular_name_short: 'MID'))
+    in_player = FactoryBot.create(:player, position: Position.find_by(singular_name_short: 'MID'))
 
     outcome = Leagues::ProcessMiniDraftPickForm.run(
       league: league,
@@ -62,7 +62,7 @@ RSpec.describe Leagues::PassMiniDraftPickForm, type: :form do
     expect(outcome).to be_valid
     expect(outcome.league_decorator.next_fpl_team).to eq(fpl_team3)
 
-    in_player = FactoryGirl.create(:player, position: Position.find_by(singular_name_short: 'MID'))
+    in_player = FactoryBot.create(:player, position: Position.find_by(singular_name_short: 'MID'))
 
     outcome = Leagues::ProcessMiniDraftPickForm.run(
       league: league,
@@ -94,7 +94,7 @@ RSpec.describe Leagues::PassMiniDraftPickForm, type: :form do
     expect(outcome).to be_valid
     expect(outcome.league_decorator.next_fpl_team).to eq(fpl_team2)
 
-    in_player = FactoryGirl.create(:player, position: Position.find_by(singular_name_short: 'MID'))
+    in_player = FactoryBot.create(:player, position: Position.find_by(singular_name_short: 'MID'))
 
     # fpl_team 2 is only able to make a pick since all other fpl teams have passed
     outcome = Leagues::ProcessMiniDraftPickForm.run(

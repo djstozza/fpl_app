@@ -1,30 +1,30 @@
 require 'rails_helper'
 
 RSpec.describe FplTeams::ProcessSubstitutionForm, type: :form do
-  let!(:user) { FactoryGirl.create(:user) }
-  let!(:league) { FactoryGirl.create(:league, commissioner: user) }
-  let!(:fpl_team) { FactoryGirl.create(:fpl_team, user: user, league: league) }
+  let!(:user) { FactoryBot.create(:user) }
+  let!(:league) { FactoryBot.create(:league, commissioner: user) }
+  let!(:fpl_team) { FactoryBot.create(:fpl_team, user: user, league: league) }
 
   before do
     i = 0
     3.times do
       i += 1
-      FactoryGirl.create(:player, position: Position.find_by(singular_name_short: 'FWD'), ict_index: i)
+      FactoryBot.create(:player, position: Position.find_by(singular_name_short: 'FWD'), ict_index: i)
     end
 
     5.times do
       i += 1
-      FactoryGirl.create(:player, position: Position.find_by(singular_name_short: 'MID'), ict_index: i)
+      FactoryBot.create(:player, position: Position.find_by(singular_name_short: 'MID'), ict_index: i)
     end
 
     5.times do
       i += 1
-      FactoryGirl.create(:player, position: Position.find_by(singular_name_short: 'DEF'), ict_index: i)
+      FactoryBot.create(:player, position: Position.find_by(singular_name_short: 'DEF'), ict_index: i)
     end
 
     2.times do
       i += 1
-      FactoryGirl.create(:player, position: Position.find_by(singular_name_short: 'GKP'), ict_index: i)
+      FactoryBot.create(:player, position: Position.find_by(singular_name_short: 'GKP'), ict_index: i)
     end
 
     fpl_team.players << Player.all
@@ -120,7 +120,7 @@ RSpec.describe FplTeams::ProcessSubstitutionForm, type: :form do
       fpl_team_list: fpl_team_list,
       player: fpl_team_list.list_positions.starting.midfielders.first.player,
       target: fpl_team_list.list_positions.find_by(role: 'substitute_1').player,
-      current_user: FactoryGirl.create(:user)
+      current_user: FactoryBot.create(:user)
     )
     form.save
     expect(form.errors.full_messages).to include('You are not authorised to make changes to this team.')

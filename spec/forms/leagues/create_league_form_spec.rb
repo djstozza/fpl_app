@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Leagues::CreateLeagueForm, type: :form do
   it 'successfully creates a league and fpl team' do
-    user = FactoryGirl.create(:user)
+    user = FactoryBot.create(:user)
     form = described_class.run(
       current_user: user,
       league_name: Faker::GameOfThrones.house,
@@ -19,7 +19,7 @@ RSpec.describe Leagues::CreateLeagueForm, type: :form do
   end
 
   it 'requires a league name (unique), code and fpl team name (unique)' do
-    user = FactoryGirl.build_stubbed(:user)
+    user = FactoryBot.build_stubbed(:user)
     form = described_class.run(
       current_user: user,
       code: SecureRandom.hex(6),
@@ -43,7 +43,7 @@ RSpec.describe Leagues::CreateLeagueForm, type: :form do
 
     expect(form.errors.full_messages).to include('Code is required')
 
-    user = FactoryGirl.create(:user)
+    user = FactoryBot.create(:user)
     team_name = Faker::Team.unique.name
     league_name = Faker::GameOfThrones.unique.house
 

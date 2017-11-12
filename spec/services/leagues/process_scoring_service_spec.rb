@@ -1,38 +1,38 @@
 require 'rails_helper'
 
 RSpec.describe Leagues::ProcessWaiverPicksWorker do
-  let!(:user) { FactoryGirl.create(:user) }
-  let!(:league) { FactoryGirl.create(:league, commissioner: user) }
-  let!(:fpl_team) { FactoryGirl.create(:fpl_team, league: league, user: user) }
+  let!(:user) { FactoryBot.create(:user) }
+  let!(:league) { FactoryBot.create(:league, commissioner: user) }
+  let!(:fpl_team) { FactoryBot.create(:fpl_team, league: league, user: user) }
 
   before do
     Round.create(name: 'Gameweek 1', is_current: true, data_checked: true, deadline_time: 4.days.ago)
 
     3.times do
-      FactoryGirl.create(:player, position: Position.find_by(singular_name_short: 'FWD'))
+      FactoryBot.create(:player, position: Position.find_by(singular_name_short: 'FWD'))
     end
 
     5.times do
-      FactoryGirl.create(
+      FactoryBot.create(
         :player,
         position: Position.find_by(singular_name_short: 'MID'),
-        team: FactoryGirl.create(:team)
+        team: FactoryBot.create(:team)
       )
     end
 
     5.times do
-      FactoryGirl.create(
+      FactoryBot.create(
         :player,
         position: Position.find_by(singular_name_short: 'DEF'),
-        team: FactoryGirl.create(:team)
+        team: FactoryBot.create(:team)
       )
     end
 
     2.times do
-      FactoryGirl.create(
+      FactoryBot.create(
         :player,
         position: Position.find_by(singular_name_short: 'GKP'),
-        team: FactoryGirl.create(:team)
+        team: FactoryBot.create(:team)
       )
     end
     fpl_team.players << Player.all

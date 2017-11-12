@@ -1,37 +1,37 @@
 require 'rails_helper'
 
 RSpec.describe FplTeams::CreateWaiverPickForm, type: :form do
-  let!(:user) { FactoryGirl.create(:user) }
-  let!(:league) { FactoryGirl.create(:league, commissioner: user) }
-  let!(:fpl_team) { FactoryGirl.create(:fpl_team, user: user, league: league) }
-  let!(:team) { FactoryGirl.create(:team) }
+  let!(:user) { FactoryBot.create(:user) }
+  let!(:league) { FactoryBot.create(:league, commissioner: user) }
+  let!(:fpl_team) { FactoryBot.create(:fpl_team, user: user, league: league) }
+  let!(:team) { FactoryBot.create(:team) }
 
   before do
     3.times do
-      FactoryGirl.create(:player, position: Position.find_by(singular_name_short: 'FWD'), team: team)
+      FactoryBot.create(:player, position: Position.find_by(singular_name_short: 'FWD'), team: team)
     end
 
     5.times do
-      FactoryGirl.create(
+      FactoryBot.create(
         :player,
         position: Position.find_by(singular_name_short: 'MID'),
-        team: FactoryGirl.create(:team)
+        team: FactoryBot.create(:team)
       )
     end
 
     5.times do
-      FactoryGirl.create(
+      FactoryBot.create(
         :player,
         position: Position.find_by(singular_name_short: 'DEF'),
-        team: FactoryGirl.create(:team)
+        team: FactoryBot.create(:team)
       )
     end
 
     2.times do
-      FactoryGirl.create(
+      FactoryBot.create(
         :player,
         position: Position.find_by(singular_name_short: 'GKP'),
-        team: FactoryGirl.create(:team)
+        team: FactoryBot.create(:team)
       )
     end
 
@@ -43,10 +43,10 @@ RSpec.describe FplTeams::CreateWaiverPickForm, type: :form do
     FplTeamList.first.update(round: Round.second)
     @list_position = ListPosition.midfielders.first
     @out_player = @list_position.player
-    @in_player = FactoryGirl.create(
+    @in_player = FactoryBot.create(
       :player,
       position: Position.find_by(singular_name_short: 'MID'),
-      team: FactoryGirl.create(:team)
+      team: FactoryBot.create(:team)
     )
   end
 
@@ -82,7 +82,7 @@ RSpec.describe FplTeams::CreateWaiverPickForm, type: :form do
       fpl_team: fpl_team,
       list_position_id: @list_position.id,
       target_id: @in_player.id,
-      current_user: FactoryGirl.create(:user)
+      current_user: FactoryBot.create(:user)
     )
 
     expect(outcome).not_to be_valid
