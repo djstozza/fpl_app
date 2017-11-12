@@ -3,21 +3,18 @@ class FplTeamListsController < ApplicationController
   skip_before_action :verify_authenticity_token
   before_action :set_fpl_team_list, only: [:show, :update]
   before_action :set_fpl_team, only: [:index, :show, :update]
+  respond_to :json
 
   # GET /fpl_teams/1/fpl_team_lists
   # GET /fpl_teams/1/fpl_team_lists.json
   def index
-    respond_to do |format|
-      format.json { render json: fpl_team_list_hash }
-    end
+    render json: fpl_team_list_hash
   end
 
   # GET /fpl_team_lists/1
   # GET /fpl_team_lists/1.json
   def show
-    respond_to do |format|
-      format.json { render json: fpl_team_list_hash }
-    end
+    render json: fpl_team_list_hash
   end
 
   # PATCH/PUT /fpl_team_lists/1
@@ -33,11 +30,9 @@ class FplTeamListsController < ApplicationController
     )
     respond_to do |format|
       if form.save
-        hash = fpl_team_list_hash.merge!(success: "Successfully substituted #{player.name} with #{target.name}.")
-        format.json { render json: hash }
+        render json: fpl_team_list_hash.merge!(success: "Successfully substituted #{player.name} with #{target.name}.")
       else
-        hash = fpl_team_list_hash.merge!(errors: form.errors.full_messages)
-        format.json { render json: hash, status: :unprocessable_entity }
+        render json: fpl_team_list_hash.merge!(errors: form.errors.full_messages), status: :unprocessable_entity
       end
     end
   end

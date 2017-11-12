@@ -1,7 +1,7 @@
 class PositionsController < ApplicationController
+  respond_to :json
+
   def index
-    respond_to do |format|
-      format.json { render json: Position.all }
-    end
+    render json: Position.all
   end
 end

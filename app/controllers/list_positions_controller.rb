@@ -1,12 +1,11 @@
 class ListPositionsController < ApplicationController
+  respond_to :json
   before_action :set_list_position, only: [:show]
 
   # GET /list_positions/1
   # GET /list_positions/1.json
   def show
-    respond_to do |format|
-      format.json { render json: { options: ListPositionDecorator.new(@list_position).substitute_options } }
-    end
+    render json: { options: ListPositionDecorator.new(@list_position).substitute_options }
   end
 
   private

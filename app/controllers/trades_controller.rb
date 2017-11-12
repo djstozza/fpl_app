@@ -2,6 +2,7 @@ class TradesController < ApplicationController
   before_action :authenticate_user!
   skip_before_action :verify_authenticity_token
   before_action :set_fpl_team, only: :create
+  respond_to :json
 
   # POST /trades
   # POST /trades.json
@@ -17,21 +18,18 @@ class TradesController < ApplicationController
       current_user: current_user
     )
     league_decorator = LeagueDraftPicksDecorator.new(@fpl_team.league)
-    respond_to do |format|
-      if form.save
-        format.json do
-          render json: {
-            fpl_team_list: fpl_team_list,
-            line_up: ListPositionsDecorator.new(fpl_team_list.list_positions).list_position_arr,
-            players:  PlayersDecorator.new(@fpl_team.players).all_data,
-            unpicked_players: league_decorator.unpicked_players,
-            picked_players: league_decorator.picked_players,
-            success: "You have successfully traded out #{list_position_player_name} for #{target.name}"
-          }
-        end
-      else
-        format.json { render json: { errors: form.errors.full_messages }, status: :unprocessable_entity }
-      end
+
+    if form.save
+        render json: {
+          fpl_team_list: fpl_team_list,
+          line_up: ListPositionsDecorator.new(fpl_team_list.list_positions).list_position_arr,
+          players:  PlayersDecorator.new(@fpl_team.players).all_data,
+          unpicked_players: league_decorator.unpicked_players,
+          picked_players: league_decorator.picked_players,
+          success: "You have successfully traded out #{list_position_player_name} for #{target.name}"
+        }
+    else
+      render json: { errors: form.errors.full_messages }, status: :unprocessable_entity
     end
   end
 

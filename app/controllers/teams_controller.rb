@@ -1,10 +1,9 @@
 class TeamsController < ApplicationController
   before_action :set_team, only: [:show]
+  respond_to :json, only: :index
 
   def index
-    respond_to do |format|
-      format.json { render json: TeamsDecorator.new(Team.all).all_data }
-    end
+    render json: TeamsDecorator.new(Team.all).all_data
   end
 
   # GET /teams/1

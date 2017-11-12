@@ -10,7 +10,7 @@ RSpec.describe FplTeamsController, type: :routing do
       expect(get: '/fpl_teams/1/fpl_team_lists/new').not_to be_routable
     end
 
-    it 'routes to #show' do
+    it 'routes to #show as json' do
       expect(get: '/fpl_teams/1/fpl_team_lists/1').to route_to('fpl_team_lists#show', fpl_team_id: '1', id: '1')
     end
 
