@@ -1,6 +1,9 @@
 require 'sidekiq'
 
 class RecurringWaiverPicksWorker
+  include Sidekiq::Worker
+  sidekiq_options retry: 2
+
   def perform
     round = Round.current_round
     return if WaiverPick.pending.where(round_id: round.id).empty?
