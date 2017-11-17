@@ -28,12 +28,11 @@ class FplTeamListsController < ApplicationController
       target: target,
       current_user: current_user
     )
-    respond_to do |format|
-      if form.save
-        render json: fpl_team_list_hash.merge!(success: "Successfully substituted #{player.name} with #{target.name}.")
-      else
-        render json: fpl_team_list_hash.merge!(errors: form.errors.full_messages), status: :unprocessable_entity
-      end
+    
+    if form.save
+      render json: fpl_team_list_hash.merge!(success: "Successfully substituted #{player.name} with #{target.name}.")
+    else
+      render json: fpl_team_list_hash.merge!(errors: form.errors.full_messages), status: :unprocessable_entity
     end
   end
 
