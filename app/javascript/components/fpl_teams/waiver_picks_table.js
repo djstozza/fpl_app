@@ -225,6 +225,7 @@ export default class WaiverPicksTable extends Component {
           </TableHeaderColumn>
           { this.deleteWaiverPickCol() }
         </BootstrapTable>
+        <ReactTooltip />
       </div>
     )
   }

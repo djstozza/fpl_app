@@ -165,7 +165,7 @@ export default class TeamListTable extends Component {
       i: { name: 'ambulance', title: 'Injured' }
     }
 
-    let columnClassNameFormat = (fieldValue, row, rowIdx, colIdx) => {
+    let statusColumnClassNameFormat = (fieldValue, row, rowIdx, colIdx) => {
       return `player-status-${row.status}`
     }
 
@@ -241,13 +241,17 @@ export default class TeamListTable extends Component {
           <TableHeaderColumn
             dataField='status'
             dataAlign='center'
-            columnClassName={ columnClassNameFormat }
+            columnClassName={ statusColumnClassNameFormat }
             dataFormat={ statusIconCell }
           >
             <span data-tip='Status'>S</span>
           </TableHeaderColumn>
         );
       }
+    }
+
+    let opponentColumnClassNameFormat = (fieldValue, row, rowIdx, colIdx) => {
+      return row.difficulty_class
     }
 
     const selectRowProp = {
@@ -276,8 +280,15 @@ export default class TeamListTable extends Component {
           <TableHeaderColumn dataField='last_name' dataAlign='center' dataFormat={ this.linkCellText } isKey >
             <span data-tip='Player'>P</span>
           </TableHeaderColumn>
-          <TableHeaderColumn dataField='short_name' dataAlign='center' >
+          <TableHeaderColumn dataField='team_short_name' dataAlign='center' >
             <span data-tip='Team'>T</span>
+          </TableHeaderColumn>
+          <TableHeaderColumn
+            dataField='opponent_short_name'
+            dataAlign='center'
+            columnClassName={ opponentColumnClassNameFormat }
+          >
+            <span data-tip='Opponent'>O</span>
           </TableHeaderColumn>
           { pointsColumn() }
           { statusColumn() }

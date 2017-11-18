@@ -197,19 +197,20 @@ class TeamDecorator < SimpleDelegator
   def advantage(fixture, home_fixture)
     if home_fixture
       fixture.team_a_difficulty - fixture.team_h_difficulty
-     else
-       fixture.team_h_difficulty - fixture.team_a_difficulty
-     end
+    else
+     fixture.team_h_difficulty - fixture.team_a_difficulty
+    end
   end
 
   def fixture_advantage(advantage)
-    advantage_type = if advantage < 0
-                       'o'
-                     elsif advantage == 0
-                       'e'
-                     else
-                       't'
-                     end
+    advantage_type =
+      if advantage < 0
+        'o'
+      elsif advantage == 0
+        'e'
+      else
+        't'
+      end
     "difficulty-#{advantage_type}#{advantage.abs unless advantage == 0}"
   end
 
