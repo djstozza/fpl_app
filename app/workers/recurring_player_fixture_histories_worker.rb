@@ -8,7 +8,8 @@ class RecurringPlayerFixtureHistoriesWorker
 
   def perform
     Player.all.each do |player|
-      player_json = HTTParty.get("https://fantasy.premierleague.com/drf/element-summary/#{player.id}")
+      response = HTTParty.get("https://fantasy.premierleague.com/drf/element-summary/#{player.id}")
+      player_json = response&.parsed_response || response
       next unless player_json.instance_of?(Hash)
       player.update(player_past_histories: player_json['history_past'])
       fixture_histories = player_json['history']
