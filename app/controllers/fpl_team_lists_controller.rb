@@ -28,7 +28,7 @@ class FplTeamListsController < ApplicationController
       target: target,
       current_user: current_user
     )
-    
+
     if form.save
       render json: fpl_team_list_hash.merge!(success: "Successfully substituted #{player.name} with #{target.name}.")
     else
@@ -66,7 +66,7 @@ class FplTeamListsController < ApplicationController
       fpl_team_lists: fpl_team_decorator.fpl_team_lists.order(:round_id),
       fpl_team_list: fpl_team_list_decorator,
       line_up: line_up,
-      status: Round.current_round_status,
+      status: Round.current_round_status(round: fpl_team_list_decorator.round),
       unpicked_players: LeagueDraftPicksDecorator.new(@fpl_team.league).unpicked_players,
       score: fpl_team_list_decorator.score
     }
