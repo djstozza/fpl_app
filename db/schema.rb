@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170909071629) do
+ActiveRecord::Schema.define(version: 20171119212146) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -90,6 +90,31 @@ ActiveRecord::Schema.define(version: 20170909071629) do
     t.index ["fpl_team_id", "player_id"], name: "by_fpl_team_and_player", unique: true, using: :btree
     t.index ["fpl_team_id"], name: "index_fpl_teams_players_on_fpl_team_id", using: :btree
     t.index ["player_id"], name: "index_fpl_teams_players_on_player_id", using: :btree
+  end
+
+  create_table "inter_team_trade_groups", force: :cascade do |t|
+    t.integer  "out_fpl_team_list_id"
+    t.integer  "in_fpl_team_list_id"
+    t.integer  "round_id"
+    t.integer  "league_id"
+    t.integer  "status",               default: 0
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
+    t.index ["in_fpl_team_list_id"], name: "index_inter_team_trade_groups_on_in_fpl_team_list_id", using: :btree
+    t.index ["league_id"], name: "index_inter_team_trade_groups_on_league_id", using: :btree
+    t.index ["out_fpl_team_list_id"], name: "index_inter_team_trade_groups_on_out_fpl_team_list_id", using: :btree
+    t.index ["round_id"], name: "index_inter_team_trade_groups_on_round_id", using: :btree
+  end
+
+  create_table "inter_team_trades", force: :cascade do |t|
+    t.integer  "inter_team_trade_group_id"
+    t.integer  "out_player_id"
+    t.integer  "in_player_id"
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.index ["in_player_id"], name: "index_inter_team_trades_on_in_player_id", using: :btree
+    t.index ["inter_team_trade_group_id"], name: "index_inter_team_trades_on_inter_team_trade_group_id", using: :btree
+    t.index ["out_player_id"], name: "index_inter_team_trades_on_out_player_id", using: :btree
   end
 
   create_table "leagues", force: :cascade do |t|
@@ -309,6 +334,10 @@ ActiveRecord::Schema.define(version: 20170909071629) do
 
   add_foreign_key "fixtures", "teams", column: "team_a_id"
   add_foreign_key "fixtures", "teams", column: "team_h_id"
+  add_foreign_key "inter_team_trade_groups", "fpl_team_lists", column: "in_fpl_team_list_id"
+  add_foreign_key "inter_team_trade_groups", "fpl_team_lists", column: "out_fpl_team_list_id"
+  add_foreign_key "inter_team_trades", "players", column: "in_player_id"
+  add_foreign_key "inter_team_trades", "players", column: "out_player_id"
   add_foreign_key "leagues", "users", column: "commissioner_id"
   add_foreign_key "mini_draft_picks", "players", column: "in_player_id"
   add_foreign_key "mini_draft_picks", "players", column: "out_player_id"

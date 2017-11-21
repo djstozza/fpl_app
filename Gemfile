@@ -65,6 +65,7 @@ group :development do
 end
 
 group :test do
+  gem 'timecop'
   gem 'faker'
   gem 'factory_bot_rails', require: false
   gem 'database_cleaner'
