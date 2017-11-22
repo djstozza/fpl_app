@@ -130,6 +130,7 @@ export default class TradePlayersTable extends Component {
     if (this.state.selected && this.props.listPosition) {
       return (
         <div>
+          <h3>Complete</h3>
           <p>(3) Click the button below to complete.</p>
           <Button onClick={ () => this.completeTradeAction() }>
             Complete
@@ -219,12 +220,20 @@ export default class TradePlayersTable extends Component {
             <span data-tip='Position'>Pos</span>
           </TableHeaderColumn>
           <TableHeaderColumn
+            dataField='event_points'
+            dataAlign='center'
+            dataSort
+            filter={ { type: 'NumberFilter', placeholder: ' ' } }
+          >
+            <span data-tip='Last Round'>LR</span>
+          </TableHeaderColumn>
+          <TableHeaderColumn
             dataField='total_points'
             dataAlign='center'
             dataSort
             filter={ { type: 'NumberFilter', placeholder: ' ' } }
           >
-            <span data-tip='Total Points (last season)'>TP</span>
+            <span data-tip='Total Points'>TP</span>
           </TableHeaderColumn>
           <TableHeaderColumn
             dataField='status'
@@ -235,8 +244,8 @@ export default class TradePlayersTable extends Component {
             <span data-tip='Status'>S</span>
           </TableHeaderColumn>
         </BootstrapTable>
-        { this.completeTradeActionButton() }
         <ReactTooltip />
+        { this.completeTradeActionButton() }
       </div>
     )
   }

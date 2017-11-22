@@ -205,19 +205,13 @@ export default class TeamListTable extends Component {
     }
 
     let pointsColumn = () => {
-      if (this.props.action == 'selectLineUp') {
+      if (this.props.action == 'pastRound') {
         return (
-          <TableHeaderColumn dataField='event_points' dataAlign='center' >
-            <span data-tip='Last Round'>LR</span>
+          <TableHeaderColumn dataField='player_fixture_histories' dataAlign='center' dataFormat={ pointsText } >
+            <span data-tip='Points'>Pts</span>
           </TableHeaderColumn>
         );
-      } else if (this.props.action == 'tradePlayers' || this.props.action == 'waiverPicks') {
-        return (
-          <TableHeaderColumn dataField='total_points' dataAlign='center' >
-            <span data-tip='Total Points'>TP</span>
-          </TableHeaderColumn>
-        );
-      } else if (this.props.action == 'miniDraft') {
+      } else {
         return [
           <TableHeaderColumn dataField='event_points' dataAlign='center' >
             <span data-tip='Last Round'>LR</span>
@@ -226,12 +220,6 @@ export default class TeamListTable extends Component {
             <span data-tip='Total Points'>TP</span>
           </TableHeaderColumn>
         ]
-      } else {
-        return (
-          <TableHeaderColumn dataField='player_fixture_histories' dataAlign='center' dataFormat={ pointsText } >
-            <span data-tip='Points'>Pts</span>
-          </TableHeaderColumn>
-        );
       }
     }
 

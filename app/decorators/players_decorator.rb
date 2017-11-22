@@ -42,6 +42,7 @@ class PlayersDecorator < SimpleDelegator
       :offside,
       :target_missed,
       :points_per_game,
+      :event_points,
       :total_points,
       :singular_name_short,
       :short_name,

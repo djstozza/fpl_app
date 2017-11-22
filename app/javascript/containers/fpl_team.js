@@ -203,7 +203,7 @@ class FplTeam extends Component {
   tradePlayersTable () {
     if (this.state.action == 'tradePlayers' || this.state.action == 'waiverPicks') {
       return (
-        <Col sm={6} xs={12}>
+        <Col xs={12}>
           <TradePlayersTable
             unpicked_players={ this.state.unpicked_players }
             teams={ this.state.teams }
@@ -281,7 +281,7 @@ class FplTeam extends Component {
           { this.showButtons() }
           <h4>{ this.roundScore() }</h4>
           <Row className='clearfix'>
-            <Col sm={ this.setTeamTableCol() } >
+            <Col xs={12} >
               <TeamListTable
                 fpl_team={ this.state.fpl_team }
                 current_user={ this.state.current_user }
@@ -295,6 +295,8 @@ class FplTeam extends Component {
                 setlistPosition={ this.setlistPosition }
               />
             </Col>
+          </Row>
+          <Row className='clearfix'>
             { this.tradePlayersTable() }
           </Row>
           <Row className='clearfix'>
