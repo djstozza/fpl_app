@@ -3,7 +3,7 @@ class InterTeamTradeGroups::Expire < InterTeamTradeGroups::Base
   object :round, class: Round, default: -> { inter_team_trade_group.round }
 
   validate :round_deadline_time_passed
-  validates :inter_team_trade_group_unprocessed
+  validate :inter_team_trade_group_unprocessed
 
   run_in_transaction!
 
