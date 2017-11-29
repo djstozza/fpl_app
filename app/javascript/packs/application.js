@@ -22,6 +22,7 @@ import League from '../containers/league.js';
 import DraftPicks from '../containers/draft_picks.js';
 import FplTeam from '../containers/fpl_team.js';
 import FplTeams from '../containers/fpl_teams.js';
+import InterTeamTradeGroups from '../containers/inter_team_trade_groups.js';
 import MiniDraftPicks from '../containers/mini_draft_picks.js'
 import thunk from 'redux-thunk';
 import reducers from '../reducers';
@@ -66,6 +67,11 @@ export default class App extends Component {
                 <Route exact path='/leagues/:id(\d+)/mini_draft_picks' component={ MiniDraftPicks } />
                 <Route exact path='/fpl_teams' component={ FplTeams } />
                 <Route exact path='/fpl_teams/:id(\d+)' component={ FplTeam } />
+                <Route
+                  exact
+                    path='/fpl_teams/:fpl_team_id(\d+)/fpl_team_lists/:fpl_team_list_id(\d+)/inter_team_trade_groups'
+                  component={ InterTeamTradeGroups }
+                />
              </Col>
             </Row>
           </div>

@@ -8,7 +8,7 @@ export default function createWaiverPick (fplTeamId, fplTeamListId, listPosition
       url: `/fpl_teams/${fplTeamId}/fpl_team_lists/${fplTeamListId}/waiver_picks.json`,
       data: {
         list_position_id: listPositionId,
-        target_id: targetId
+        in_player_id: targetId
       }
     }).then(res => {
       dispatch(createWaiverPickAsync(res.data));

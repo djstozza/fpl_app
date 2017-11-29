@@ -11,11 +11,9 @@ class FplTeams::CreateWaiverPickForm < ApplicationInteraction
 
   array :waiver_picks, default: -> { fpl_team_list.reload.waiver_picks }
 
-  integer :target_id
   object :in_player, class: Player, default: -> { Player.find(target_id) }
 
-  integer :list_position_id
-  object :list_position, class: ListPosition, default: -> { ListPosition.find(list_position_id) }
+  object :list_position, class: ListPosition
 
   object :out_player, class: Player, default: -> { list_position.player }
 

@@ -19,6 +19,7 @@ class FplTeam < ApplicationRecord
   has_many :draft_picks
   has_many :fpl_team_lists
   has_many :waiver_picks, through: :fpl_team_lists
+  has_many :inter_team_trade_groups, through: :fpl_team_lists
   has_and_belongs_to_many :players
   has_many :teams, through: :players
   has_many :positions, through: :players

@@ -20,6 +20,8 @@ class InterTeamTradeGroups::Create < InterTeamTradeGroups::Base
   validate :in_player_in_fpl_team
   validate :in_fpl_team_in_league
   validate :identical_player_and_target_positions
+  validate :round_is_current
+  validate :trade_occurring_in_valid_period
   validate :valid_team_quota_out_fpl_team
   validate :valid_team_quota_in_fpl_team
 

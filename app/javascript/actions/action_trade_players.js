@@ -8,7 +8,7 @@ export default function tradePlayers (fplTeamId, listPositionId, targetId) {
       url: `/fpl_teams/${fplTeamId}/trades.json`,
       data: {
         list_position_id: listPositionId,
-        target_id: targetId
+        in_player_id: targetId
       }
     }).then(res => {
       dispatch(tradePlayersAsync(res.data));

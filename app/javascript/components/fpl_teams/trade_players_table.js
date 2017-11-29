@@ -130,7 +130,6 @@ export default class TradePlayersTable extends Component {
     if (this.state.selected && this.props.listPosition) {
       return (
         <div>
-          <h3>Complete</h3>
           <p>(3) Click the button below to complete.</p>
           <Button onClick={ () => this.completeTradeAction() }>
             Complete
@@ -211,12 +210,8 @@ export default class TradePlayersTable extends Component {
             ref='position'
             dataAlign='center'
             dataSort
-            filter={ {
-              type: 'SelectFilter',
-              options: positionText,
-              placeholder: ' '
-            }
-          }>
+            filter={ { type: 'SelectFilter', options: positionText, placeholder: ' ' } }
+          >
             <span data-tip='Position'>Pos</span>
           </TableHeaderColumn>
           <TableHeaderColumn

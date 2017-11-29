@@ -58,6 +58,7 @@ class FplTeam extends Component {
   tradePlayers (targetId) {
     this.props.tradePlayers(this.state.fplTeamId, this.state.listPosition.id, targetId);
     this.props.fetchFplTeamLists(this.state.fplTeamId);
+    window.scrollTo(0, 0);
   }
 
   waiverPicks (targetId) {
@@ -67,6 +68,7 @@ class FplTeam extends Component {
       this.state.listPosition.id,
       targetId
     );
+    window.scrollTo(0, 0);
   }
 
   completeTradeAction (targetId) {
@@ -157,7 +159,6 @@ class FplTeam extends Component {
     if (this.props.errors != nextProps.errors) {
       this.errorMessages(nextProps.errors);
     }
-
   }
 
   successMesssage (success) {
@@ -190,14 +191,6 @@ class FplTeam extends Component {
     this.setState({
       action: action
     })
-  }
-
-  setTeamTableCol () {
-    if (this.state.action == 'selectLineUp') {
-      return 12;
-    } else if (this.state.action == 'tradePlayers' || this.state.action == 'waiverPicks') {
-      return 6;
-    }
   }
 
   tradePlayersTable () {
@@ -342,7 +335,7 @@ function mapStateToProps (state) {
   }
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps (dispatch) {
   return bindActionCreators({
     fetchFplTeam: fetchFplTeam,
     fetchTeams: fetchTeams,

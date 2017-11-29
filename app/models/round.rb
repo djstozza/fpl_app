@@ -35,7 +35,7 @@ class Round < ApplicationRecord
       RoundDecorator.new(round)
     end
 
-    def current_round_status(round: Round.current_round)
+    def round_status(round: Round.current_round)
       if round.mini_draft && Time.now < round.deadline_time
         'mini_draft'
       elsif Time.now < round.deadline_time - 1.day && round.id != Round.first.id

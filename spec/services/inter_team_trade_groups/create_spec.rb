@@ -61,10 +61,11 @@ RSpec.describe InterTeamTradeGroups::Create do
 
     expect(inter_team_trade.out_player).to eq(out_player)
     expect(inter_team_trade.in_player).to eq(in_player)
+    binding.pry
   end
 
   it 'fails if the round deadline time has passed' do
-    round.update(deadline_time: 1.second.ago)
+    Timecop.freeze(round.deadline_time + 1.second)
 
     out_fpl_team_list = out_fpl_team.fpl_team_lists.first
     in_fpl_team_list = in_fpl_team.fpl_team_lists.first
@@ -81,6 +82,7 @@ RSpec.describe InterTeamTradeGroups::Create do
     )
 
     expect(outcome).not_to be_valid
+    Timecop.return
   end
 
   it 'fails if the player positions are not identical' do

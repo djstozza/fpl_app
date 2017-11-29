@@ -30,48 +30,48 @@ RSpec.describe Round, type: :model do
     end
   end
 
-  context '#current_round_status' do
+  context '#round_status' do
     it 'when current round is the first and it is > 1 day before the deadline time' do
       FactoryBot.create(:round, is_current: true, deadline_time: 2.days.from_now)
-      expect(Round.current_round_status).to eq('trade')
+      expect(Round.round_status).to eq('trade')
     end
 
     it 'when current round is the first and the is < 1 day before the deadline time' do
       FactoryBot.create(:round, is_current: true, deadline_time: 23.hours.from_now)
-      expect(Round.current_round_status).to eq('trade')
+      expect(Round.round_status).to eq('trade')
     end
 
     it 'when current round is the first and it is after deadline time' do
       FactoryBot.create(:round, is_current: true, deadline_time: 1.second.ago)
-      expect(Round.current_round_status).to be_blank
+      expect(Round.round_status).to be_blank
     end
 
     it 'when current round is not the first round and it is > 1.day before the deadline time' do
       FactoryBot.create(:round, is_current: false, is_previous: true)
       FactoryBot.create(:round, is_current: true, deadline_time: 2.days.from_now)
-      expect(Round.current_round_status).to eq('waiver')
+      expect(Round.round_status).to eq('waiver')
     end
 
     it 'when current round is not the first round and it is > 1.day before the deadline time' do
       FactoryBot.create(:round, is_current: false, is_previous: true)
       FactoryBot.create(:round, is_current: true, deadline_time: 23.hours.from_now)
-      expect(Round.current_round_status).to eq('trade')
+      expect(Round.round_status).to eq('trade')
     end
 
     it 'when current round is not the first round and it is > 1.day before the deadline time' do
       FactoryBot.create(:round, is_current: false, is_previous: true)
       FactoryBot.create(:round, is_current: true, deadline_time: 1.second.ago)
-      expect(Round.current_round_status).to be_blank
+      expect(Round.round_status).to be_blank
     end
 
     it 'when current round is a mini draft round and it is before the deadline time' do
       FactoryBot.create(:round, is_current: true, mini_draft: true, deadline_time: 1.minute.from_now)
-      expect(Round.current_round_status).to eq('mini_draft')
+      expect(Round.round_status).to eq('mini_draft')
     end
 
     it 'when current round is a mini draft round and it is after the deadline time' do
       FactoryBot.create(:round, is_current: true, mini_draft: true, deadline_time: 1.second.ago)
-      expect(Round.current_round_status).to be_blank
+      expect(Round.round_status).to be_blank
     end
   end
 end

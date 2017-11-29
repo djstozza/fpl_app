@@ -80,8 +80,8 @@ RSpec.describe FplTeams::CreateWaiverPickForm, type: :form do
     outcome = ::FplTeams::CreateWaiverPickForm.run(
       fpl_team_list: FplTeamList.first,
       fpl_team: fpl_team,
-      list_position_id: @list_position.id,
-      target_id: @in_player.id,
+      list_position: @list_position,
+      in_player: @in_player,
       current_user: FactoryBot.create(:user)
     )
 

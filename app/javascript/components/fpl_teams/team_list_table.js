@@ -71,7 +71,7 @@ export default class TeamListTable extends Component {
 
     if (this.props.action == 'selectLineUp') {
       return this.selectLineUp(row);
-    } else if (this.props.action == 'tradePlayers' || this.props.action == 'waiverPicks' || this.props.action == 'miniDraft') {
+    } else {
       return this.tradePlayers(row);
     }
   }
@@ -250,7 +250,7 @@ export default class TeamListTable extends Component {
     };
 
     return (
-      <div>
+      <div id='team-list-table'>
         { this.descriptionText() }
         <BootstrapTable
           data={ this.props.line_up }
@@ -259,13 +259,14 @@ export default class TeamListTable extends Component {
           trClassName={ this.trClassFormat }
           hover
         >
+          <TableHeaderColumn dataField='id' hidden isKey/>
           <TableHeaderColumn dataField='role' dataAlign='center' dataFormat={ roleTextCell }>
             <span data-tip='Role'>R</span>
           </TableHeaderColumn>
           <TableHeaderColumn dataField='singular_name_short' dataAlign='center' >
             <span data-tip='Position'>Pos</span>
           </TableHeaderColumn>
-          <TableHeaderColumn dataField='last_name' dataAlign='center' dataFormat={ this.linkCellText } isKey >
+          <TableHeaderColumn dataField='last_name' dataAlign='center' dataFormat={ this.linkCellText } >
             <span data-tip='Player'>P</span>
           </TableHeaderColumn>
           <TableHeaderColumn dataField='team_short_name' dataAlign='center' >

@@ -11,7 +11,7 @@ class PassMiniDraftPicksController < ApplicationController
     league_decorator = LeagueMiniDraftPicksDecorator.new(@league)
     fpl_team = FplTeamDecorator.new(current_user.fpl_teams.find_by(league_id: league_decorator.id))
     round = Round.current_round
-    status = Round.current_round_status
+    status = Round.round_status
 
     if form.valid?
       render json: {

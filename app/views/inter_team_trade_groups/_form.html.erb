@@ -1,0 +1,17 @@
+<%= form_for(inter_team_trade_group) do |f| %>
+  <% if inter_team_trade_group.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(inter_team_trade_group.errors.count, "error") %> prohibited this inter_team_trade_group from being saved:</h2>
+
+      <ul>
+      <% inter_team_trade_group.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

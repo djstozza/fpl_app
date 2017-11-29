@@ -21,7 +21,7 @@ class MiniDraftPicksController < ApplicationController
           line_up: fpl_team.current_line_up,
           fpl_team_list: fpl_team.current_fpl_team_list,
           round: Round.current_round,
-          status: Round.current_round_status,
+          status: Round.round_status,
           positions: Position.all
         }
       end
@@ -36,7 +36,7 @@ class MiniDraftPicksController < ApplicationController
     league_decorator = LeagueMiniDraftPicksDecorator.new(@league)
     fpl_team = FplTeamDecorator.new(current_user.fpl_teams.find_by(league_id: league_decorator.id))
     round = Round.current_round
-    status = Round.current_round_status
+    status = Round.round_status
     fpl_team_list = FplTeamList.find_by(id: params[:fpl_team_list_id])
 
 
