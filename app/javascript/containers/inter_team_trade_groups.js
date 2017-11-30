@@ -7,9 +7,11 @@ import axios from 'axios';
 import fetchFplTeam from '../actions/fpl_teams/action_fetch_fpl_team.js';
 import fetchFplTeamLists from '../actions/fpl_team_lists/action_fetch_fpl_team_lists.js';
 import fetchInterTeamTradeGroups from '../actions/inter_team_trade_groups/action_index.js';
-import fetchInterTeamTradeGroup from '../actions/inter_team_trade_groups/action_show.js';
-import newInterTeamTradeGroup from '../actions/inter_team_trade_groups/action_new.js';
+import submitInterTeamTradeGroup from '../actions/inter_team_trade_groups/action_submit.js';
 import createInterTeamTradeGroup from '../actions/inter_team_trade_groups/action_create.js';
+import addToInterTeamTradeGroup from '../actions/inter_team_trade_groups/action_add.js';
+import deleteInterTeamTradeGroup from '../actions/inter_team_trade_groups/action_delete.js';
+import removeInterTeamTrade from '../actions/inter_team_trade_groups/action_remove.js';
 import fetchTeams from '../actions/action_fetch_teams.js';
 import OutTradesTable from '../components/inter_team_trades/out_trades_table.js';
 import InTradesTable from '../components/inter_team_trades/in_trades_table.js';
@@ -22,23 +24,36 @@ class InterTeamTradeGroups extends Component {
     this.state = {
       fplTeamId: this.props.match.params.fpl_team_id,
       fplTeamListId: this.props.match.params.fpl_team_list_id,
+      clearSelection: false
     }
 
-    this.newTradeGroup = this.newTradeGroup.bind(this);
-    this.tradeGroupPlayerList = this.tradeGroupPlayerList.bind(this);
+    this.toggleNewTradeGroup = this.toggleNewTradeGroup.bind(this);
+    this.newTradeGroupPlayerList = this.newTradeGroupPlayerList.bind(this);
     this.setOutPlayer = this.setOutPlayer.bind(this);
-    this.completeTradeAction = this.completeTradeAction.bind(this);
+    this.createTradeGroupAction = this.createTradeGroupAction.bind(this);
     this.outTradeGroups = this.outTradeGroups.bind(this);
-    this.fetchTradeGroup = this.fetchTradeGroup.bind(this);
+    this.addToTradeGroupAction = this.addToTradeGroupAction.bind(this);
+    this.createTradeGroupAction = this.createTradeGroupAction.bind(this);
+    this.submitTradeGroupAction = this.submitTradeGroupAction.bind(this);
+    this.deleteTradeGroupAction = this.deleteTradeGroupAction.bind(this);
+    this.removeTradeAction = this.removeTradeAction.bind(this);
   }
 
-  newTradeGroup () {
-    this.setState({
-      out_players_tradeable: null,
-      in_players_tradeable: null,
-      tradeGroup: null
-    })
-    this.props.newInterTeamTradeGroup(this.state.fplTeamId, this.state.fplTeamListId);
+  toggleNewTradeGroup () {
+    const element = document.getElementById('new-trade-group');
+    if (element.classList.contains('hidden')) {
+      element.classList.remove('hidden');
+      this.setState({
+        out_player: null,
+        clearSelection: false
+      });
+    } else {
+      element.classList.add('hidden');
+      this.setState({
+        out_player: null,
+        clearSelection: true
+      });
+    }
   }
 
   componentWillMount () {
@@ -48,22 +63,42 @@ class InterTeamTradeGroups extends Component {
     this.props.fetchTeams();
   }
 
-  completeTradeAction (in_player) {
-    if (this.state.tradeGroup == null) {
-      this.props.createInterTeamTradeGroup(
-        this.state.fplTeamId,
-        this.state.fplTeamListId,
-        in_player.in_fpl_team_list_id,
-        this.state.out_player.out_player_id,
-        in_player.in_player_id
-      );
-    }
-
+  createTradeGroupAction (in_player) {
+    this.props.createInterTeamTradeGroup(
+      this.state.fplTeamId,
+      this.state.fplTeamListId,
+      in_player.in_fpl_team_list_id,
+      this.state.out_player.out_player_id,
+      in_player.in_player_id
+    );
     this.setState({
-      out_players_tradeable: null,
-      in_players_tradeable: null,
-      tradeGroup: null
+      out_player: null,
+      clearSelection: true
     });
+    const element = document.getElementById('new-trade-group');
+    element.classList.add('hidden');
+  }
+
+  addToTradeGroupAction (tradeGroup, out_player, in_player) {
+    this.props.addToInterTeamTradeGroup(
+      this.state.fplTeamId,
+      this.state.fplTeamListId,
+      tradeGroup.id,
+      out_player.out_player_id,
+      in_player.in_player_id
+    );
+  }
+
+  submitTradeGroupAction (tradeGroup) {
+    this.props.submitInterTeamTradeGroup(this.state.fplTeamId, this.state.fplTeamListId, tradeGroup.id);
+  }
+
+  deleteTradeGroupAction (tradeGroup) {
+    this.props.deleteInterTeamTradeGroup(this.state.fplTeamId, this.state.fplTeamListId, tradeGroup.id);
+  }
+
+  removeTradeAction (tradeGroup, tradeId) {
+    this.props.removeInterTeamTrade(this.state.fplTeamId, this.state.fplTeamListId, tradeGroup.id, tradeId);
   }
 
   componentWillReceiveProps (nextProps) {
@@ -87,16 +122,13 @@ class InterTeamTradeGroups extends Component {
     });
   }
 
-  tradeGroupPlayerList (tradeGroup) {
-    if (this.state.out_players_tradeable == null || this.state.tradeGroup != tradeGroup) {
-      return;
-    }
-
+  newTradeGroupPlayerList (tradeGroup) {
     return (
-      <div>
+      <div id='new-trade-group' className='hidden'>
         <Row className='clearfix'>
           <Col xs={5}>
             <OutTradesTable
+              clearSelection={ this.state.clearSelection }
               out_players_tradeable={ this.state.out_players_tradeable }
               fpl_team={ this.state.fpl_team }
               current_user={ this.state.current_user }
@@ -114,7 +146,7 @@ class InterTeamTradeGroups extends Component {
               status={ this.state.status }
               fpl_team={ this.state.fpl_team }
               current_user={ this.state.current_user }
-              completeTradeAction={ this.completeTradeAction }
+              completeTradeAction={ this.createTradeGroupAction }
             />
           </Col>
         </Row>
@@ -125,22 +157,27 @@ class InterTeamTradeGroups extends Component {
   outTradeGroups () {
     return (
       this.state.out_trade_groups.map( (tradeGroup) => {
+        let key=`out-trade-group-${tradeGroup.id}`
         return (
-          <div key={ `outTradeGroup-${tradeGroup.id}` }>
-            <Button  onClick={ () => this.fetchTradeGroup(tradeGroup) }>
-              Add to Trade Group
-            </Button>
-            { this.tradeGroupPlayerList(tradeGroup) }
-            <TradeGroupsTable tradeGroup={ tradeGroup } />
+          <div key={ key }>
+            <TradeGroupsTable
+              selector={ key }
+              tradeGroup={ tradeGroup }
+              fpl_team={ this.state.fpl_team }
+              fpl_teams={ this.state.fpl_teams }
+              current_user={ this.state.current_user }
+              status={ this.state.status }
+              teams={ this.state.teams }
+              positions={ this.state.positions }
+              completeTradeAction={ this.addToTradeGroupAction }
+              submitTradeGroupAction={ this.submitTradeGroupAction }
+              deleteTradeGroupAction={ this.deleteTradeGroupAction }
+              removeTradeAction={ this.removeTradeAction }
+            />
           </div>
         )
       })
     )
-  }
-
-  fetchTradeGroup (tradeGroup) {
-    this.setState({ tradeGroup: tradeGroup });
-    this.props.fetchInterTeamTradeGroup(this.state.fplTeamId, this.state.fplTeamListId, tradeGroup.id);
   }
 
   setOutPlayer (outPlayer) {
@@ -148,18 +185,22 @@ class InterTeamTradeGroups extends Component {
   }
 
   render () {
-    if (this.state == null || this.state.fpl_team == null || this.state.fpl_team_list == null) {
-      return (
-        <p>Loading...</p>
-      )
+    if (
+      this.state == null ||
+      this.state.fpl_team == null ||
+      this.state.fpl_team_list == null ||
+      this.state.out_trade_groups == null
+    ) {
+      return (<p>Loading...</p>);
     } else {
       return (
         <div>
-          <Button onClick={ (e) => this.newTradeGroup(e) }>Create A New Trade</Button>
-          { this.tradeGroupPlayerList() }
+          { this.newTradeGroupPlayerList() }
+          <Button bsStyle='primary' onClick={ () => this.toggleNewTradeGroup() }>Create A New Trade</Button>
+          <hr/>
           { this.outTradeGroups() }
         </div>
-      )
+      );
     }
   }
 }
@@ -191,10 +232,12 @@ function mapDispatchToProps(dispatch) {
     fetchFplTeam: fetchFplTeam,
     fetchFplTeamLists: fetchFplTeamLists,
     fetchTeams: fetchTeams,
-    newInterTeamTradeGroup: newInterTeamTradeGroup,
     createInterTeamTradeGroup: createInterTeamTradeGroup,
     fetchInterTeamTradeGroups: fetchInterTeamTradeGroups,
-    fetchInterTeamTradeGroup: fetchInterTeamTradeGroup
+    addToInterTeamTradeGroup: addToInterTeamTradeGroup,
+    submitInterTeamTradeGroup: submitInterTeamTradeGroup,
+    deleteInterTeamTradeGroup: deleteInterTeamTradeGroup,
+    removeInterTeamTrade: removeInterTeamTrade
   }, dispatch);
 }
 

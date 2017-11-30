@@ -13,8 +13,8 @@ export default function createInterTeamTradeGroup (fplTeamId, fplTeamListId, inF
         in_player_id: inPlayerId
       }
     }).then(res => {
-        dispatch(createInterTeamTradeGroupAsync(res.data));
-      });
+      dispatch(createInterTeamTradeGroupAsync(res.data));
+    });
   }
 }
 

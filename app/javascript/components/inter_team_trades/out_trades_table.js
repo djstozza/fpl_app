@@ -28,6 +28,14 @@ export default class OutTradesTable extends Component {
   trClassFormat (row) {
     if (this.state.selected == row.out_player_id) {
       return 'selected-player'
+    } else {
+      return ''
+    }
+  }
+
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.clearSelection) {
+      this.setState( {selected: ''} )
     }
   }
 

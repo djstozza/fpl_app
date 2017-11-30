@@ -26,6 +26,7 @@ class InterTeamTradeGroups::AddToGroup < InterTeamTradeGroups::Base
   validate :valid_team_quota_out_fpl_team
   validate :valid_team_quota_in_fpl_team
   validate :inter_team_trade_group_pending
+  validate :trade_occurring_in_valid_period
 
   def execute
     trade = InterTeamTrade.create(

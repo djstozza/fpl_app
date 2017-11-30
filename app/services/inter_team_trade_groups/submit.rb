@@ -7,6 +7,7 @@ class InterTeamTradeGroups::Submit < InterTeamTradeGroups::Base
 
   validate :authorised_user_out_fpl_team
   validate :inter_team_trade_group_pending
+  validate :trade_occurring_in_valid_period
 
   def execute
     inter_team_trade_group.update(status: 'submitted')

@@ -61,7 +61,6 @@ RSpec.describe InterTeamTradeGroups::Create do
 
     expect(inter_team_trade.out_player).to eq(out_player)
     expect(inter_team_trade.in_player).to eq(in_player)
-    binding.pry
   end
 
   it 'fails if the round deadline time has passed' do

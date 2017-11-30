@@ -6,10 +6,9 @@ Rails.application.routes.draw do
   resources :fpl_teams, except: [:new, :create, :destroy] do
     resources :fpl_team_lists, only: [:index, :show, :update] do
       resources :waiver_picks, only: [:create, :update, :destroy]
-      resources :inter_team_trade_groups, except: [:edit, :destroy]
+      resources :inter_team_trade_groups, except: [:new, :show, :edit]
     end
     resources :waiver_picks, only: :index
-    resources :inter_team_trade_groups, only: :index
     resources :trades, only: :create
   end
 

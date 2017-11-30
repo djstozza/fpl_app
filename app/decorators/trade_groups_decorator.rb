@@ -1,5 +1,31 @@
 class TradeGroupsDecorator < SimpleDelegator
   def all_trades
-    map { |trade_group| { id: trade_group.id, trades: TradeGroupDecorator.new(trade_group).all_data } }
+    map do |trade_group|
+      decorator = TradeGroupDecorator.new(trade_group)
+      {
+        id: decorator.id,
+        trades: decorator.all_data,
+        status: decorator.status,
+        in_players_tradeable: decorator.in_players_tradeable,
+        out_players_tradeable: decorator.out_players_tradeable,
+        out_fpl_team: decorator.out_fpl_team_list.fpl_team,
+        in_fpl_team: decorator.in_fpl_team_list.fpl_team
+      }
+    end
+  end
+
+  def new_trade_group
+    decorator = TradeGroupDecorator.new(
+      InterTeamTradeGroup.new(
+        out_fpl_team_list: out_fpl_team_list,
+        round_id: Round.current_round.id,
+        league: out_fpl_team_list.fpl_team.league
+      )
+    )
+
+    {
+      in_players_tradeable: decorator.in_players_tradeable,
+      out_players_tradeable: decorator.out_players_tradeable
+    }
   end
 end

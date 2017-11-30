@@ -71,6 +71,7 @@ class TradeGroupDecorator < SimpleDelegator
       .joins('JOIN teams AS out_teams ON out_players.team_id = out_teams.id')
       .joins('JOIN positions ON out_players.position_id = positions.id')
       .pluck_to_hash(
+        :id,
         'in_players.id AS in_player_id',
         'in_players.last_name AS in_player_last_name',
         'in_teams.short_name AS in_team_short_name',
