@@ -9,7 +9,7 @@ import { Row, Col, Button } from 'react-bootstrap';
 import OutTradesTable from './out_trades_table.js';
 import InTradesTable from './in_trades_table.js';
 
-export default class TradeGroupsTable extends Component {
+export default class OutTradeGroupTable extends Component {
   constructor(props) {
     super(props);
 
@@ -109,7 +109,7 @@ export default class TradeGroupsTable extends Component {
   }
 
   removeTradeAction (tradeId) {
-    return this.props.removeTradeAction(this.props.tradeGroup, tradeId);
+    this.props.removeTradeAction(this.props.tradeGroup, tradeId);
   }
 
   deleteTradeGroupButton () {

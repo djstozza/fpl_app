@@ -13,9 +13,10 @@ import addToInterTeamTradeGroup from '../actions/inter_team_trade_groups/action_
 import deleteInterTeamTradeGroup from '../actions/inter_team_trade_groups/action_delete.js';
 import removeInterTeamTrade from '../actions/inter_team_trade_groups/action_remove.js';
 import fetchTeams from '../actions/action_fetch_teams.js';
+import OutTradeGroups from '../components/inter_team_trades/out_trade_groups.js';
 import OutTradesTable from '../components/inter_team_trades/out_trades_table.js';
 import InTradesTable from '../components/inter_team_trades/in_trades_table.js';
-import TradeGroupsTable from '../components/inter_team_trades/trade_group_table.js';
+
 
 class InterTeamTradeGroups extends Component {
   constructor (props) {
@@ -31,7 +32,6 @@ class InterTeamTradeGroups extends Component {
     this.newTradeGroupPlayerList = this.newTradeGroupPlayerList.bind(this);
     this.setOutPlayer = this.setOutPlayer.bind(this);
     this.createTradeGroupAction = this.createTradeGroupAction.bind(this);
-    this.outTradeGroups = this.outTradeGroups.bind(this);
     this.addToTradeGroupAction = this.addToTradeGroupAction.bind(this);
     this.createTradeGroupAction = this.createTradeGroupAction.bind(this);
     this.submitTradeGroupAction = this.submitTradeGroupAction.bind(this);
@@ -154,32 +154,6 @@ class InterTeamTradeGroups extends Component {
     );
   }
 
-  outTradeGroups () {
-    return (
-      this.state.out_trade_groups.map( (tradeGroup) => {
-        let key=`out-trade-group-${tradeGroup.id}`
-        return (
-          <div key={ key }>
-            <TradeGroupsTable
-              selector={ key }
-              tradeGroup={ tradeGroup }
-              fpl_team={ this.state.fpl_team }
-              fpl_teams={ this.state.fpl_teams }
-              current_user={ this.state.current_user }
-              status={ this.state.status }
-              teams={ this.state.teams }
-              positions={ this.state.positions }
-              completeTradeAction={ this.addToTradeGroupAction }
-              submitTradeGroupAction={ this.submitTradeGroupAction }
-              deleteTradeGroupAction={ this.deleteTradeGroupAction }
-              removeTradeAction={ this.removeTradeAction }
-            />
-          </div>
-        )
-      })
-    )
-  }
-
   setOutPlayer (outPlayer) {
     this.setState({ out_player: outPlayer });
   }
@@ -198,7 +172,19 @@ class InterTeamTradeGroups extends Component {
           { this.newTradeGroupPlayerList() }
           <Button bsStyle='primary' onClick={ () => this.toggleNewTradeGroup() }>Create A New Trade</Button>
           <hr/>
-          { this.outTradeGroups() }
+          <OutTradeGroups
+            out_trade_groups={ this.state.out_trade_groups }
+            fpl_team={ this.state.fpl_team }
+            fpl_teams={ this.state.fpl_teams }
+            current_user={ this.state.current_user }
+            status={ this.state.status }
+            teams={ this.state.teams }
+            positions={ this.state.positions }
+            completeTradeAction={ this.addToTradeGroupAction }
+            submitTradeGroupAction={ this.submitTradeGroupAction }
+            deleteTradeGroupAction={ this.deleteTradeGroupAction }
+            removeTradeAction={ this.removeTradeAction }
+          />
         </div>
       );
     }
