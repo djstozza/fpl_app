@@ -113,4 +113,17 @@ class InterTeamTradeGroups::Base < ApplicationInteraction
     return if Time.now < round.deadline_time
     errors.add(:base, "Trades can still occur as the round's deadline time hasn't passed.")
   end
+
+  def no_duplicate_trades
+    duplicates_present =
+      InterTeamTradeGroup
+        .where.not(status: 'pending')
+        .where(out_fpl_team_list: out_fpl_team_list, in_fpl_team_list: in_fpl_team_list).any? do |trade_group|
+          trade_group.in_players == inter_team_trade_group.in_players &&
+          trade_group.out_players == inter_team_trade_group.out_players
+        end
+
+    return unless duplicates_present
+    errors.add(:base, 'You have already created this trade.')
+  end
 end
