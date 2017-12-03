@@ -26,3 +26,7 @@
   RecurringWaiverPicksWorker:
     cron: '0 */1 * * *'
     description: 'Check that the date is the same as the waier deadline so that picks can be processed.'
+
+  RecurringExpireTradeGroupsWorker:
+    cron: '0 */1 * * *'
+    description: 'Change the state of pending + submitted inter_team_trade_groups if the current round deadline time has passed.'

@@ -1,4 +1,4 @@
-import { ADD_TO_INTER_TEAM_TRADE_GROUP } from '../types';
+import { ADD_TO_INTER_TEAM_TRADE_GROUP, SHOW_ERRORS } from '../types';
 import axios from 'axios';
 
 export default function addToInterTeamTradeGroup (fplTeamId, tradeGroupId, outPlayerId, inPlayerId) {
@@ -13,6 +13,8 @@ export default function addToInterTeamTradeGroup (fplTeamId, tradeGroupId, outPl
       }
     }).then(res => {
       dispatch(addToInterTeamTradeGroupAsync(res.data));
+    }).catch(error => {
+      dispatch({ type: SHOW_ERRORS, payload: error.response.data });
     });
   }
 }

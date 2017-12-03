@@ -60,25 +60,41 @@ class InterTeamTradeGroups::Base < ApplicationInteraction
   end
 
   def valid_team_quota_out_fpl_team
-    player_arr = out_fpl_team.players.to_a.delete_if { |player| player == out_player }
-    team_arr = player_arr.map { |player| player.team_id }
-    team_arr << in_player.team_id
-    return if team_arr.count(in_player.team_id) <= FplTeam::QUOTAS[:team]
+    out_players =
+      out_fpl_team.players.where.not(id: inter_team_trade_group.out_players.map(&:id) << out_player.id)
+
+    in_players = inter_team_trade_group.in_players.to_a << in_player
+    team_arr = out_players.map { |player| player.team_id }
+    team_arr += in_players.map(&:team_id)
+
+    team_id = team_arr.detect { |id| team_arr.count(id) > FplTeam::QUOTAS[:team] }
+    team = Team.find_by(id: team_id)
+
+    return unless team
     errors.add(
       :base,
-      "You can't have more than #{FplTeam::QUOTAS[:team]} players from the same team (#{in_player.team.name})."
+      "You can't have more than #{FplTeam::QUOTAS[:team]} players from the same team " \
+        "(#{team.name})."
     )
   end
 
   def valid_team_quota_in_fpl_team
-    player_arr = in_fpl_team.players.to_a.delete_if { |player| player == in_player }
-    team_arr = player_arr.map { |player| player.team_id }
-    team_arr << out_player.team_id
-    return if team_arr.count(in_player.team_id) <= FplTeam::QUOTAS[:team]
+    in_players =
+      in_fpl_team.players.where.not(id: inter_team_trade_group.in_players.map(&:id) << in_player.id)
+
+    out_players = inter_team_trade_group.out_players.to_a << out_player
+
+    team_arr = in_players.map { |player| player.team_id }
+    team_arr += out_players.map(&:team_id)
+
+    team_id = team_arr.detect { |id| team_arr.count(id) > FplTeam::QUOTAS[:team] }
+    team = Team.find_by(id: team_id)
+
+    return unless team
     errors.add(
       :base,
       "#{in_fpl_team.name} can't have more than #{FplTeam::QUOTAS[:team]} players from the same team " \
-        "(#{out_player.team.name})."
+        "(#{team.name})."
     )
   end
 
@@ -118,7 +134,8 @@ class InterTeamTradeGroups::Base < ApplicationInteraction
     duplicates_present =
       InterTeamTradeGroup
         .where.not(status: 'pending')
-        .where(out_fpl_team_list: out_fpl_team_list, in_fpl_team_list: in_fpl_team_list).any? do |trade_group|
+        .where(out_fpl_team_list: out_fpl_team_list, in_fpl_team_list: in_fpl_team_list)
+        .any? do |trade_group|
           trade_group.in_players == inter_team_trade_group.in_players &&
           trade_group.out_players == inter_team_trade_group.out_players
         end

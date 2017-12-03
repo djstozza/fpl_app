@@ -1,4 +1,4 @@
-import { REMOVE_INTER_TEAM_TRADE } from '../types';
+import { REMOVE_INTER_TEAM_TRADE, SHOW_ERRORS } from '../types';
 import axios from 'axios';
 
 export default function removeInterTeamTrade (fplTeamId, tradeGroupId, interTeamTradeId) {
@@ -12,6 +12,8 @@ export default function removeInterTeamTrade (fplTeamId, tradeGroupId, interTeam
       }
     }).then(res => {
       dispatch(removeInterTeamTradeAsync(res.data));
+    }).catch(error => {
+      dispatch({ type: SHOW_ERRORS, payload: error.response.data });
     });
   }
 }

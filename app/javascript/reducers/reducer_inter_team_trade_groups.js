@@ -6,7 +6,8 @@ import {
   DELETE_INTER_TEAM_TRADE_GROUP,
   REMOVE_INTER_TEAM_TRADE,
   APPROVE_INTER_TEAM_TRADE_GROUP,
-  DECLINE_INTER_TEAM_TRADE_GROUP
+  DECLINE_INTER_TEAM_TRADE_GROUP,
+  SHOW_ERRORS
 } from '../actions/types';
 
 export default function(state=[], action) {
@@ -26,6 +27,8 @@ export default function(state=[], action) {
     case APPROVE_INTER_TEAM_TRADE_GROUP:
       return action.payload;
     case DECLINE_INTER_TEAM_TRADE_GROUP:
+      return action.payload;
+    case SHOW_ERRORS:
       return action.payload;
 
     default:

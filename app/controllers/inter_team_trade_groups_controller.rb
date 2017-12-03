@@ -31,7 +31,8 @@ class InterTeamTradeGroupsController < ApplicationController
                   "Out: #{outcome.out_player.name} In: #{outcome.in_player.name}."
       )
     else
-      render json: trade_group_hash.merge(errors: outcome.errors)
+      render json: trade_group_hash.merge(errors: outcome.errors.full_messages),
+        status: :unprocessable_entity
     end
   end
 
@@ -48,7 +49,8 @@ class InterTeamTradeGroupsController < ApplicationController
     if outcome.valid?
       render json: trade_group_hash.merge(success: outcome.success_message)
     else
-      render json: trade_group_hash.merge(errors: outcome.errors)
+      render json: trade_group_hash.merge(errors: outcome.errors.full_messages),
+        status: :unprocessable_entity
     end
   end
 
@@ -64,7 +66,8 @@ class InterTeamTradeGroupsController < ApplicationController
     if outcome.valid?
       render json: trade_group_hash
     else
-      render json: trade_group_hash.merge(errors: outcome.errors)
+      render json: trade_group_hash.merge(errors: outcome.errors.full_messages),
+        status: :unprocessable_entity
     end
   end
 

@@ -244,6 +244,9 @@ class FplTeam extends Component {
       <div>
         <Button onClick={ () => this.setAction('selectLineUp') }>Select starting line up</Button>
         { this.tradeButtons() }
+        <Button href={ `/fpl_teams/${this.state.fplTeamId}/inter_team_trade_groups` }>
+          Create/View Inter Team Trades
+        </Button>
       </div>
     )
   }

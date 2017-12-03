@@ -44,7 +44,7 @@ RSpec.describe InterTeamTradeGroups::AddToGroup do
       in_fpl_team_list: in_fpl_team.fpl_team_lists.first,
       out_player: out_player,
       in_player: in_player
-    ).result
+    ).inter_team_trade_group.reload
   end
 
   it 'successfully adds to the trade group' do
@@ -60,7 +60,7 @@ RSpec.describe InterTeamTradeGroups::AddToGroup do
 
     expect(outcome).to be_valid
 
-    trade_group = outcome.result
+    trade_group = outcome.inter_team_trade_group.reload
 
     expect(trade_group.inter_team_trades.count).to eq(2)
 
@@ -121,10 +121,11 @@ RSpec.describe InterTeamTradeGroups::AddToGroup do
   end
 
   it 'fails if team quotas are not observed (in_fpl_team)' do
-    in_player = @in_fpl_team_list.list_positions.midfielders.first.player
+    in_player = @in_fpl_team_list.list_positions.midfielders.second.player
+
     team = @in_fpl_team_list.list_positions.forwards.first.player.team
 
-    out_player = @out_fpl_team_list.list_positions.midfielders.first.player
+    out_player = @out_fpl_team_list.list_positions.midfielders.second.player
     out_player.update(team: team)
 
     outcome = described_class.run(

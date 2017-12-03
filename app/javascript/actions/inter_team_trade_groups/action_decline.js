@@ -1,4 +1,4 @@
-import { DECLINE_INTER_TEAM_TRADE_GROUP } from '../types';
+import { DECLINE_INTER_TEAM_TRADE_GROUP, SHOW_ERRORS } from '../types';
 import axios from 'axios';
 
 export default function declineInterTeamTradeGroup (fplTeamId, tradeGroupId) {
@@ -11,6 +11,8 @@ export default function declineInterTeamTradeGroup (fplTeamId, tradeGroupId) {
       }
     }).then(res => {
       dispatch(declineInterTeamTradeGroupAsync(res.data));
+    }).catch(error => {
+      dispatch({ type: SHOW_ERRORS, payload: error.response.data });
     });
   }
 }

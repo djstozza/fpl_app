@@ -1,4 +1,4 @@
-import { APPROVE_INTER_TEAM_TRADE_GROUP } from '../types';
+import { APPROVE_INTER_TEAM_TRADE_GROUP, SHOW_ERRORS } from '../types';
 import axios from 'axios';
 
 export default function approveInterTeamTradeGroup (fplTeamId, tradeGroupId) {
@@ -11,6 +11,8 @@ export default function approveInterTeamTradeGroup (fplTeamId, tradeGroupId) {
       }
     }).then(res => {
       dispatch(approveInterTeamTradeGroupAsync(res.data));
+    }).catch(error => {
+      dispatch({ type: SHOW_ERRORS, payload: error.response.data });
     });
   }
 }

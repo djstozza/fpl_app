@@ -49,7 +49,7 @@ RSpec.describe InterTeamTradeGroups::Create do
 
     expect(outcome).to be_valid
 
-    trade_group = outcome.result
+    trade_group = outcome.inter_team_trade_group.reload
     inter_team_trade = trade_group.inter_team_trades.first
 
     expect(trade_group.out_fpl_team_list).to eq(out_fpl_team_list)

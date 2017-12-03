@@ -1,4 +1,4 @@
-import { DELETE_INTER_TEAM_TRADE_GROUP } from '../types';
+import { DELETE_INTER_TEAM_TRADE_GROUP, SHOW_ERRORS } from '../types';
 import axios from 'axios';
 
 export default function deleteInterTeamTradeGroup (fplTeamId, tradeGroupId) {
@@ -8,6 +8,8 @@ export default function deleteInterTeamTradeGroup (fplTeamId, tradeGroupId) {
       method: 'delete'
     }).then(res => {
       dispatch(deleteInterTeamTradeGroupAsync(res.data));
+    }).catch(error => {
+      dispatch({ type: SHOW_ERRORS, payload: error.response.data });
     });
   }
 }
