@@ -1,6 +1,6 @@
 class TradeGroupsDecorator < SimpleDelegator
   def all_trades
-    group_by(&:status).sort.map { |k, v| { status: k.humanize, trade_groups: trade_group_arr(v) } }
+    order(:status).group_by(&:status).map { |k, v| { status: k.humanize, trade_groups: trade_group_arr(v) } }
   end
 
   def new_trade_group

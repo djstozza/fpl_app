@@ -11,8 +11,8 @@ export default class WaiverPicksTable extends Component {
     this.deleteWaiverPickCol = this.deleteWaiverPickCol.bind(this);
     this.deletePickButton = this.deletePickButton.bind(this);
     this.beforeSaveCell = this.beforeSaveCell.bind(this);
-    this.openDeleteWaiverDialog = this.openDeleteWaiverDialog.bind(this);
-    this.closeDeleteWaiverDialog = this.closeDeleteWaiverDialog.bind(this);
+    this.openDeleteWaiverDialogue = this.openDeleteWaiverDialogue.bind(this);
+    this.closeDeleteWaiverDialogue = this.closeDeleteWaiverDialogue.bind(this);
     this.deleteWaiverPick = this.deleteWaiverPick.bind(this);
     this.state = {
       selected: '',
@@ -52,18 +52,23 @@ export default class WaiverPicksTable extends Component {
 
   deletePickButton (cell, row) {
     return (
-      <Button bsStyle='danger' onClick={ () => this.openDeleteWaiverDialog(row.id) }>Delete</Button>
+      <Button
+        bsStyle='danger'
+        onClick={ () => this.openDeleteWaiverDialogue(row.id) }
+      >
+        Delete
+      </Button>
     )
   }
 
-  closeDeleteWaiverDialog () {
+  closeDeleteWaiverDialogue () {
     this.setState({
       showModal: false,
       selected: ''
     });
   }
 
-  openDeleteWaiverDialog (rowId) {
+  openDeleteWaiverDialogue (rowId) {
     this.setState({
       showModal: true,
       selected: rowId
@@ -72,7 +77,7 @@ export default class WaiverPicksTable extends Component {
 
   deleteWaiverPick () {
     this.props.deleteWaiverPick(this.state.selected);
-    this.closeDeleteWaiverDialog();
+    this.closeDeleteWaiverDialogue();
   }
 
   waiverPickDescriptionText () {
@@ -83,8 +88,8 @@ export default class WaiverPicksTable extends Component {
     return (
       <div>
         <p>
-          You can edit the order of your waiver picks by clicking on the pick number and changing it. Remember to
-            click outside the cell for your change to be saved.
+          You can edit the order of your waiver picks by clicking on the pick number and
+          changing it. Remember to click outside the cell for your change to be saved.
         </p>
         <p>
           You can delete an undesired waiver pick by clicking its 'Delete Pick' button.
@@ -106,7 +111,7 @@ export default class WaiverPicksTable extends Component {
 
     return (
       <div>
-        <Modal show={ this.state.showModal } onHide={ this.closeDeleteWaiverDialog }>
+        <Modal show={ this.state.showModal } onHide={ this.closeDeleteWaiverDialogue }>
             <Modal.Header closeButton><b>Delete waiver pick</b></Modal.Header>
             <Modal.Body>
               <p>Are you sure you want to delete this waiver pick?</p>
@@ -115,7 +120,7 @@ export default class WaiverPicksTable extends Component {
                   <Button
                     bsStyle='danger'
                     className='pull-left'
-                    onClick={ () => this.closeDeleteWaiverDialog() }
+                    onClick={ () => this.closeDeleteWaiverDialogue() }
                   >
                     Cancel
                   </Button>

@@ -4,7 +4,9 @@ import {
   ADD_TO_INTER_TEAM_TRADE_GROUP,
   SUBMIT_INTER_TEAM_TRADE_GROUP,
   DELETE_INTER_TEAM_TRADE_GROUP,
-  REMOVE_INTER_TEAM_TRADE
+  REMOVE_INTER_TEAM_TRADE,
+  APPROVE_INTER_TEAM_TRADE_GROUP,
+  DECLINE_INTER_TEAM_TRADE_GROUP
 } from '../actions/types';
 
 export default function(state=[], action) {
@@ -20,6 +22,10 @@ export default function(state=[], action) {
     case DELETE_INTER_TEAM_TRADE_GROUP:
       return action.payload;
     case REMOVE_INTER_TEAM_TRADE:
+      return action.payload;
+    case APPROVE_INTER_TEAM_TRADE_GROUP:
+      return action.payload;
+    case DECLINE_INTER_TEAM_TRADE_GROUP:
       return action.payload;
 
     default:

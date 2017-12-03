@@ -27,6 +27,8 @@ export default class OutTradeGroupTable extends Component {
     this.removeTradeButton = this.removeTradeButton.bind(this);
     this.deleteTradeGroupButton = this.deleteTradeGroupButton.bind(this);
     this.removeTradeAction = this.removeTradeAction.bind(this);
+    this.buttonCol = this.buttonCol.bind(this);
+    this.buttonColWidth = this.buttonColWidth.bind(this);
   }
 
   showTradeList (selector) {
@@ -79,13 +81,32 @@ export default class OutTradeGroupTable extends Component {
           bsStyle='success' onClick={ () => this.submitTradeGroupButton() }
         >
           Submit
+        </Button>,
+        <Button
+          bsStyle='danger'
+          key={ `trade-group-${tradeGroup.id}-delete` }
+          onClick={ () => this.deleteTradeGroupButton() } >
+          Delete
         </Button>
-      ]
+      ];
+    } else if (tradeGroup.status == 'submitted') {
+      return (
+        <Button
+          bsStyle='danger'
+          key={ `trade-group-${tradeGroup.id}-delete` }
+          onClick={ () => this.deleteTradeGroupButton() } >
+          Delete
+        </Button>
+      );
     }
   }
 
   removeTradeGroupCol () {
-    if (this.props.tradeGroup.status == 'submitted' || this.props.tradeGroup.trades.length == 1) {
+    if (this.props.status == null) {
+      return;
+    }
+
+    if (this.props.tradeGroup.status != 'pending' || this.props.tradeGroup.trades.length == 1) {
       return;
     }
 
@@ -114,6 +135,34 @@ export default class OutTradeGroupTable extends Component {
 
   deleteTradeGroupButton () {
     this.props.deleteTradeGroupAction(this.props.tradeGroup);
+  }
+
+  buttonCol () {
+    if (this.props.status == null) {
+      return;
+    }
+
+    if (this.props.tradeGroup.status == 'pending' || this.props.tradeGroup.status == 'submitted') {
+      return (
+        <TableHeaderColumn
+          row='0'
+          colSpan={ this.buttonColWidth() }
+          dataAlign='center'
+        >
+          <div>
+            { this.tradeGroupButtons() }
+          </div>
+        </TableHeaderColumn>
+      );
+    }
+  }
+
+  buttonColWidth () {
+    if (this.props.tradeGroup.trades.length == 1 || this.props.tradeGroup.status != 'pending') {
+      return '5'
+    } else {
+      return '6'
+    }
   }
 
   render () {
@@ -150,23 +199,12 @@ export default class OutTradeGroupTable extends Component {
           </Row>
         </div>
 
-
         <BootstrapTable
           data={ this.props.tradeGroup.trades }
           striped
           hover
         >
-          <TableHeaderColumn row='0' colSpan='3' dataAlign='center'>
-            <span>Status: { capitalisedTradeGroupStatus }</span>
-          </TableHeaderColumn>
-
-          <TableHeaderColumn row='0' colSpan={ this.props.tradeGroup.status == 'pending' ? '3' : '2' } dataAlign='center'>
-            <div>
-              { this.tradeGroupButtons() }
-              <Button bsStyle='danger' onClick={ () => this.deleteTradeGroupButton() } >Delete</Button>
-            </div>
-          </TableHeaderColumn>
-
+          { this.buttonCol() }
           <TableHeaderColumn dataField='out_player_id' dataAlign='center' isKey hidden/>
           <TableHeaderColumn row='1' colSpan='2' rowSpan='1' dataAlign='center'>
             <span data-tip='Out'>{ this.props.fpl_team.name } (Me)</span>

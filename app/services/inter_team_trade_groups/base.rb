@@ -1,6 +1,6 @@
 class InterTeamTradeGroups::Base < ApplicationInteraction
-
   validate :round_is_current
+  attr_reader :success_message
 
   run_in_transaction!
 

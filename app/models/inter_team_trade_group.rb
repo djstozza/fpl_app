@@ -20,5 +20,5 @@ class InterTeamTradeGroup < ApplicationRecord
   has_many :in_players, class_name: Player, foreign_key: :in_player_id, through: :inter_team_trades
   has_many :out_players, class_name: Player, foreign_key: :out_player_id, through: :inter_team_trades
   has_many :inter_team_trades
-  enum status: %w[pending submitted approved declined expired]
+  enum status: { pending: 0, submitted: 1, approved: 2, declined: 3, expired: 4 }
 end

@@ -35,6 +35,8 @@ class InterTeamTradeGroups::AddToGroup < InterTeamTradeGroups::Base
       inter_team_trade_group: inter_team_trade_group
     )
     errors.merge!(trade.errors)
+    @success_message =
+      "Out: #{out_player.name} - In: #{in_player.name} has been added to the trade proposal."
     inter_team_trade_group
   end
 end
