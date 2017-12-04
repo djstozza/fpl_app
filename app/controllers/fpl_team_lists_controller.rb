@@ -30,7 +30,9 @@ class FplTeamListsController < ApplicationController
     )
 
     if form.save
-      render json: fpl_team_list_hash.merge!(success: "Successfully substituted #{player.name} with #{target.name}.")
+      render json: fpl_team_list_hash.merge!(
+        success: "Successfully substituted #{player.name} with #{target.name}."
+      )
     else
       render json: fpl_team_list_hash.merge!(errors: form.errors.full_messages), status: :unprocessable_entity
     end
@@ -39,7 +41,7 @@ class FplTeamListsController < ApplicationController
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_fpl_team_list
-    @fpl_team_list = FplTeamList.find(params[:id])
+    @fpl_team_list = FplTeamList.find_by(params[:id])
   end
 
   def set_fpl_team
@@ -53,7 +55,9 @@ class FplTeamListsController < ApplicationController
 
   def fpl_team_list_hash
     fpl_team_decorator = FplTeamDecorator.new(@fpl_team)
-    fpl_team_list_decorator = FplTeamListDecorator.new(@fpl_team_list || fpl_team_decorator.current_fpl_team_list)
+    fpl_team_list_decorator = FplTeamListDecorator.new(
+      @fpl_team_list || fpl_team_decorator.current_fpl_team_list
+    )
     rounds_decorator = fpl_team_decorator.fpl_team_list_rounds
     line_up = if @fpl_team_list
                 ListPositionsDecorator.new(@fpl_team_list.list_positions).list_position_arr
