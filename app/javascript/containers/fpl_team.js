@@ -277,7 +277,7 @@ class FplTeam extends Component {
           { this.showButtons() }
           <h4>{ this.roundScore() }</h4>
           <Row className='clearfix'>
-            <Col xs={12} >
+            <Col xs={12}>
               <TeamListTable
                 fpl_team={ this.state.fpl_team }
                 current_user={ this.state.current_user }

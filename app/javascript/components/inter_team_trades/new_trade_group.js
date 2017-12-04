@@ -90,7 +90,9 @@ export default class NewTradeGroup extends Component {
       return (
         <div id='new-trade-group' className='hidden'>
           <Row className='clearfix'>
-            <Col xs={5}>
+            <Col xs={12} sm={12} md={5}>
+              <h3>Out Players (You)</h3>
+              <p>(1) Select the player you wish to trade out</p>
               <OutTradesTable
                 clearSelection={ this.state.clearSelection }
                 out_players_tradeable={ this.props.out_players_tradeable }
@@ -100,7 +102,9 @@ export default class NewTradeGroup extends Component {
                 setOutPlayer={ this.setOutPlayer }
               />
             </Col>
-            <Col xs={7}>
+            <Col xs={12} sm={12} md={7}>
+              <h3>In Players</h3>
+              <p>(2) Select the player you wish to trade in</p>
               <InTradesTable
                 in_players_tradeable={ this.props.in_players_tradeable }
                 teams={ this.props.teams }

@@ -166,14 +166,14 @@ export default class OutTradeGroupTable extends Component {
   }
 
   render () {
-    let tradeGroupStatus = this.props.tradeGroup.status;
-    let capitalisedTradeGroupStatus = tradeGroupStatus.charAt(0).toUpperCase() + tradeGroupStatus.slice(1);
-
+    console.log(this.props.tradeGroup);
     return (
       <div>
         <div id={ this.props.selector } className='hidden'>
-          <Row className='clearfix'>
-            <Col xs={5}>
+          <Row>
+            <Col xs={12} sm={12} md={5}>
+              <h3>Out Players (You)</h3>
+              <p>(1) Select the player you wish to trade out</p>
               <OutTradesTable
                 out_players_tradeable={ this.props.tradeGroup.out_players_tradeable }
                 clearSelection={ this.state.clearSelection }
@@ -183,7 +183,9 @@ export default class OutTradeGroupTable extends Component {
                 setOutPlayer={ this.setOutPlayer }
               />
             </Col>
-            <Col xs={7}>
+            <Col xs={12} sm={12} md={7}>
+              <h3>In Players ({ this.props.tradeGroup.in_fpl_team.name })</h3>
+              <p>(2) Select the player you wish to trade in</p>
               <InTradesTable
                 in_players_tradeable={ this.props.tradeGroup.in_players_tradeable }
                 teams={ this.props.teams }

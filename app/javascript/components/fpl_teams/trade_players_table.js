@@ -41,11 +41,16 @@ export default class TradePlayersTable extends Component {
           </div>
         );
       case 'miniDraft':
-        if (this.props.listPosition != null && this.props.fpl_team.id == this.props.current_draft_pick.fpl_team_id) {
+        if (
+          this.props.listPosition != null &&
+          this.props.fpl_team.id == this.props.current_draft_pick.fpl_team_id
+        ) {
           return (
             <div>
               <h3>Mini Draft (In)</h3>
-              <p>(2) Click the row of the player you wish to trade in for this mini draft pick.</p>
+              <p>
+                (2) Click the row of the player you wish to trade in for this mini draft pick.
+              </p>
             </div>
           );
         }
@@ -84,13 +89,11 @@ export default class TradePlayersTable extends Component {
   }
 
   onRowSelect (row, isSelected, e) {
-    if (this.props.action == 'pastRound') {
+    if (this.props.action == null || this.props.action == 'pastRound') {
       return;
     }
 
-    if (this.props.action == 'tradePlayers' || this.props.action == 'waiverPicks' || this.props.action == 'miniDraft') {
-      return this.selectPlayerToTrade(row);
-    }
+    return this.selectPlayerToTrade(row);
   }
 
   trClassFormat (row) {
@@ -131,7 +134,7 @@ export default class TradePlayersTable extends Component {
       return (
         <div>
           <p>(3) Click the button below to complete.</p>
-          <Button onClick={ () => this.completeTradeAction() }>
+          <Button bsStyle='success' onClick={ () => this.completeTradeAction() }>
             Complete
           </Button>
         </div>

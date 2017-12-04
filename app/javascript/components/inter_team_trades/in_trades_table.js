@@ -97,7 +97,7 @@ export default class InTradesTable extends Component {
         return (
           <div>
             <p>(3) Click the button below to complete.</p>
-            <Button onClick={ () => this.completeTradeAction() }>
+            <Button bsStyle='success' onClick={ () => this.completeTradeAction() }>
               Complete
             </Button>
           </div>
