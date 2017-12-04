@@ -21,18 +21,16 @@ html
             span.icon-bar
             span.icon-bar
             span.icon-bar
-          .navbar-brand href="#"  FplApp
+          a.navbar-brand href='/'  FplApp
         #nav.collapse.navbar-collapse
+          ul.nav.navbar-nav.navbar-left
+            li = link_to('Players', players_path)
+            li = link_to('Teams', teams_path)
           ul.nav.navbar-nav.navbar-right
             - if current_user
-              li.dropdown
-                a.dropdown-toggle aria-expanded="false" data-toggle="dropdown" href="#" role="button"
-                  = current_user.username
-                  span.caret
-                ul.dropdown-menu
-                  li = link_to('Create a League', new_league_path)
-                  li = link_to('Join a League', join_a_league_path)
-                  li = link_to('My Teams', fpl_teams_path)
+              li = link_to('My Fpl Teams', fpl_teams_path)
+              li = link_to('Create a League', new_league_path)
+              li = link_to('Join a League', join_a_league_path)
             li = sign_up_link
             li = session_link
 

@@ -52,9 +52,9 @@ export default class App extends Component {
     return (
       <Provider store={store}>
         <ConnectedRouter history={history}>
-          <div className='container'>
+          <div className='container-fluid'>
             <Row className='clearfix'>
-              <Col md={12} xs={12}>
+              <Col xs={12} mdOffset={1} md={10}>
                 <Alert stack={ { limit: 3 } } />
                 <Route exact path="/" component={ Rounds } />
                 <Route exact path='/rounds' component={ Rounds } />
