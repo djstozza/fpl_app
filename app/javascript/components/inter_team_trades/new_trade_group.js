@@ -77,8 +77,12 @@ export default class NewTradeGroup extends Component {
       clearSelection: true
     });
 
-    const element = document.getElementById('new-trade-group');
-    element.classList.add('hidden');
+    const tradeGroupList = document.getElementById('new-trade-group');
+    const newTradeGroupButton = document.getElementById('new-trade-group-button');
+
+    newTradeGroupButton.classList.replace('btn-danger', 'btn-primary');
+    newTradeGroupButton.innerHTML = 'Create A New Trade';
+    tradeGroupList.classList.add('hidden');
   }
 
   newTradeGroupPlayerList (tradeGroup) {

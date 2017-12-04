@@ -22,7 +22,10 @@ class InterTeamTradeGroupsController < ApplicationController
   def create
     outcome =
       InterTeamTradeGroups::Create.run(
-        params.merge(out_fpl_team_list: @fpl_team_list, current_user: current_user)
+        params.merge(
+          inter_team_trade_group: InterTeamTradeGroup.new(out_fpl_team_list: @fpl_team_list),
+          current_user: current_user
+        )
       )
 
     if outcome.valid?

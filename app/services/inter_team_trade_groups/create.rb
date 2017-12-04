@@ -1,9 +1,9 @@
 class InterTeamTradeGroups::Create < InterTeamTradeGroups::Base
   object :current_user, class: User
 
-  object :inter_team_trade_group, class: InterTeamTradeGroup, default: -> { InterTeamTradeGroup.new }
+  object :inter_team_trade_group, class: InterTeamTradeGroup
 
-  object :out_fpl_team_list, class: FplTeamList
+  object :out_fpl_team_list, class: FplTeamList, default: -> { inter_team_trade_group.out_fpl_team_list }
   object :in_fpl_team_list, class: FplTeamList
 
   object :out_fpl_team, class: FplTeam, default: -> { out_fpl_team_list.fpl_team }
