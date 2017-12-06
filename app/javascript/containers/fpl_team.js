@@ -32,13 +32,12 @@ class FplTeam extends Component {
     this.substitutePlayer = this.substitutePlayer.bind(this);
     this.setlistPosition = this.setlistPosition.bind(this);
     this.completeTradeAction = this.completeTradeAction.bind(this);
-    this.dataSource = this.dataSource.bind(this);
+    this.roundDataSource = this.roundDataSource.bind(this);
     this.tradePlayers = this.tradePlayers.bind(this);
     this.sortWaiverPicks = this.sortWaiverPicks.bind(this);
     this.waiverPicks = this.waiverPicks.bind(this);
     this.updateWaiverPickOrder = this.updateWaiverPickOrder.bind(this);
     this.deleteWaiverPick = this.deleteWaiverPick.bind(this);
-    this.dataSource = this.dataSource.bind(this);
     this.tradeGroupNotifications = this.tradeGroupNotifications.bind(this);
 
     this.state = {
@@ -47,7 +46,7 @@ class FplTeam extends Component {
     }
   }
 
-  dataSource (roundId) {
+  roundDataSource (roundId) {
     let fplTeamList = _.find(this.state.fpl_team_lists, (obj) => {
       return obj.round_id == roundId
     });
@@ -126,6 +125,24 @@ class FplTeam extends Component {
     this.props.fetchFplTeamLists(this.state.fplTeamId);
     this.props.fetchWaiverPicks(this.state.fplTeamId, null);
     this.props.fetchTeams();
+  }
+
+  componentDidMount () {
+    setInterval(function () {
+      if (!this.state.round.is_current && !this.state.round.is_next) {
+        return;
+      }
+
+      if (this.state.round.data_checked) {
+        return;
+      }
+
+      if (this.state.round.id != this.state.fpl_team_list.round_id) {
+        return;
+      }
+
+      this.props.fetchFplTeamLists(this.state.fplTeamId);
+    }.bind(this), 10000);
   }
 
   componentWillReceiveProps (nextProps) {
@@ -264,7 +281,7 @@ class FplTeam extends Component {
       return;
     }
 
-    if (!this.state.round.data_checked) {
+    if (!this.state.round.data_checked && this.state.status == null) {
       return `Provisional round score: ${this.state.score}`
     } else {
       return `Round score: ${this.state.score}`
@@ -293,7 +310,7 @@ class FplTeam extends Component {
       return (
         <div>
           <h2>{ this.state.fpl_team.name }</h2>
-          <RoundsNav rounds={ this.state.rounds } round={ this.state.round } onChange={ this.dataSource } />
+          <RoundsNav rounds={ this.state.rounds } round={ this.state.round } onChange={ this.roundDataSource } />
           { this.showButtons() }
           { this.tradeGroupNotifications() }
           <h4>{ this.roundScore() }</h4>
