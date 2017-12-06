@@ -4,6 +4,9 @@ import { bindActionCreators } from 'redux';
 import { Provider } from 'react-redux';
 import { Row, Col, Button } from 'react-bootstrap';
 import axios from 'axios';
+import Alert from 'react-s-alert';
+import _ from 'underscore';
+
 import fetchFplTeam from '../actions/fpl_teams/action_fetch_fpl_team.js';
 import fetchTeams from '../actions/action_fetch_teams.js';
 import fetchFplTeamLists from '../actions/fpl_team_lists/action_fetch_fpl_team_lists.js';
@@ -13,14 +16,14 @@ import createWaiverPick from '../actions/waiver_picks/action_create_waiver_pick.
 import fetchWaiverPicks from '../actions/waiver_picks/action_fetch_waiver_picks.js';
 import deleteWaiverPick from '../actions/waiver_picks/action_delete_waiver_pick.js';
 import updateWaiverPickOrder from '../actions/waiver_picks/action_update_waiver_pick_order.js';
+
 import tradePlayers from '../actions/action_trade_players.js';
 import RoundsNav from '../components/rounds/rounds_nav.js';
 import TeamListTable from '../components/fpl_teams/team_list_table.js';
 import TradePlayersTable from '../components/fpl_teams/trade_players_table.js';
 import WaiverPicksTable from '../components/fpl_teams/waiver_picks_table.js';
 import StatusChart from '../components/fpl_teams/status_chart.js';
-import Alert from 'react-s-alert';
-import _ from 'underscore';
+import TradeGroupNotifications from '../components/fpl_teams/trade_group_notifications.js';
 
 class FplTeam extends Component {
   constructor(props) {
@@ -36,6 +39,8 @@ class FplTeam extends Component {
     this.updateWaiverPickOrder = this.updateWaiverPickOrder.bind(this);
     this.deleteWaiverPick = this.deleteWaiverPick.bind(this);
     this.dataSource = this.dataSource.bind(this);
+    this.tradeGroupNotifications = this.tradeGroupNotifications.bind(this);
+
     this.state = {
       action: 'selectLineUp',
       fplTeamId: this.props.match.params.id
@@ -140,7 +145,10 @@ class FplTeam extends Component {
       round: nextProps.round,
       rounds: nextProps.rounds,
       teams: nextProps.teams,
-      score: nextProps.score
+      score: nextProps.score,
+      submitted_in_trade_group_count: nextProps.submitted_in_trade_group_count,
+      approved_out_trade_group_count: nextProps.approved_out_trade_group_count,
+      declined_out_trade_group_count: nextProps.declined_out_trade_group_count
     });
 
     if (nextProps.round != null && new Date(nextProps.round.deadline_time) < new Date()) {
@@ -263,6 +271,19 @@ class FplTeam extends Component {
     }
   }
 
+  tradeGroupNotifications () {
+    if (this.state.fpl_team.user_id == this.state.current_user.id) {
+      return (
+        <TradeGroupNotifications
+          fplTeamId={ this.state.fplTeamId }
+          submitted_in_trade_group_count={ this.state.submitted_in_trade_group_count }
+          approved_out_trade_group_count={ this.state.approved_out_trade_group_count }
+          declined_out_trade_group_count={ this.state.declined_out_trade_group_count }
+        />
+      );
+    }
+  }
+
   render () {
     if (this.state == null || this.state.fpl_team == null || this.state.fpl_team_list == null) {
       return (
@@ -272,9 +293,9 @@ class FplTeam extends Component {
       return (
         <div>
           <h2>{ this.state.fpl_team.name }</h2>
-
           <RoundsNav rounds={ this.state.rounds } round={ this.state.round } onChange={ this.dataSource } />
           { this.showButtons() }
+          { this.tradeGroupNotifications() }
           <h4>{ this.roundScore() }</h4>
           <Row className='clearfix'>
             <Col xs={12}>
@@ -332,6 +353,9 @@ function mapStateToProps (state) {
     round: state.FplTeamListsReducer.round,
     rounds: state.FplTeamListsReducer.rounds,
     score: state.FplTeamListsReducer.score,
+    submitted_in_trade_group_count: state.FplTeamListsReducer.submitted_in_trade_group_count,
+    approved_out_trade_group_count: state.FplTeamListsReducer.approved_out_trade_group_count,
+    declined_out_trade_group_count: state.FplTeamListsReducer.declined_out_trade_group_count,
     teams: state.TeamsReducer,
     success: state.FplTeamListsReducer.success || state.TradePlayersReducer.success || state.WaiverPicksReducer.success,
     errors: state.FplTeamListsReducer.errors || state.TradePlayersReducer.errors || state.WaiverPicksReducer.errors

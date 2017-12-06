@@ -70,7 +70,10 @@ class FplTeamListsController < ApplicationController
       line_up: line_up,
       status: Round.round_status(round: fpl_team_list_decorator.round),
       unpicked_players: LeagueDraftPicksDecorator.new(@fpl_team.league).unpicked_players,
-      score: fpl_team_list_decorator.score
+      score: fpl_team_list_decorator.score,
+      submitted_in_trade_group_count: fpl_team_list_decorator.submitted_in_trade_group_count,
+      approved_out_trade_group_count: fpl_team_list_decorator.approved_out_trade_group_count,
+      declined_out_trade_group_count: fpl_team_list_decorator.declined_out_trade_group_count
     }
   end
 end

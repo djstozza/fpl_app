@@ -15,5 +15,6 @@ class InterTeamTradeGroups::Delete < InterTeamTradeGroups::Base
     inter_team_trade_group.inter_team_trades.delete_all
     inter_team_trade_group.delete
     errors.merge!(inter_team_trade_group.errors)
+    @success_message = 'Trade successfully deleted.'
   end
 end

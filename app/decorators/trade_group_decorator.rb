@@ -52,6 +52,7 @@ class TradeGroupDecorator < SimpleDelegator
       .joins('JOIN positions ON players.position_id = positions.id')
       .where(fpl_teams_players: { fpl_team_id: out_fpl_team.id })
       .where.not(id: out_players.map(&:id))
+      .order(position_id: :desc)
       .pluck_to_hash(
         'players.id AS out_player_id',
         :singular_name_short,

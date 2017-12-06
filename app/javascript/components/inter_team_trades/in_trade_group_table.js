@@ -5,16 +5,21 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import _ from 'underscore';
 import { Icon } from 'react-fa';
-import { Row, Col, Button } from 'react-bootstrap';
+import { Row, Col, Button, Modal } from 'react-bootstrap';
 
 export default class InTradeGroupTable extends Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      showModal: false
+    }
+
     this.buttonCol = this.buttonCol.bind(this);
     this.tradeGroupButtons = this.tradeGroupButtons.bind(this);
-    this.approveTrade = this.approveTrade.bind(this);
-    this.declineTrade = this.declineTrade.bind(this);
+    this.showModal = this.showModal.bind(this);
+    this.closeModal = this.closeModal.bind(this);
+    this.modalFunction = this.modalFunction.bind(this);
   }
 
   buttonCol () {
@@ -43,13 +48,13 @@ export default class InTradeGroupTable extends Component {
       return [
         <Button
           key={ `trade-group-${tradeGroup.id}-approve` }
-          bsStyle='success' onClick={ () => this.approveTrade() }
+          bsStyle='success' onClick={ () => this.showModal('approve') }
         >
           Approve
         </Button>,
         <Button
           key={`trade-group-${tradeGroup.id}-decline` }
-          bsStyle='danger' onClick={ () => this.declineTrade(this.props.tradeGr) }
+          bsStyle='danger' onClick={ () => this.showModal('decline') }
         >
           Deciline
         </Button>
@@ -57,12 +62,32 @@ export default class InTradeGroupTable extends Component {
     }
   }
 
-  approveTrade () {
-    this.props.approveTradeGroupAction(this.props.tradeGroup);
+  showModal (action) {
+    const capitalisedModalAction = action.charAt(0).toUpperCase() + action.slice(1);
+    this.setState({
+      showModal: true,
+      modalAction: action,
+      capitalisedModalAction: capitalisedModalAction,
+    })
+  };
+
+  closeModal () {
+    this.setState({
+      showModal: false
+    });
   }
 
-  declineTrade () {
-    this.props.declineTradeGroupAction(this.props.tradeGroup);
+  modalFunction () {
+    this.setState({
+      showModal: false
+    });
+
+    switch (this.state.modalAction) {
+      case 'approve':
+        return this.props.approveTradeGroupAction(this.props.tradeGroup);
+      case 'decline':
+        return this.props.declineTradeGroupAction(this.props.tradeGroup);
+    }
   }
 
   render () {
@@ -71,6 +96,31 @@ export default class InTradeGroupTable extends Component {
 
     return (
       <div>
+        <Modal show={ this.state.showModal } onHide={ this.closeModal }>
+            <Modal.Header closeButton><b>{ this.state.capitalisedModalAction } Trade</b></Modal.Header>
+            <Modal.Body>
+              <p>Are you sure you want to { this.state.modalAction } this trade? It cannot be undone.</p>
+              <Row className='clearfix'>
+                <Col sm={12}>
+                  <Button
+                    bsStyle='danger'
+                    className='pull-left'
+                    onClick={ () => this.closeModal() }
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    className='pull-right'
+                    bsStyle='success'
+                    onClick={ () => this.modalFunction() }
+                  >
+                    { this.state.capitalisedModalAction }
+                  </Button>
+                </Col>
+              </Row>
+            </Modal.Body>
+        </Modal>
+
         <BootstrapTable
           data={ this.props.tradeGroup.trades }
           striped

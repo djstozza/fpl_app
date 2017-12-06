@@ -186,6 +186,7 @@ class InterTeamTradeGroups extends Component {
     } else {
       return (
         <div>
+          <h2>{ this.state.fpl_team.name } Inter Team Trade Groups</h2>
           <NewTradeGroup
             out_players_tradeable={ this.state.out_players_tradeable }
             in_players_tradeable={ this.state.in_players_tradeable }

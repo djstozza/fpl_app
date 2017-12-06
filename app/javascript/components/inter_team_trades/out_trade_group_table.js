@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import _ from 'underscore';
 import { Icon } from 'react-fa';
-import { Row, Col, Button } from 'react-bootstrap';
+import { Row, Col, Button, Modal } from 'react-bootstrap';
 import OutTradesTable from './out_trades_table.js';
 import InTradesTable from './in_trades_table.js';
 
@@ -15,20 +15,22 @@ export default class OutTradeGroupTable extends Component {
 
     this.state = {
       out_player: '',
-      clearSelection: false
+      clearSelection: false,
+      showModal: false
     }
 
     this.showTradeList = this.showTradeList.bind(this);
     this.setOutPlayer = this.setOutPlayer.bind(this);
     this.completeTradeAction = this.completeTradeAction.bind(this);
-    this.submitTradeGroupButton = this.submitTradeGroupButton.bind(this);
     this.tradeGroupButtons = this.tradeGroupButtons.bind(this);
     this.removeTradeGroupCol = this.removeTradeGroupCol.bind(this);
     this.removeTradeButton = this.removeTradeButton.bind(this);
-    this.deleteTradeGroupButton = this.deleteTradeGroupButton.bind(this);
     this.removeTradeAction = this.removeTradeAction.bind(this);
     this.buttonCol = this.buttonCol.bind(this);
     this.buttonColWidth = this.buttonColWidth.bind(this);
+    this.showModal = this.showModal.bind(this);
+    this.closeModal = this.closeModal.bind(this);
+    this.modalFunction = this.modalFunction.bind(this);
   }
 
   showTradeList (selector) {
@@ -62,10 +64,6 @@ export default class OutTradeGroupTable extends Component {
     element.classList.add('hidden');
   }
 
-  submitTradeGroupButton () {
-    this.props.submitTradeGroupAction(this.props.tradeGroup);
-  }
-
   tradeGroupButtons () {
     const tradeGroup = this.props.tradeGroup;
     if (tradeGroup.status == 'pending') {
@@ -78,14 +76,14 @@ export default class OutTradeGroupTable extends Component {
         </Button>,
         <Button
           key={`trade-group-${tradeGroup.id}-submit` }
-          bsStyle='success' onClick={ () => this.submitTradeGroupButton() }
+          bsStyle='success' onClick={ () => this.showModal('submit') }
         >
           Submit
         </Button>,
         <Button
           bsStyle='danger'
           key={ `trade-group-${tradeGroup.id}-delete` }
-          onClick={ () => this.deleteTradeGroupButton() } >
+          onClick={ () => this.showModal('delete') } >
           Delete
         </Button>
       ];
@@ -94,7 +92,7 @@ export default class OutTradeGroupTable extends Component {
         <Button
           bsStyle='danger'
           key={ `trade-group-${tradeGroup.id}-delete` }
-          onClick={ () => this.deleteTradeGroupButton() } >
+          onClick={ () => this.showModal('delete') } >
           Delete
         </Button>
       );
@@ -133,10 +131,6 @@ export default class OutTradeGroupTable extends Component {
     this.props.removeTradeAction(this.props.tradeGroup, tradeId);
   }
 
-  deleteTradeGroupButton () {
-    this.props.deleteTradeGroupAction(this.props.tradeGroup);
-  }
-
   buttonCol () {
     if (this.props.status == null) {
       return;
@@ -165,10 +159,61 @@ export default class OutTradeGroupTable extends Component {
     }
   }
 
+  showModal (action) {
+    const capitalisedModalAction = action.charAt(0).toUpperCase() + action.slice(1);
+    this.setState({
+      showModal: true,
+      modalAction: action,
+      capitalisedModalAction: capitalisedModalAction,
+    })
+  };
+
+  closeModal () {
+    this.setState({
+      showModal: false
+    });
+  }
+
+  modalFunction () {
+    this.setState({
+      showModal: false
+    });
+
+    switch (this.state.modalAction) {
+      case 'delete':
+        return this.props.deleteTradeGroupAction(this.props.tradeGroup);
+      case 'submit':
+        return this.props.submitTradeGroupAction(this.props.tradeGroup);
+    }
+  }
+
   render () {
-    console.log(this.props.tradeGroup);
     return (
       <div>
+        <Modal show={ this.state.showModal } onHide={ this.closeModal }>
+            <Modal.Header closeButton><b>{ this.state.capitalisedModalAction } Trade</b></Modal.Header>
+            <Modal.Body>
+              <p>Are you sure you want to { this.state.modalAction } this trade?</p>
+              <Row className='clearfix'>
+                <Col sm={12}>
+                  <Button
+                    bsStyle='danger'
+                    className='pull-left'
+                    onClick={ () => this.closeModal() }
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    className='pull-right'
+                    bsStyle='success'
+                    onClick={ () => this.modalFunction() }
+                  >
+                    { this.state.capitalisedModalAction }
+                  </Button>
+                </Col>
+              </Row>
+            </Modal.Body>
+        </Modal>
         <div id={ this.props.selector } className='hidden'>
           <Row>
             <Col xs={12} sm={12} md={5}>

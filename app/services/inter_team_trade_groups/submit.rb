@@ -15,5 +15,6 @@ class InterTeamTradeGroups::Submit < InterTeamTradeGroups::Base
     inter_team_trade_group.update(status: 'submitted')
     errors.merge!(inter_team_trade_group.errors)
     inter_team_trade_group
+    @success_message = 'Trade successfully submitted.'
   end
 end

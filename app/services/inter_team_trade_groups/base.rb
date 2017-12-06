@@ -116,13 +116,13 @@ class InterTeamTradeGroups::Base < ApplicationInteraction
   def out_players_in_fpl_team
     remainder = inter_team_trade_group.out_players - out_fpl_team.players
     return if remainder.empty?
-    errors.add(:base, "Not all proposed trades are in the fpl_team.")
+    errors.add(:base, "Not all the players in this proposed trade are in the team (#{out_fpl_team.name}).")
   end
 
   def in_players_in_fpl_team
     remainder = inter_team_trade_group.in_players - in_fpl_team.players
     return if remainder.empty?
-    errors.add(:base, "Not all proposed trades are in the fpl_team.")
+    errors.add(:base, "Not all the players in this proposed trade are in the team (#{in_fpl_team.name}).")
   end
 
   def round_deadline_time_passed
