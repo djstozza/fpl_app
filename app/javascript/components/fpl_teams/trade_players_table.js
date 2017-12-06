@@ -10,7 +10,7 @@ export default class TradePlayersTable extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selected: ''
+      selected: null
     }
 
     this.options = {
@@ -66,12 +66,12 @@ export default class TradePlayersTable extends Component {
 
   componentWillReceiveProps (nextProps) {
     if (nextProps.listPosition == null) {
-      if (this.refs.positionId) {
-        this.refs.positionId.cleanFiltered();
+      if (this.refs.position) {
+        this.refs.position.cleanFiltered();
       }
 
       this.setState({
-        selected: ''
+        selected: null
       })
       return;
     }
@@ -83,7 +83,7 @@ export default class TradePlayersTable extends Component {
         this.props.listPosition.singular_name_short != nextProps.listPosition.singular_name_short
       ) {
       this.setState({
-        selected: ''
+        selected: null
       })
     }
   }
@@ -97,7 +97,7 @@ export default class TradePlayersTable extends Component {
   }
 
   trClassFormat (row) {
-    if (this.state.selected == row) {
+    if (this.state.selected && this.state.selected.id == row.id) {
       return 'substitute-option'
     }
   }
@@ -113,7 +113,7 @@ export default class TradePlayersTable extends Component {
       });
     } else if (this.state.selected == row) {
       this.setState({
-        selected: ''
+        selected: null
       });
     }
   }
@@ -121,7 +121,7 @@ export default class TradePlayersTable extends Component {
   completeTradeAction () {
     this.props.completeTradeAction(this.state.selected.id);
     this.setState({
-      selected: ''
+      selected: null
     })
   }
 

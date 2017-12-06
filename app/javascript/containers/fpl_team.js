@@ -42,6 +42,7 @@ class FplTeam extends Component {
 
     this.state = {
       action: 'selectLineUp',
+      clearSelection: false,
       fplTeamId: this.props.match.params.id
     }
   }
@@ -63,6 +64,10 @@ class FplTeam extends Component {
     this.props.tradePlayers(this.state.fplTeamId, this.state.listPosition.id, targetId);
     this.props.fetchFplTeamLists(this.state.fplTeamId);
     window.scrollTo(0, 0);
+    this.setState({
+      listPosition: null,
+      clearSelection: true
+    });
   }
 
   waiverPicks (targetId) {
@@ -73,6 +78,10 @@ class FplTeam extends Component {
       targetId
     );
     window.scrollTo(0, 0);
+    this.setState({
+      listPosition: null,
+      clearSelection: true
+    });
   }
 
   completeTradeAction (targetId) {
@@ -117,7 +126,10 @@ class FplTeam extends Component {
   }
 
   setlistPosition (listPosition) {
-    this.setState({ listPosition: listPosition });
+    this.setState({
+      listPosition: listPosition,
+      clearSelection: false
+    });
   }
 
   componentWillMount () {
@@ -172,10 +184,6 @@ class FplTeam extends Component {
       this.setState({
         action: 'pastRound'
       });
-    } else {
-      this.setState({
-        action: 'selectLineUp'
-      });
     }
 
     if (this.props.success != nextProps.success) {
@@ -215,7 +223,13 @@ class FplTeam extends Component {
   setAction (action) {
     this.setState({
       action: action
-    })
+    });
+
+    if (action == 'selectLineUp') {
+      this.setState({
+        clearSelection: false
+      })
+    }
   }
 
   tradePlayersTable () {
@@ -325,6 +339,7 @@ class FplTeam extends Component {
                 round={ this.state.round }
                 status={ this.state.status }
                 action={ this.state.action }
+                clearSelection={ this.state.clearSelection }
                 substitutePlayer={ this.substitutePlayer }
                 setlistPosition={ this.setlistPosition }
               />

@@ -143,6 +143,10 @@ export default class TeamListTable extends Component {
         options: []
       })
     }
+
+    if (nextProps.clearSelection) {
+      this.setState( {selected: ''} )
+    }
   }
 
   render () {
