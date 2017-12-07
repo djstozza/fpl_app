@@ -209,6 +209,7 @@ export default class TeamListTable extends Component {
     }
 
     let pointsColumn = () => {
+      console.log(this.props.status, this.props.action, this.props.round);
       if (this.props.action == 'pastRound') {
         return (
           <TableHeaderColumn dataField='player_fixture_histories' dataAlign='center' dataFormat={ pointsText } >
@@ -217,10 +218,10 @@ export default class TeamListTable extends Component {
         );
       } else {
         return [
-          <TableHeaderColumn dataField='event_points' dataAlign='center' >
+          <TableHeaderColumn key='last-round' dataField='event_points' dataAlign='center' >
             <span data-tip='Last Round'>LR</span>
           </TableHeaderColumn>,
-          <TableHeaderColumn dataField='total_points' dataAlign='center' >
+          <TableHeaderColumn key='total-points' dataField='total_points' dataAlign='center' >
             <span data-tip='Total Points'>TP</span>
           </TableHeaderColumn>
         ]
@@ -228,7 +229,7 @@ export default class TeamListTable extends Component {
     }
 
     let statusColumn = () => {
-      if (this.props.round.is_current || this.props.action != 'pastRound') {
+      if (this.props.round.is_current || this.props.action != 'pastRound' || this.props.status != null) {
         return (
           <TableHeaderColumn
             dataField='status'

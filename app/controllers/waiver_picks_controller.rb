@@ -20,7 +20,7 @@ class WaiverPicksController < ApplicationController
   # POST fpl_teams/1/fpl_team_lists/1/waiver_picks.json
   def create
     outcome = ::FplTeams::CreateWaiverPickForm.run(
-      params.merge(current_user: current_user, fpl_team_list: @fpl_team_list, fpl_team: @fpl_team)
+      params.merge(current_user: current_user)
     )
 
     if outcome.valid?
@@ -45,8 +45,6 @@ class WaiverPicksController < ApplicationController
     outcome = ::FplTeams::UpdateWaiverPickOrderForm.run(
       params.merge(
         current_user: current_user,
-        fpl_team_list: @fpl_team_list,
-        fpl_team: @fpl_team,
         waiver_pick: @waiver_pick
       )
     )
@@ -70,8 +68,6 @@ class WaiverPicksController < ApplicationController
   def destroy
     outcome = ::FplTeams::DeleteWaiverPickForm.run(
       params.merge(
-        fpl_team: @fpl_team,
-        fpl_team_list: @fpl_team_list,
         waiver_pick: @waiver_pick,
         current_user: current_user
       )
