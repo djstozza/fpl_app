@@ -1,6 +1,9 @@
 class FplTeamListDecorator < SimpleDelegator
   def score
-    total_score || provisional_score || FplTeamList.find_by(round: Round.find_by(is_current: true))&.total_score
+    total_score || provisional_score || FplTeamList.find_by(
+                                          fpl_team: fpl_team,
+                                          round: Round.find_by(is_current: true)
+                                        )&.total_score
   end
 
   def provisional_score
