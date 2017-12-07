@@ -301,6 +301,8 @@ class FplTeam extends Component {
 
     if (!this.state.round.data_checked && this.state.status == null) {
       return `Provisional round score: ${this.state.score}`
+    } else if (!this.state.round.data_checked && this.state.status != null) {
+      return `Last round: ${this.state.score}`
     } else {
       return `Round score: ${this.state.score}`
     }
