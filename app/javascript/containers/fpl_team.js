@@ -184,6 +184,10 @@ class FplTeam extends Component {
       this.setState({
         action: 'pastRound'
       });
+    } else {
+      this.setState({
+        action: 'selectLineUp'
+      });
     }
 
     if (this.props.success != nextProps.success) {
