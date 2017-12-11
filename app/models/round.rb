@@ -25,14 +25,15 @@ class Round < ApplicationRecord
 
   class << self
     def current_round
-      round = if where(is_current: true).empty?
-                find_by(is_next: true)
-              elsif find_by(is_current: true).data_checked
-                find_by(is_next: true) || find_by(is_current: true)
-              else
-                find_by(is_current: true)
-              end
-      RoundDecorator.new(round)
+      @current_round ||=
+        if where(is_current: true).empty?
+          find_by(is_next: true)
+        elsif find_by(is_current: true).data_checked
+          find_by(is_next: true) || find_by(is_current: true)
+        else
+          find_by(is_current: true)
+        end
+      RoundDecorator.new(@current_round)
     end
 
     def round_status(round: Round.current_round)
@@ -42,6 +43,16 @@ class Round < ApplicationRecord
         'waiver'
       elsif Time.now < round.deadline_time
         'trade'
+      end
+    end
+
+    def deadline
+      round = current_round
+      status = round_status(round: round)
+      if status == 'mini_draft' || status == 'waiver'
+        round.deadline_time - 1.day
+      elsif status == 'trade'
+        round.deadline_time
       end
     end
   end

@@ -16,6 +16,7 @@ import createWaiverPick from '../actions/waiver_picks/action_create_waiver_pick.
 import fetchWaiverPicks from '../actions/waiver_picks/action_fetch_waiver_picks.js';
 import deleteWaiverPick from '../actions/waiver_picks/action_delete_waiver_pick.js';
 import updateWaiverPickOrder from '../actions/waiver_picks/action_update_waiver_pick_order.js';
+import fetchCurrentRound from '../actions/action_fetch_current_round.js';
 
 import tradePlayers from '../actions/action_trade_players.js';
 import RoundsNav from '../components/rounds/rounds_nav.js';
@@ -24,6 +25,7 @@ import TradePlayersTable from '../components/fpl_teams/trade_players_table.js';
 import WaiverPicksTable from '../components/fpl_teams/waiver_picks_table.js';
 import StatusChart from '../components/fpl_teams/status_chart.js';
 import TradeGroupNotifications from '../components/fpl_teams/trade_group_notifications.js';
+import RoundCountdown from '../components/rounds/round_countdown.js';
 
 class FplTeam extends Component {
   constructor(props) {
@@ -39,6 +41,7 @@ class FplTeam extends Component {
     this.updateWaiverPickOrder = this.updateWaiverPickOrder.bind(this);
     this.deleteWaiverPick = this.deleteWaiverPick.bind(this);
     this.tradeGroupNotifications = this.tradeGroupNotifications.bind(this);
+    this.roundCountdown = this.roundCountdown.bind(this);
 
     this.state = {
       action: 'selectLineUp',
@@ -133,6 +136,7 @@ class FplTeam extends Component {
   }
 
   componentWillMount () {
+    this.props.fetchCurrentRound();
     this.props.fetchFplTeam(this.state.fplTeamId);
     this.props.fetchFplTeamLists(this.state.fplTeamId);
     this.props.fetchWaiverPicks(this.state.fplTeamId, null);
@@ -175,6 +179,9 @@ class FplTeam extends Component {
       rounds: nextProps.rounds,
       teams: nextProps.teams,
       score: nextProps.score,
+      current_round: nextProps.current_round,
+      current_round_deadline: nextProps.current_round_deadline,
+      current_round_status: nextProps.current_round_status,
       submitted_in_trade_group_count: nextProps.submitted_in_trade_group_count,
       approved_out_trade_group_count: nextProps.approved_out_trade_group_count,
       declined_out_trade_group_count: nextProps.declined_out_trade_group_count
@@ -184,7 +191,7 @@ class FplTeam extends Component {
       this.setState({
         action: 'pastRound'
       });
-    } else {
+    } else if (this.state.action == 'pastRound' && nextProps.status != null) {
       this.setState({
         action: 'selectLineUp'
       });
@@ -321,14 +328,28 @@ class FplTeam extends Component {
     }
   }
 
+  roundCountdown () {
+    if (this.state.current_round_deadline) {
+      return (
+        <RoundCountdown
+          round={ this.state.current_round }
+          current_round_deadline={ this.state.current_round_deadline }
+          current_round_status={ this.state.current_round_status }
+        />
+      );
+    }
+  }
+
   render () {
     if (this.state == null || this.state.fpl_team == null || this.state.fpl_team_list == null) {
       return (
         <p>Loading...</p>
       )
     } else {
+      console.log(this.state.action)
       return (
         <div>
+          { this.roundCountdown() }
           <h2>{ this.state.fpl_team.name }</h2>
           <RoundsNav rounds={ this.state.rounds } round={ this.state.round } onChange={ this.roundDataSource } />
           { this.showButtons() }
@@ -388,9 +409,13 @@ function mapStateToProps (state) {
     status: state.FplTeamListsReducer.status,
     waiver_picks: state.WaiverPicksReducer.waiver_picks || state.FplTeamReducer.waiver_picks,
     positions: state.FplTeamReducer.positions,
+    current_round: state.CurrentRoundReducer.current_round,
+    current_round_deadline: state.CurrentRoundReducer.current_round_deadline,
+    current_round_status: state.CurrentRoundReducer.current_round_status,
     round: state.FplTeamListsReducer.round,
     rounds: state.FplTeamListsReducer.rounds,
     score: state.FplTeamListsReducer.score,
+    deadline: state.FplTeamListsReducer.deadline,
     submitted_in_trade_group_count: state.FplTeamListsReducer.submitted_in_trade_group_count,
     approved_out_trade_group_count: state.FplTeamListsReducer.approved_out_trade_group_count,
     declined_out_trade_group_count: state.FplTeamListsReducer.declined_out_trade_group_count,
@@ -411,7 +436,8 @@ function mapDispatchToProps (dispatch) {
     createWaiverPick: createWaiverPick,
     fetchWaiverPicks: fetchWaiverPicks,
     updateWaiverPickOrder: updateWaiverPickOrder,
-    deleteWaiverPick: deleteWaiverPick
+    deleteWaiverPick: deleteWaiverPick,
+    fetchCurrentRound: fetchCurrentRound
   }, dispatch);
 }
 

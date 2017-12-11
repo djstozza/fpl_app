@@ -18,6 +18,8 @@ Rails.application.routes.draw do
     resources :pass_mini_draft_picks, only: :create
   end
 
+  resources :current_rounds, only: :index
+
   require 'sidekiq/web'
   require 'sidekiq-scheduler/web'
   mount Sidekiq::Web => '/sidekiq'

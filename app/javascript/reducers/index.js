@@ -2,6 +2,7 @@ import { combineReducers } from 'redux';
 import PositionsReducer from './reducer_positions';
 import TeamsReducer from './reducer_teams';
 import RoundsReducer from './reducer_rounds';
+import CurrentRoundReducer from './reducer_current_round';
 import TeamReducer from './reducer_team';
 import PlayersReducer from './reducer_players';
 import PlayerReducer from './reducer_player';
@@ -18,6 +19,7 @@ const rootReducer = combineReducers({
   PositionsReducer: PositionsReducer,
   TeamsReducer: TeamsReducer,
   RoundsReducer: RoundsReducer,
+  CurrentRoundReducer: CurrentRoundReducer,
   TeamReducer: TeamReducer,
   PlayersReducer: PlayersReducer,
   PlayerReducer: PlayerReducer,
