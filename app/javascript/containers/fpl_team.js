@@ -346,7 +346,6 @@ class FplTeam extends Component {
         <p>Loading...</p>
       )
     } else {
-      console.log(this.state.action)
       return (
         <div>
           { this.roundCountdown() }

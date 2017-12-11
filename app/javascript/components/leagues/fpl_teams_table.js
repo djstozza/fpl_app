@@ -46,10 +46,8 @@ export default class FplTeamsTable extends Component {
     function getDraftPicksColumn (draftPicks) {
       if (draftPicks.length > 0) {
         return (
-          <TableHeaderColumn
-            dataField='id'
+          <TableHeaderColumn dataField='id'
             dataAlign='center'
-            filter={ { type: 'TextFilter', placeholder: ' ' } }
             dataFormat={ pickTextCell }
             dataSort
             sortFunc={ pickSortFunc }>
@@ -61,40 +59,22 @@ export default class FplTeamsTable extends Component {
 
     return (
       <div>
-        <BootstrapTable
-          data={ this.props.fpl_teams }
-          striped
-          hover >
-          <TableHeaderColumn
-            dataField='name'
+        <BootstrapTable data={ this.props.fpl_teams } striped hover>
+          <TableHeaderColumn dataField='name'
             dataAlign='center'
             dataFormat={ this.linkCellText }
-            filter={ { type: 'TextFilter', placeholder: ' ' } }
             dataSort
             isKey>
             <span data-tip='Team'>T</span>
           </TableHeaderColumn>
-          <TableHeaderColumn
-            dataField='user_id'
-            dataAlign='center'
-            filter={ { type: 'TextFilter', placeholder: ' ' } }
-            dataFormat={ userTextCell }
-            dataSort>
+          <TableHeaderColumn dataField='user_id' dataAlign='center' dataFormat={ userTextCell } dataSort>
             <span data-tip='User'>U</span>
           </TableHeaderColumn>
           { getDraftPicksColumn(this.props.draft_picks) }
-          <TableHeaderColumn
-            dataField='total_score'
-            dataAlign='center'
-            filter={ { type: 'TextFilter', placeholder: ' ' } }
-            dataSort>
+          <TableHeaderColumn dataField='total_score' dataAlign='center' dataSort>
             <span data-tip='Total Score'>TS</span>
           </TableHeaderColumn>
-          <TableHeaderColumn
-            dataField='rank'
-            dataAlign='center'
-            filter={ { type: 'TextFilter', placeholder: ' ' } }
-            dataSort>
+          <TableHeaderColumn dataField='rank' dataAlign='center' dataSort>
             <span data-tip='Rank'>Rank</span>
           </TableHeaderColumn>
         </BootstrapTable>
