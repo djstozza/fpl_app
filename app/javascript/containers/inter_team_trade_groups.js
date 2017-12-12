@@ -16,10 +16,12 @@ import removeInterTeamTrade from '../actions/inter_team_trade_groups/action_remo
 import fetchTeams from '../actions/action_fetch_teams.js';
 import approveInterTeamTradeGroup from '../actions/inter_team_trade_groups/action_approve.js';
 import declineInterTeamTradeGroup from '../actions/inter_team_trade_groups/action_decline.js';
+import fetchCurrentRound from '../actions/action_fetch_current_round.js';
 
 import NewTradeGroup from '../components/inter_team_trades/new_trade_group.js';
 import OutTradeGroups from '../components/inter_team_trades/out_trade_groups.js';
 import InTradeGroups from '../components/inter_team_trades/in_trade_groups.js';
+import RoundCountdown from '../components/rounds/round_countdown.js';
 
 
 class InterTeamTradeGroups extends Component {
@@ -40,9 +42,11 @@ class InterTeamTradeGroups extends Component {
     this.removeTradeAction = this.removeTradeAction.bind(this);
     this.outTradeGroupSection = this.outTradeGroupSection.bind(this);
     this.inTradeGroupSection = this.inTradeGroupSection.bind(this);
+    this.roundCountdown = this.roundCountdown.bind(this);
   }
 
   componentWillMount () {
+    this.props.fetchCurrentRound();
     this.props.fetchFplTeam(this.state.fplTeamId);
     this.props.fetchInterTeamTradeGroups(this.state.fplTeamId);
     this.props.fetchTeams();
@@ -99,8 +103,7 @@ class InterTeamTradeGroups extends Component {
       in_players_tradeable: nextProps.in_players_tradeable,
       status: nextProps.status,
       positions: nextProps.positions,
-      round: nextProps.round,
-      rounds: nextProps.rounds,
+      current_round: nextProps.current_round,
       teams: nextProps.teams,
       out_trade_groups: nextProps.out_trade_groups,
       in_trade_groups: nextProps.in_trade_groups
@@ -112,6 +115,16 @@ class InterTeamTradeGroups extends Component {
     if (this.props.errors != nextProps.errors) {
       this.errorMessages(nextProps.errors);
     }
+  }
+
+  componentDidMount () {
+    setInterval(function () {
+      if (new Date(this.state.current_round.deadline_time) < new Date()) {
+        return;
+      }
+
+      this.props.fetchInterTeamTradeGroups(this.state.fplTeamId);
+    }.bind(this), 10000);
   }
 
   successMesssage (success) {
@@ -180,12 +193,25 @@ class InterTeamTradeGroups extends Component {
     }
   }
 
+  roundCountdown () {
+    if (new Date() < new Date(this.state.current_round.deadline_time)) {
+      return (
+        <RoundCountdown
+          round={ this.state.current_round }
+          current_round_deadline={ this.state.current_round.deadline_time }
+          current_round_status={ 'trade' }
+        />
+      );
+    }
+  }
+
   render () {
     if (this.state == null || this.state.fpl_team == null || this.state.out_trade_groups == null) {
       return (<p>Loading...</p>);
     } else {
       return (
         <div>
+          { this.roundCountdown() }
           <h2>{ this.state.fpl_team.name } Inter Team Trade Groups</h2>
           <NewTradeGroup
             out_players_tradeable={ this.state.out_players_tradeable }
@@ -212,6 +238,7 @@ function mapStateToProps (state) {
     fpl_teams: state.FplTeamReducer.fpl_teams,
     current_user: state.FplTeamReducer.current_user,
     positions: state.FplTeamReducer.positions,
+    current_round: state.CurrentRoundReducer.current_round,
     teams: state.TeamsReducer,
     status: state.InterTeamTradeGroupsReducer.status,
     out_trade_groups: state.InterTeamTradeGroupsReducer.out_trade_groups,
@@ -234,7 +261,8 @@ function mapDispatchToProps(dispatch) {
     deleteInterTeamTradeGroup: deleteInterTeamTradeGroup,
     removeInterTeamTrade: removeInterTeamTrade,
     approveInterTeamTradeGroup: approveInterTeamTradeGroup,
-    declineInterTeamTradeGroup: declineInterTeamTradeGroup
+    declineInterTeamTradeGroup: declineInterTeamTradeGroup,
+    fetchCurrentRound: fetchCurrentRound
   }, dispatch);
 }
 
