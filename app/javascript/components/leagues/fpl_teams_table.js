@@ -81,6 +81,5 @@ export default class FplTeamsTable extends Component {
         <ReactTooltip />
       </div>
     );
-
   }
 }

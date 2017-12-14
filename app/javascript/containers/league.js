@@ -9,6 +9,7 @@ import fetchLeague from '../actions/action_fetch_league.js';
 import fetchDraftPicks from '../actions/action_fetch_draft_picks.js';
 import createDraftPicks from '../actions/action_create_draft_picks.js';
 import FplTeamsTable from '../components/leagues/fpl_teams_table.js';
+import TeamListsTable from '../components/leagues/team_lists_table.js';
 import axios from 'axios';
 
 class League extends Component {
@@ -36,6 +37,7 @@ class League extends Component {
       commissioner: nextProps.commissioner,
       current_user: nextProps.current_user,
       draft_picks: nextProps.draft_picks,
+      fpl_team_list_arr: nextProps.fpl_team_list_arr,
       fpl_team: nextProps.fpl_team
     })
   }
@@ -77,6 +79,7 @@ class League extends Component {
             users={ this.state.users }
             draft_picks={ this.state.draft_picks }/>
           { this.createDraftPicksButton() }
+          <TeamListsTable fpl_team_list_arr={ this.state.fpl_team_list_arr } />
         </div>
       )
     }
@@ -88,6 +91,7 @@ function mapStateToProps(state) {
     league: state.LeagueReducer.league,
     fpl_teams: state.LeagueReducer.fpl_teams,
     users: state.LeagueReducer.users,
+    fpl_team_list_arr: state.LeagueReducer.fpl_team_list_arr,
     commissioner: state.LeagueReducer.commissioner,
     current_user: state.LeagueReducer.current_user,
     draft_picks: state.DraftPicksReducer.draft_picks

@@ -17,6 +17,7 @@ class LeaguesController < ApplicationController
           commissioner: league_decorator.commissioner,
           picked_players: league_decorator.picked_players,
           unpicked_players: league_decorator.unpicked_players,
+          fpl_team_list_arr: league_decorator.fpl_team_list_arr,
           current_user: current_user
         }
       end
