@@ -20,7 +20,7 @@ export default class TeamListsTable extends Component {
     return (
       this.props.fpl_team_list_arr.map(function ([team, teamLists], i) {
         return(
-          <tr key={ i }><td>{ team }</td>{ self.listDetails(teamLists) }</tr>
+          <tr key={ i }><td colSpan='2'>{ team }</td>{ self.listDetails(teamLists) }</tr>
 
         )
       })
@@ -30,11 +30,12 @@ export default class TeamListsTable extends Component {
   listDetails (teamLists) {
     return (
       teamLists.map( (teamList) => {
+        let roundId = teamList.round_id;
         return [
-          <td key={ `round-${teamList.round_id}-total-score`} className={ this.rankClass(teamList.list_rank) }>
+          <td key={ `round-${roundId}-total-score`} className={ `${this.rankClass(teamList.list_rank)} score-col` }>
             { teamList.list_score }
           </td>,
-          <td key={ `round-${teamList.round_id}-overall-rank`} className={ this.rankClass(teamList.overall_rank) }>
+          <td key={ `round-${roundId}-overall-rank`} className={ `${this.rankClass(teamList.overall_rank)} rank-col` }>
             { teamList.overall_rank }
           </td>
         ]
@@ -51,6 +52,8 @@ export default class TeamListsTable extends Component {
       return 'rank-third';
     } else if (rank == this.props.fpl_team_list_arr.length) {
       return 'rank-last';
+    } else {
+      return '';
     }
   }
 
@@ -59,7 +62,7 @@ export default class TeamListsTable extends Component {
       this.props.fpl_team_list_arr[0][1].map( (teamList) => {
         let roundId = teamList.round_id
         return (
-          <th key={ `round-${roundId}` } colSpan='2' rowSpan='1' row='0'>
+          <th key={ `round-${roundId}` } colSpan='2' rowSpan='1' row='0' className='round-header'>
             <span data-tip={ `Round ${roundId}` }>R{ roundId }</span>
           </th>
         )
@@ -71,10 +74,10 @@ export default class TeamListsTable extends Component {
     return (
       this.props.fpl_team_list_arr[0][1].map( (teamList) => {
         return [
-          <th key={ `round-${teamList.round_id}-scores` } colSpan='1' rowSpan='1' row='1'>
+          <th key={ `round-${teamList.round_id}-scores` } colSpan='1' rowSpan='1' row='1' className='score-col'>
             <span data-tip='Score'>S</span>
           </th>,
-          <th key={ `round-${teamList.round_id}-rank-header` } colSpan='1' rowSpan='1' row='1'>
+          <th key={ `round-${teamList.round_id}-rank-header` } colSpan='1' rowSpan='1' row='1' className='rank-col'>
             <span data-tip='Rank'>R</span>
           </th>
         ]
@@ -83,9 +86,7 @@ export default class TeamListsTable extends Component {
   }
 
   scrollClass () {
-    if (this.props.fpl_team_list_arr[0][1].length > 15) {
-      return 'scroll-table'
-    }
+    return this.props.fpl_team_list_arr[0][1].length > 15 ? 'scroll-table' : ''
   }
 
   render () {
@@ -95,7 +96,7 @@ export default class TeamListsTable extends Component {
         <Table className={ `league-list-table ${this.scrollClass()}` } bordered striped hover>
           <thead>
             <tr>
-              <th rowSpan='2'><span data-tip='Team'>T</span></th>
+              <th rowSpan='2' colSpan='2'><span data-tip='Team'>T</span></th>
               { this.roundHeaders() }
             </tr>
             <tr>

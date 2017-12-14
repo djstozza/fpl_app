@@ -1,8 +1,44 @@
 table.league-list-table {
-  th, td {
+  thead > tr > th, tbody> tr > td {
     text-align: center;
-    vertical-align: middle !important;
+    vertical-align: middle;
+
+    &.rank-first {
+      background-color: $gold;
+    }
+
+    &.rank-second {
+      background-color: $silver;
+    }
+
+    &.rank-third {
+      background-color: $bronze;
+    }
+
+    &.rank-last {
+      background-color: $red;
+    }
+
+    &.round-header {
+      border-top: 2px solid $black !important;
+      border-left: 2px solid $black;
+      border-right: 2px solid $black;
+    }
+
+    &.score-col {
+      border-left: 2px solid $black;
+    }
+
+    &.rank-col {
+      border-right: 2px solid $black;
+    }
   }
+
+  tbody > tr:last-child > td.score-col, tbody > tr:last-child > td.rank-col {
+    border-bottom: 2px solid $black;
+  }
+
+
 
   &.scroll-table {
     overflow-x: scroll;
@@ -13,20 +49,4 @@ table.league-list-table {
       display: none;
     }
   }
-}
-
-.rank-first {
-  background-color: $gold !important;
-}
-
-.rank-second {
-  background-color: $silver !important;
-}
-
-.rank-third {
-  background-color: $bronze !important;
-}
-
-.rank-last {
-  background-color: $red !important;
 }
