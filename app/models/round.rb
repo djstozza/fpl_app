@@ -25,7 +25,7 @@ class Round < ApplicationRecord
 
   class << self
     def current_round
-      @current_round ||=
+      round =
         if where(is_current: true).empty?
           find_by(is_next: true)
         elsif find_by(is_current: true).data_checked
@@ -33,7 +33,7 @@ class Round < ApplicationRecord
         else
           find_by(is_current: true)
         end
-      RoundDecorator.new(@current_round)
+      RoundDecorator.new(round)
     end
 
     def round_status(round: Round.current_round)
