@@ -5,6 +5,16 @@ class ApplicationController < ActionController::Base
 
   before_action :set_timezone
 
+  rescue_from ActiveRecord::RecordNotFound do
+    render '/errors/show', locals: { code: "404" },
+      status: :not_found
+  end
+
+  rescue_from ActionController::RoutingError do |exception|
+   logger.error 'Routing error occurred'
+   render plain: '404 Not found', status: 404
+  end
+
   private
 
   def set_timezone

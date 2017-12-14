@@ -14,6 +14,11 @@ import { Route, IndexRoute } from 'react-router'
 import { createStore, applyMiddleware } from 'redux';
 import { ConnectedRouter, routerReducer, routerMiddleware, push } from 'react-router-redux';
 import { Row, Col } from 'react-bootstrap';
+import thunk from 'redux-thunk';
+import reducers from '../reducers';
+import axios from 'axios';
+import Alert from 'react-s-alert';
+
 import Rounds from '../containers/rounds.js';
 import Team from '../containers/team.js';
 import Players from '../containers/players.js';
@@ -23,11 +28,8 @@ import DraftPicks from '../containers/draft_picks.js';
 import FplTeam from '../containers/fpl_team.js';
 import FplTeams from '../containers/fpl_teams.js';
 import InterTeamTradeGroups from '../containers/inter_team_trade_groups.js';
-import MiniDraftPicks from '../containers/mini_draft_picks.js'
-import thunk from 'redux-thunk';
-import reducers from '../reducers';
-import axios from 'axios';
-import Alert from 'react-s-alert';
+import MiniDraftPicks from '../containers/mini_draft_picks.js';
+
 import '../../../node_modules/react-bootstrap-table/dist/react-bootstrap-table.min.css';
 import '../../../node_modules/react-s-alert/dist/s-alert-default.css';
 import '../../../node_modules/react-s-alert/dist/s-alert-css-effects/bouncyflip.css';

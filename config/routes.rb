@@ -40,4 +40,6 @@ Rails.application.routes.draw do
   resources :players, only: [:show, :index]
 
   resources :teams, only: [:index, :show]
+
+  match "*path", to: "errors#show", via: :all
 end

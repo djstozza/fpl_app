@@ -1,7 +1,4 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { Provider } from 'react-redux';
 import { Row, Col, Button } from 'react-bootstrap';
 import axios from 'axios';
 
