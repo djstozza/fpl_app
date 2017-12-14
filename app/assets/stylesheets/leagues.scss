@@ -4,12 +4,14 @@ table.league-list-table {
     vertical-align: middle !important;
   }
 
-  overflow-x: auto;
-  overflow-y: hidden;
-  display: -webkit-box;
-  display: -moz-box;
-  &::-webkit-scrollbar {
-    display: none;
+  &.scroll-table {
+    overflow-x: scroll;
+    overflow-y: hidden;
+    display: -webkit-box;
+    display: -moz-box;
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
 }
 

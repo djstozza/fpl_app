@@ -12,6 +12,7 @@ export default class TeamListsTable extends Component {
     this.roundHeaders = this.roundHeaders.bind(this);
     this.listHeaders = this.listHeaders.bind(this);
     this.rankClass = this.rankClass.bind(this);
+    this.scrollClass = this.scrollClass.bind(this);
   }
 
   teamList () {
@@ -78,15 +79,20 @@ export default class TeamListsTable extends Component {
           </th>
         ]
       })
-    )
+    );
+  }
 
+  scrollClass () {
+    if (this.props.fpl_team_list_arr[0][1].length > 15) {
+      return 'scroll-table'
+    }
   }
 
   render () {
     return (
       <div>
         <h3>League History</h3>
-        <Table className='league-list-table' bordered striped hover>
+        <Table className={ `league-list-table ${this.scrollClass()}` } bordered striped hover>
           <thead>
             <tr>
               <th rowSpan='2'><span data-tip='Team'>T</span></th>
