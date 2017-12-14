@@ -11,6 +11,7 @@ export default class TeamListsTable extends Component {
     this.listDetails = this.listDetails.bind(this);
     this.roundHeaders = this.roundHeaders.bind(this);
     this.listHeaders = this.listHeaders.bind(this);
+    this.rankClass = this.rankClass.bind(this);
   }
 
   teamList () {
@@ -29,11 +30,27 @@ export default class TeamListsTable extends Component {
     return (
       teamLists.map( (teamList) => {
         return [
-          <td key={ `round-${teamList.round_id}-total-score`}>{ teamList.list_score }</td>,
-          <td key={ `round-${teamList.round_id}-overall-rank`}>{ teamList.overall_rank }</td>
+          <td key={ `round-${teamList.round_id}-total-score`} className={ this.rankClass(teamList.list_rank) }>
+            { teamList.list_score }
+          </td>,
+          <td key={ `round-${teamList.round_id}-overall-rank`} className={ this.rankClass(teamList.overall_rank) }>
+            { teamList.overall_rank }
+          </td>
         ]
       })
     )
+  }
+
+  rankClass (rank) {
+    if (rank == 1) {
+      return 'rank-first';
+    } else if (rank == 2) {
+      return 'rank-second';
+    } else if (rank == 3) {
+      return 'rank-third';
+    } else if (rank == this.props.fpl_team_list_arr.length) {
+      return 'rank-last';
+    }
   }
 
   roundHeaders () {
@@ -68,6 +85,7 @@ export default class TeamListsTable extends Component {
   render () {
     return (
       <div>
+        <h3>League History</h3>
         <Table className='league-list-table' bordered striped hover>
           <thead>
             <tr>

@@ -6,3 +6,19 @@ table.league-list-table {
 
   overflow-x: scroll;
 }
+
+.rank-first {
+  background-color: $gold !important;
+}
+
+.rank-second {
+  background-color: $silver !important;
+}
+
+.rank-third {
+  background-color: $bronze !important;
+}
+
+.rank-last {
+  background-color: $red !important;
+}
