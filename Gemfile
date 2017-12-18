@@ -48,6 +48,9 @@ gem 'sidekiq'
 gem 'sidekiq-scheduler'
 gem 'rufus-scheduler', '3.2.2'
 gem 'httparty'
+gem 'mailgun-ruby', '~>1.1.6'
+
+gem 'figaro'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
