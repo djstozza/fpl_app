@@ -26,6 +26,7 @@
     "humanize-string": "^1.0.1",
     "immutable": "^3.8.1",
     "js-yaml": "^3.8.3",
+    "mathjs": "^3.18.0",
     "node-sass": "^4.7.2",
     "path-complete-extname": "^0.1.0",
     "postcss-loader": "^2.0.9",
