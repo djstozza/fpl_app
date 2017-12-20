@@ -71,8 +71,6 @@ class Leagues::ProcessScoringService < ActiveInteraction::Base
     return if substitute_arr.empty?
 
     starting_field_line_up.select { |list_position| minutes_parser(list_position.player).zero? }.each do |list_position|
-      player = list_position.player
-
       substitute_arr.each do |substitute|
         next unless valid_substitution(list_position, substitute) && list_position.starting?
         list_position.update(role: substitute.role)

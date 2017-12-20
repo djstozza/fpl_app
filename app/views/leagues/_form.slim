@@ -1,27 +1,30 @@
-= form_tag(path, method: method) do
-  - if @form.errors.any?
-    #error_explanation
-      p #{pluralize(@form.errors.count, "error")} prohibited this league from being saved:
+= form_for(@form, url: path, method: method, builder: FormBuilder) do |f|
+  = f.group :league_name do
+    = f.label :league_name
 
-      ul
-      - @form.errors.full_messages.each do |message|
-        li = message
+    - if method == :post
+      = f.text_field :league_name, autofocus: true
+    - else
+      = f.text_field :league_name, value: @form.league.name, autofocus: true
 
-  .form_group
-    = label_tag :league_nanme, 'League Name'
-    = text_field_tag :league_name, @form&.league&.name, class: 'form-control'
-  .form_group
-    = label_tag :code
-    = text_field_tag :code, @form&.league&.code, class: 'form-control js-league-code', readonly: true
+    = f.errors :league_name
+
+  = f.group :code do
+    = f.label :code
+
+    - if method == :post
+      = f.text_field :code, class: 'js-league-code', readonly: true
+    - else
+      = f.text_field :code, value: @form.league.code, class: 'js-league-code', readonly: true
+    = f.errors :code
+
     a.js-generate-code.btn.btn-default href='javascript:' Generate code
-    = hidden_field_tag :commissioner_id
 
-
-  .form_group
-    = label_tag :fpl_team_name, 'Team Name'
-    = text_field_tag :fpl_team_name, @form&.fpl_team&.name, class: 'form-control'
-  = hidden_field_tag :league_id
-  = hidden_field_tag :user_id
+  - if method == :post
+    = f.group :fpl_team_name do
+      = f.label :fpl_team_name
+      = f.text_field :fpl_team_name
+      = f.errors :fpl_team_name
 
   .actions
     = submit_tag 'Submit', class: 'btn btn-default'

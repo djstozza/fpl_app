@@ -30,7 +30,7 @@ class FplTeams extends Component {
     } else {
       return (
         <div>
-          <h2>My Teams</h2>
+          <h2>My Fpl Teams</h2>
           <UserFplTeamsTable fpl_teams={ this.state.fpl_teams }/>
         </div>
       );

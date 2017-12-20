@@ -26,7 +26,7 @@ class LeaguesController < ApplicationController
 
   # GET /leagues/new
   def new
-    @form = Leagues::ProcessLeagueForm.new(
+    @form = Leagues::CreateLeagueForm.new(
       league: League.new,
       fpl_team: FplTeam.new,
       current_user: current_user
@@ -35,21 +35,16 @@ class LeaguesController < ApplicationController
 
   # GET /leagues/1/edit
   def edit
-    # fpl_team = FplTeam.find_by(league: @league, user: current_user)
-    @form = Leagues::ProcessLeagueForm.new(league: @league, fpl_team: @fpl_team, current_user: current_user)
+    @form = Leagues::ProcessLeagueForm.new(league: @league, current_user: current_user)
   end
 
   # POST /leagues
   # POST /leagues.json
   def create
-    @form = Leagues::ProcessLeagueForm.new(
-      league: League.new,
-      fpl_team: FplTeam.new,
-      current_user: current_user
-    )
-    @form.attributes = league_params
+    @form = Leagues::CreateLeagueForm.run(league_params.merge(current_user: current_user))
+
     respond_to do |format|
-      if @form.save
+      if @form.valid?
         format.html { redirect_to @form.league, notice: 'League was successfully created.' }
         format.json { render :show, status: :created, location: @league }
       else
@@ -62,15 +57,15 @@ class LeaguesController < ApplicationController
   # PATCH/PUT /leagues/1
   # PATCH/PUT /leagues/1.json
   def update
-    @form = Leagues::ProcessLeagueForm.new(league: @league, fpl_team: @fpl_team, current_user: current_user)
-    @form.attributes = league_params
+    @form = Leagues::ProcessLeagueForm.run(league_params.merge(league: @league, current_user: current_user))
+
     respond_to do |format|
-      if @form.update
+      if @form.valid?
         format.html { redirect_to @league, notice: 'League was successfully updated.' }
         format.json { render :show, status: :ok, location: @league }
       else
         format.html { render :edit }
-        format.json { render json: @league.errors, status: :unprocessable_entity }
+        format.json { render json: @form.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -97,6 +92,6 @@ class LeaguesController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def league_params
-    params.permit(:id, :league_name, :code, :comissioner_id, :fpl_team_name, :user_id)
+    params.fetch(:league, keys: [:id, :code, :league_name, :commisioner_id, :fpl_team_name, :user_id ])
   end
 end

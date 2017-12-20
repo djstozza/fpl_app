@@ -6,6 +6,7 @@ class Leagues::CreateLeagueForm < ApplicationInteraction
   string :code
   string :fpl_team_name
 
+  validates :league_name, :fpl_team_name, :code, presence: true
   validate :league_name_uniqueness
   validate :fpl_team_name_uniqueness
 
@@ -14,21 +15,26 @@ class Leagues::CreateLeagueForm < ApplicationInteraction
   def execute
     league.assign_attributes(name: league_name, code: code, commissioner: current_user)
     league.save
+    errors.merge!(league.errors)
     fpl_team.assign_attributes(name: fpl_team_name, user: current_user, league: league)
     fpl_team.save
+    errors.merge!(fpl_team.errors)
   end
 
-  private
+  def to_model
+    league
+  end
+
 
   def league_name_uniqueness
     if League.where('lower(name) = ?', league_name.downcase).count.positive?
-      errors.add(:base, 'League name has already been taken')
+      errors.add(:league_name, 'has already been taken.')
     end
   end
 
   def fpl_team_name_uniqueness
     if FplTeam.where('lower(name) = ?', fpl_team_name.downcase).count.positive?
-      errors.add(:base, 'Fpl team name has already been taken')
+      errors.add(:fpl_team_name, 'has already been taken.')
     end
   end
 end

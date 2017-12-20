@@ -1,19 +1,21 @@
 .container: .row: .col-sm-offset-1.col-sm-10.col-md-offset-3.col-md-6
-  = form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
+  = form_for(resource, as: resource_name, url: session_path(resource_name), builder: FormBuilder) do |f|
+    = devise_error_messages!
     h2 Log in
-    .form_group
+
+    = f.group :email do
       = f.label :email
-      = f.email_field :email, class: 'form-control', autofocus: true
+      = f.email_field :email, autofocus: true
 
-    .form_group
-      = f.label :password
-      = f.password_field :password, class: 'form-control', autocomplete: 'off'
+    = f.group :password do
+      = f.label :password, 'New password'
+      = f.password_field :password, autofocus: true, autocomplete: 'off'
+      = f.errors :password
 
-    - if devise_mapping.rememberable?
-      .checkbox
-        = f.label :remember_me
-          | #{f.check_box :remember_me}
-          | Remember me
+    .checkbox
+      = f.label :remember_me
+        | #{f.check_box :remember_me}
+        | Remember me
 
     .actions
       = f.submit 'Log in', class: 'btn btn-primary'

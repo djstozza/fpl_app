@@ -1,0 +1,25 @@
+.container: .row: .col-sm-offset-3.col-sm-6
+  h2 Change your password
+
+  = form_for resource,
+    as: resource_name,
+    url: password_path(resource_name),
+    html: { method: :put },
+    builder: FormBuilder do |f|
+
+    = f.hidden_field :reset_password_token
+
+    = f.group :password do
+      = f.label :password, 'New password'
+      = f.password_field :password, autofocus: true, autocomplete: 'off'
+      = f.errors :password
+
+    = f.group :password_confirmation do
+      = f.label :password_confirmation, 'Confirm new password'
+      = f.password_field :password_confirmation, autofocus: true, autocomplete: 'off'
+      = f.errors :password_confirmation
+
+    .actions
+      = f.submit 'Change my password', class: 'btn btn-primary'
+
+    = render 'users/shared/links'

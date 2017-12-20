@@ -16,8 +16,8 @@ html
     nav.navbar.navbar-default
       .container-fluid
         .navbar-header
-          button.navbar-toggle.collapsed aria-expanded="false" data-target="#nav" data-toggle="collapse" type="button"
-            span.sr-only Toggle navigation
+          button.navbar-toggle.collapsed aria-expanded='false' data-target='#nav' data-toggle='collapse' type='button'
+            span.sr-only
             span.icon-bar
             span.icon-bar
             span.icon-bar
@@ -28,7 +28,8 @@ html
             li = link_to('Teams', team_path(Team.order(:position).first))
           ul.nav.navbar-nav.navbar-right
             - if current_user
-              li = link_to('My Fpl Teams', fpl_teams_path)
+              - if current_user.fpl_teams.any?
+                li = link_to('My Fpl Teams', fpl_teams_path)
               li = link_to('Create a League', new_league_path)
               li = link_to('Join a League', join_a_league_path)
             li = sign_up_link

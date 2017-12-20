@@ -33,6 +33,7 @@ export default class UserFplTeamsTable extends Component {
             <span data-tip='Rank'>R</span>
           </TableHeaderColumn>
         </BootstrapTable>
+        <ReactTooltip/>
       </div>
     )
   }

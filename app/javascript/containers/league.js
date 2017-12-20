@@ -27,6 +27,7 @@ class League extends Component {
     this.createDraftPicksButton = this.createDraftPicksButton.bind(this);
     this.createDraftPicks = this.createDraftPicks.bind(this);
     this.roundCountdown = this.roundCountdown.bind(this);
+    this.teamListsTable = this.teamListsTable.bind(this);
   }
 
   componentWillMount () {
@@ -85,6 +86,14 @@ class League extends Component {
     }
   }
 
+  teamListsTable () {
+    if (this.state.league.active) {
+      return (
+        <TeamListsTable fpl_team_list_arr={ this.state.fpl_team_list_arr } />
+      );
+    }
+  }
+
   render () {
     if (this.state == null || this.state.league == null || this.state.draft_picks == null) {
       return (
@@ -101,7 +110,7 @@ class League extends Component {
             users={ this.state.users }
             draft_picks={ this.state.draft_picks }/>
           { this.createDraftPicksButton() }
-          <TeamListsTable fpl_team_list_arr={ this.state.fpl_team_list_arr } />
+          { this.teamListsTable() }
         </div>
       )
     }

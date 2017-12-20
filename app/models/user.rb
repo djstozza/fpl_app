@@ -28,4 +28,5 @@ class User < ApplicationRecord
   has_many :league_commissioner_assignments, class_name: 'LeagueCommissionerAssignment', foreign_key: 'commissioner_id'
   has_many :leagues, through: :fpl_teams
   has_many :fpl_teams
+  validates :username, :email, uniqueness: true, presence: true
 end
