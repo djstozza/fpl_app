@@ -1,61 +1,65 @@
-class Leagues::JoinLeagueForm
-  include ActiveModel::Model
-  include ::Virtus.model
+class Leagues::JoinLeagueForm < ApplicationInteraction
+  object :current_user, class: User
+  object :fpl_team, class: FplTeam, default: -> { FplTeam.new }
 
-  attr_accessor :league, :current_user, :fpl_team
+  string :league_name
+  string :code
+  string :fpl_team_name
 
-  def initialize(current_user:, fpl_team:)
-    @current_user = current_user
-    @fpl_team = fpl_team
-    super
-  end
-
-  attribute :league_name, String
-  attribute :code, String
-
-  attribute :fpl_team_name, String
-  attribute :user_id, Integer
-
-  validate :league_presence
-  validates :current_user, presence: true
-  validates :fpl_team, presence: true
-  validates :code, :league_name, :fpl_team_name, presence: true
-  validate :already_joined
-  validate :fpl_team_name_uniqueness
-  validate :fpl_team_quota
+  object :league, class: League, default: -> {
+    League.where('lower(name) = :name AND code = :code', name: league_name&.downcase, code: code).first
+  }
 
   MAX_FPL_TEAM_QUOTA = 11
 
-  def save
-    return false unless valid?
-    ActiveRecord::Base.transaction do
-      @fpl_team.attributes = { name: fpl_team_name, user: @current_user, league: @league }
-      @fpl_team.save!
-    end
+  validates :league_name, :fpl_team_name, :code, presence: true
+  validate :league_presence
+  validate :fpl_team_name_uniqueness
+  validate :already_joined
+  validate :fpl_team_quota
+  validate :inactive_league
+
+  attr_reader :error
+
+  run_in_transaction!
+
+  def execute
+    fpl_team.assign_attributes(name: fpl_team_name, user: current_user, league: league)
+    fpl_team.save
+    errors.merge!(fpl_team.errors)
+  end
+
+  def to_model
+    fpl_team
   end
 
   private
 
-  def already_joined
-    errors.add(:base, 'You have already joined this league') if @league&.users&.include?(@current_user)
+  def league_presence
+    errors.add(:base, 'The league name and/or code you have entered is incorrect.') if league.blank?
   end
 
-  def league_presence
-    @league = League.where('lower(name) = :name AND code = :code', name: league_name&.downcase, code: code).first
-    errors.add(:base, 'The league name and/or code you have entered is incorrect') if @league.nil?
-  end
 
   def fpl_team_name_uniqueness
-    return if fpl_team_name.blank?
-    return if fpl_team_name.downcase == @fpl_team&.name&.downcase
-    if FplTeam.where('lower(name) = ?', fpl_team_name.downcase).count.positive?
-      errors.add(:base, 'Fpl team name has already been taken')
-    end
+    return unless FplTeam.where('lower(name) = ?', fpl_team_name.downcase).count.positive?
+    errors.add(:fpl_team_name, 'has already been taken.')
+  end
+
+  def already_joined
+    return if league.nil?
+    return unless league.users.include?(current_user)
+    errors.add(:base, 'You have already joined this league')
   end
 
   def fpl_team_quota
-    if @league.present? && @league.fpl_teams.count >= MAX_FPL_TEAM_QUOTA
-      errors.add(:base, 'Limit on fpl teams for this league has already been reached')
-    end
+    return if league.nil?
+    return if league.fpl_teams.count <= MAX_FPL_TEAM_QUOTA
+    errors.add(:base, 'Limit on fpl teams for this league has already been reached.')
+  end
+
+  def inactive_league
+    return if league.nil?
+    return unless league.active || league.draft_picks.any?
+    errors.add(:base, 'You cannot join an activated league.')
   end
 end

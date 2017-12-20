@@ -1,26 +1,18 @@
-= form_tag(join_leagues_path, url: '/join-a-league', method: :post) do
-  - if @form.errors.any?
-    #error_explanation
-      p #{pluralize(@form.errors.count, "error")} prevented you from joining a league:
+= form_for(@form, url: '/join-a-league', method: :post, builder: FormBuilder) do |f|
+  = f.group :league_name do
+    = f.label :league_name
+    = f.text_field :league_name, autofocus: true
+    = f.errors :league_name
 
-      ul
-      - @form.errors.full_messages.each do |message|
-        li = message
+  = f.group :code do
+    = f.label :code
+    = f.text_field :code
+    = f.errors :code
 
-  .form_group
-    = label_tag :league_nanme, 'League Name'
-    = text_field_tag :league_name, @form.fpl_team&.league&.name, class: 'form-control'
-  .form_group
-    = label_tag :code
-    = text_field_tag :code, @form.fpl_team&.league&.code, class: 'form-control'
-    = hidden_field_tag :commissioner_id
-
-
-  .form_group
-    = label_tag :fpl_team_name, 'Team Name'
-    = text_field_tag :fpl_team_name, @form.fpl_team&.name, class: 'form-control'
-  = hidden_field_tag :league_id
-  = hidden_field_tag :user_id
+  = f.group :fpl_team_name do
+    = f.label :fpl_team_name
+    = f.text_field :fpl_team_name
+    = f.errors :fpl_team_name
 
   .actions
-    = submit_tag 'Join', class: 'btn btn-default'
+    = submit_tag 'Join', class: 'btn btn-primary'

@@ -48,6 +48,7 @@ class LeaguesController < ApplicationController
         format.html { redirect_to @form.league, notice: 'League was successfully created.' }
         format.json { render :show, status: :created, location: @league }
       else
+        flash[:danger] = @form.errors[:base]&.first
         format.html { render :new }
         format.json { render json: @form.errors, status: :unprocessable_entity }
       end
@@ -64,6 +65,7 @@ class LeaguesController < ApplicationController
         format.html { redirect_to @league, notice: 'League was successfully updated.' }
         format.json { render :show, status: :ok, location: @league }
       else
+        flash[:danger] = @form.errors[:base]&.first
         format.html { render :edit }
         format.json { render json: @form.errors, status: :unprocessable_entity }
       end
@@ -92,6 +94,6 @@ class LeaguesController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def league_params
-    params.fetch(:league, keys: [:id, :code, :league_name, :commisioner_id, :fpl_team_name, :user_id ])
+    params.fetch(:league, keys: [:id, :code, :league_name, :fpl_team_name])
   end
 end
