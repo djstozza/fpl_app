@@ -37,10 +37,11 @@ html
 
     .row.clearfix: .container
       - flash.each do |key, value|
-        div class="alert alert-#{key} alert-dismissable"
-          button type='button' data-dismiss='alert' class='close'
-            span aria-hidden='true' &times;
-          = value
+        - if value
+          div class="alert alert-#{key} alert-dismissable"
+            button type='button' data-dismiss='alert' class='close'
+              span aria-hidden='true' &times;
+            = value
 
     = yield
     #root
