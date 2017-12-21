@@ -10,6 +10,7 @@
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #  rank        :integer
+#  active      :boolean
 #
 
 class FplTeam < ApplicationRecord

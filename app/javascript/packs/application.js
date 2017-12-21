@@ -55,27 +55,25 @@ export default class App extends Component {
       <Provider store={store}>
         <ConnectedRouter history={history}>
           <div className='container-fluid'>
-            <Row className='clearfix'>
-              <Col xs={12} mdOffset={1} md={10}>
-                <Alert stack={ { limit: 3 } } />
-                <Route exact path="/" component={ Rounds } />
-                <Route exact path='/rounds' component={ Rounds } />
-                <Route exact path='/rounds/:id(\d+)' component={ Rounds } />
-                <Route path='/teams/:id(\d+)' component={ Team } />
-                <Route exact path='/players' component={ Players } />
-                <Route exact path='/players/:id(\d+)' component={ Player } />
-                <Route exact path='/leagues/:id(\d+)' component={ League } />
-                <Route exact path='/leagues/:id(\d+)/draft_picks' component={ DraftPicks } />
-                <Route exact path='/leagues/:id(\d+)/mini_draft_picks' component={ MiniDraftPicks } />
-                <Route exact path='/fpl_teams' component={ FplTeams } />
-                <Route exact path='/fpl_teams/:id(\d+)' component={ FplTeam } />
-                <Route
-                  exact
-                  path='/fpl_teams/:fpl_team_id(\d+)/inter_team_trade_groups'
-                  component={ InterTeamTradeGroups }
-                />
-             </Col>
-            </Row>
+
+            <Alert stack={ { limit: 3 } } />
+            <Route exact path="/" component={ Rounds } />
+            <Route exact path='/rounds' component={ Rounds } />
+            <Route exact path='/rounds/:id(\d+)' component={ Rounds } />
+            <Route path='/teams/:id(\d+)' component={ Team } />
+            <Route exact path='/players' component={ Players } />
+            <Route exact path='/players/:id(\d+)' component={ Player } />
+            <Route exact path='/leagues/:id(\d+)' component={ League } />
+            <Route exact path='/leagues/:id(\d+)/draft_picks' component={ DraftPicks } />
+            <Route exact path='/leagues/:id(\d+)/mini_draft_picks' component={ MiniDraftPicks } />
+            <Route exact path='/fpl_teams' component={ FplTeams } />
+            <Route exact path='/fpl_teams/:id(\d+)' component={ FplTeam } />
+            <Route
+              exact
+              path='/fpl_teams/:fpl_team_id(\d+)/inter_team_trade_groups'
+              component={ InterTeamTradeGroups }
+            />
+
           </div>
         </ConnectedRouter>
       </Provider>

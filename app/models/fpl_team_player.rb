@@ -2,8 +2,8 @@
 #
 # Table name: fpl_teams_players
 #
-#  player_id   :integer
-#  fpl_team_id :integer
+#  fpl_team_id :integer          not null
+#  player_id   :integer          not null
 #
 
 class FplTeamPlayer < ApplicationRecord

@@ -52,6 +52,8 @@ class FplTeamListsController < ApplicationController
   end
 
   def fpl_team_list_hash
+    return {} unless @fpl_team.active
+
     fpl_team_decorator = FplTeamDecorator.new(@fpl_team)
     fpl_team_list_decorator = FplTeamListDecorator.new(
       @fpl_team_list || fpl_team_decorator.current_fpl_team_list

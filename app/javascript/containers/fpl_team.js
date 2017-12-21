@@ -41,7 +41,10 @@ class FplTeam extends Component {
     this.updateWaiverPickOrder = this.updateWaiverPickOrder.bind(this);
     this.deleteWaiverPick = this.deleteWaiverPick.bind(this);
     this.tradeGroupNotifications = this.tradeGroupNotifications.bind(this);
+    this.roundsNav = this.roundsNav.bind(this);
     this.roundCountdown = this.roundCountdown.bind(this);
+    this.teamListTable = this.teamListTable.bind(this);
+    this.statusChart = this.statusChart.bind(this);
 
     this.state = {
       action: 'selectLineUp',
@@ -145,6 +148,10 @@ class FplTeam extends Component {
 
   componentDidMount () {
     setInterval(function () {
+      if (!this.state.fpl_team.active) {
+        return;
+      }
+
       if (!this.state.round.is_current && !this.state.round.is_next) {
         return;
       }
@@ -244,7 +251,7 @@ class FplTeam extends Component {
   }
 
   tradePlayersTable () {
-    if (this.state.action == 'tradePlayers' || this.state.action == 'waiverPicks') {
+    if (this.state.fpl_team.active && (this.state.action == 'tradePlayers' || this.state.action == 'waiverPicks')) {
       return (
         <Col xs={12}>
           <TradePlayersTable
@@ -329,7 +336,7 @@ class FplTeam extends Component {
   }
 
   roundCountdown () {
-    if (this.state.current_round_deadline) {
+    if (this.state.current_round_deadline && this.state.fpl_team.active) {
       return (
         <RoundCountdown
           round={ this.state.current_round }
@@ -340,8 +347,62 @@ class FplTeam extends Component {
     }
   }
 
+  roundsNav () {
+    if (!this.state.fpl_team.active) {
+      return;
+    }
+
+    return (
+      <RoundsNav rounds={ this.state.rounds } round={ this.state.round } onChange={ this.roundDataSource } />
+    );
+  }
+
+  teamListTable () {
+    if (this.state.fpl_team.active) {
+      return (
+        <Row className='clearfix'>
+          <Col xs={12}>
+            <TeamListTable
+              fpl_team={ this.state.fpl_team }
+              current_user={ this.state.current_user }
+              line_up={ this.state.line_up }
+              positions={ this.state.positions }
+              teams={ this.state.teams }
+              round={ this.state.round }
+              status={ this.state.status }
+              action={ this.state.action }
+              clearSelection={ this.state.clearSelection }
+              substitutePlayer={ this.substitutePlayer }
+              setlistPosition={ this.setlistPosition }
+            />
+          </Col>
+        </Row>
+      );
+    }
+  }
+
+  statusChart () {
+    if (this.state.fpl_team.active) {
+      return (
+        <Row className='clearfix'>
+          <Col sm={12}>
+            <StatusChart
+              fpl_team_lists={ this.state.fpl_team_lists }
+              rounds={ this.state.rounds }
+              fpl_teams={ this.state.fpl_teams }
+            />
+          </Col>
+        </Row>
+      );
+    }
+  }
+
   render () {
-    if (this.state == null || this.state.fpl_team == null || this.state.fpl_team_list == null) {
+    if (
+        this.state == null ||
+        this.state.fpl_team == null ||
+        this.state.fpl_team.active && this.state.fpl_team_list == null
+      ) {
       return (
         <p>Loading...</p>
       )
@@ -350,27 +411,11 @@ class FplTeam extends Component {
         <div>
           { this.roundCountdown() }
           <h2>{ this.state.fpl_team.name }</h2>
-          <RoundsNav rounds={ this.state.rounds } round={ this.state.round } onChange={ this.roundDataSource } />
+          { this.roundsNav() }
           { this.showButtons() }
           { this.tradeGroupNotifications() }
           <h4>{ this.roundScore() }</h4>
-          <Row className='clearfix'>
-            <Col xs={12}>
-              <TeamListTable
-                fpl_team={ this.state.fpl_team }
-                current_user={ this.state.current_user }
-                line_up={ this.state.line_up }
-                positions={ this.state.positions }
-                teams={ this.state.teams }
-                round={ this.state.round }
-                status={ this.state.status }
-                action={ this.state.action }
-                clearSelection={ this.state.clearSelection }
-                substitutePlayer={ this.substitutePlayer }
-                setlistPosition={ this.setlistPosition }
-              />
-            </Col>
-          </Row>
+          { this.teamListTable() }
           <Row className='clearfix'>
             { this.tradePlayersTable() }
           </Row>
@@ -379,15 +424,7 @@ class FplTeam extends Component {
               { this.sortWaiverPicks() }
             </Col>
           </Row>
-          <Row className='clearfix'>
-            <Col sm={12}>
-              <StatusChart
-                fpl_team_lists={ this.state.fpl_team_lists }
-                rounds={ this.state.rounds }
-                fpl_teams={ this.state.fpl_teams }
-              />
-            </Col>
-          </Row>
+          { this.statusChart() }
         </div>
       )
     }

@@ -35,7 +35,7 @@ html
             li = sign_up_link
             li = session_link
 
-    .row.clearfix: .container
+    .container-fluid
       - flash.each do |key, value|
         - if value
           div class="alert alert-#{key} alert-dismissable"
