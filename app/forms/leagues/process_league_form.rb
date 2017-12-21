@@ -1,17 +1,20 @@
 class Leagues::ProcessLeagueForm < ApplicationInteraction
   object :current_user, class: User
   object :league, class: League
-  string :league_name
-  string :code
 
-  validates :league_name, :code, presence: true
+  model_fields :league do
+    string :name
+    string :code
+  end
+
+  validates :name, :code, presence: true
   validate :league_name_uniqueness
   validate :user_is_commissioner
 
   run_in_transaction!
 
   def execute
-    league.assign_attributes(name: league_name, code: code, commissioner: current_user)
+    league.assign_attributes(name: name, code: code, commissioner: current_user)
     league.save
     errors.merge!(league.errors)
   end
@@ -23,9 +26,9 @@ class Leagues::ProcessLeagueForm < ApplicationInteraction
   private
 
   def league_name_uniqueness
-    return if league_name == league.name
-    if League.where('lower(name) = ?', league_name.downcase).count.positive?
-      errors.add(:league_name, "(#{league_name}) has already been taken.")
+    return if name = league.name
+    if League.where('lower(name) = ?', name.downcase).count.positive?
+      errors.add(:league_name, "#{name} has already been taken")
     end
   end
 

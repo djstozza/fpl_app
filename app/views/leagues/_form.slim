@@ -1,21 +1,12 @@
 = form_for(@form, url: path, method: method, builder: FormBuilder) do |f|
-  = f.group :league_name do
-    = f.label :league_name
-
-    - if method == :post
-      = f.text_field :league_name, autofocus: true
-    - else
-      = f.text_field :league_name, value: @form.league.name, autofocus: true
-
-    = f.errors :league_name
+  = f.group :name do
+    = f.label :name, 'League name'
+    = f.text_field :name, autofocus: true
+    = f.errors :name
 
   = f.group :code do
     = f.label :code
-
-    - if method == :post
-      = f.text_field :code, class: 'js-league-code', readonly: true
-    - else
-      = f.text_field :code, value: @form.league.code, class: 'js-league-code', readonly: true
+    = f.text_field :code, class: 'js-league-code', readonly: true
     = f.errors :code
 
     a.js-generate-code.btn.btn-default href='javascript:' Generate code

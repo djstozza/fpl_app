@@ -32,6 +32,7 @@ class FplTeamsController < ApplicationController
 
   # GET /fpl_teams/1/edit
   def edit
+    @form = ::FplTeams::EditForm.new(fpl_team: @fpl_team, current_user: current_user)
   end
 
   # PATCH/PUT /fpl_teams/1
@@ -49,13 +50,13 @@ class FplTeamsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_fpl_team
-      @fpl_team = FplTeam.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_fpl_team
+    @fpl_team = FplTeam.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def fpl_team_params
-      params.fetch(:fpl_team, {})
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def fpl_team_params
+    params.fetch(:fpl_team, keys: [:id, :name])
+  end
 end

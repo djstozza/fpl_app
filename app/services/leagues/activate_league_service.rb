@@ -9,6 +9,7 @@ class Leagues::ActivateLeagueService < ActiveInteraction::Base
         ::FplTeams::ProcessInitialLineUp.run!(fpl_team: fpl_team)
       end
       league.update!(active: true)
+      league.fpl_teams.update_all(active: true)
     end
   end
 

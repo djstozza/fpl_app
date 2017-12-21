@@ -19,8 +19,6 @@ class Leagues::JoinLeagueForm < ApplicationInteraction
   validate :fpl_team_quota
   validate :inactive_league
 
-  attr_reader :error
-
   run_in_transaction!
 
   def execute

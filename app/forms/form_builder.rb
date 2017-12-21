@@ -26,7 +26,7 @@ class FormBuilder < ActionView::Helpers::FormBuilder
   end
 
   def errors(method)
-    raw(object.errors.full_messages_for(method).map { |m| help_block(m) }.join)
+    raw(object.errors.messages[method].map { |m| help_block(m) }.join)
   end
 
   private
@@ -38,6 +38,6 @@ class FormBuilder < ActionView::Helpers::FormBuilder
   end
 
   def help_block(message)
-    raw(%Q(<span class="help-block">#{message}</span>))
+    raw(%Q(<span class="help-block">#{message.humanize}</span>))
   end
 end
