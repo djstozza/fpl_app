@@ -31,19 +31,19 @@ class Leagues::ProcessScoringService < ActiveInteraction::Base
 
   def kickoff_time_parser(player)
     pfh = player_fixture_history(player)
-    return 0 if pfh.empty?
+    return '' if pfh.blank?
     pfh.sort { |a, b| a['kickoff_time'] <=> b['kickoff_time'] }.first['kickoff_time']
   end
 
   def player_score(player)
     pfh = player_fixture_history(player)
-    return 0 if pfh.empty?
+    return 0 if pfh.blank?
     pfh.inject(0) { |sum, x| sum +  x['total_points'].to_i }
   end
 
   def minutes_parser(player)
     pfh = player_fixture_history(player)
-    return 0 if pfh.nil?
+    return 0 if pfh.blank?
     pfh.inject(0) { |sum, x| sum + x['minutes'].to_i }
   end
 
@@ -54,7 +54,7 @@ class Leagues::ProcessScoringService < ActiveInteraction::Base
   end
 
   def counted_list_positions
-    starting_field_line_up.delete_if { |list_position| minutes_parser(list_position.player).zero? }
+    starting_field_line_up.delete_if { |list_position| minutes_parser(list_position.player).to_i.zero? }
   end
 
   def substitute_arr
@@ -68,7 +68,7 @@ class Leagues::ProcessScoringService < ActiveInteraction::Base
   end
 
   def substitute_players
-    return if substitute_arr.empty?
+    return if substitute_arr.blank?
 
     starting_field_line_up.select { |list_position| minutes_parser(list_position.player).zero? }.each do |list_position|
       substitute_arr.each do |substitute|
