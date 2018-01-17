@@ -195,7 +195,10 @@ export default class TeamListTable extends Component {
       return [
         obj.id,
         _.filter(obj.player_fixture_histories, (obj) => {
-          return obj.round == self.props.round.id
+          // Will be nil if a player has a bye
+          if (obj) {
+            return obj.round == self.props.round.id
+          }
         })
       ]
     }));
@@ -263,7 +266,7 @@ export default class TeamListTable extends Component {
           trClassName={ this.trClassFormat }
           hover
         >
-          <TableHeaderColumn dataField='id' hidden isKey/>
+          <TableHeaderColumn dataField='id' isKey/>
           <TableHeaderColumn dataField='role' dataAlign='center' dataFormat={ roleTextCell }>
             <span data-tip='Role'>R</span>
           </TableHeaderColumn>

@@ -1,16 +1,16 @@
 class ListPositionsDecorator < SimpleDelegator
   def list_position_arr
     order(role: :asc, position_id: :desc)
-      .joins(:player)
-      .joins(:position)
-      .joins(:fpl_team_list)
+      .joins(:player, :position, :fpl_team_list)
       .joins('JOIN rounds ON rounds.id = fpl_team_lists.round_id')
-      .joins('JOIN fixtures ON fixtures.round_id = rounds.id')
       .joins('JOIN teams ON teams.id = players.team_id')
       .joins(
-        'JOIN teams AS opponents ON ' \
-        '(fixtures.team_h_id = opponents.id AND fixtures.team_a_id = teams.id) OR ' \
-        '(fixtures.team_a_id = opponents.id AND fixtures.team_h_id = teams.id)'
+        'LEFT JOIN fixtures ON fixtures.round_id = rounds.id AND ' \
+        '(fixtures.team_h_id = teams.id OR fixtures.team_a_id = teams.id)'
+      ).joins(
+        'LEFT JOIN teams AS opponents ON ' \
+        '((fixtures.team_h_id = opponents.id AND fixtures.team_a_id = teams.id) OR ' \
+        '(fixtures.team_a_id = opponents.id AND fixtures.team_h_id = teams.id))'
       ).pluck_to_hash(
         :id,
         :player_id,
@@ -33,14 +33,14 @@ class ListPositionsDecorator < SimpleDelegator
       ).map do |hash|
         difficulty = hash['team_h_id'] == hash['team_id'] ? hash['difficulty'] * -1 : hash['difficulty']
         difficulty_type =
-          if difficulty < 0
+          if difficulty && difficulty < 0
             'o'
           elsif difficulty == 0
             'e'
           else
             't'
           end
-        hash[:difficulty_class] = "difficulty-#{difficulty_type}#{difficulty.abs unless difficulty == 0}"
+        hash[:difficulty_class] = "difficulty-#{difficulty_type}#{difficulty.abs unless difficulty == 0}" if difficulty
         hash
       end
   end
