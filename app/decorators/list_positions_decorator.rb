@@ -32,6 +32,7 @@ class ListPositionsDecorator < SimpleDelegator
         '(team_h_difficulty - team_a_difficulty) AS difficulty'
       ).map do |hash|
         difficulty = hash['team_h_id'] == hash['team_id'] ? hash['difficulty'] * -1 : hash['difficulty']
+        hash['opponent_short_name'] = 'BYE' unless difficulty
         difficulty_type =
           if difficulty && difficulty < 0
             'o'

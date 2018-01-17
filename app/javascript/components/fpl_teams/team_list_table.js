@@ -266,7 +266,7 @@ export default class TeamListTable extends Component {
           trClassName={ this.trClassFormat }
           hover
         >
-          <TableHeaderColumn dataField='id' isKey/>
+          <TableHeaderColumn dataField='id' hidden isKey/>
           <TableHeaderColumn dataField='role' dataAlign='center' dataFormat={ roleTextCell }>
             <span data-tip='Role'>R</span>
           </TableHeaderColumn>

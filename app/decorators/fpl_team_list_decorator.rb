@@ -8,7 +8,7 @@ class FplTeamListDecorator < SimpleDelegator
 
   def provisional_score
     arr = list_positions.starting.map do |list_position|
-      list_position.player.player_fixture_histories.find { |history| history['round'] == round.id }
+      list_position.player.player_fixture_histories.find { |history| history['round'] == round.id if history.present? }
     end
     return if arr.any? { |x| x.nil? }
     arr.inject(0) { |sum, x| sum + x['total_points'] }
