@@ -102,7 +102,7 @@ export default class DraftPlayersTable extends Component {
         <Icon size='lg' name={ statuses[cell].name } />
       )
     }
-
+    console.log(this.props);
     return (
       <div>
         <BootstrapTable

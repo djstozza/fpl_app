@@ -74,6 +74,7 @@ class DraftPicks extends Component {
     let self = this;
     cable.subscriptions.create({ channel: 'DraftPickChannel', room: `league ${this.props.match.params.id}` }, {
       received: function (data) {
+        console.log(data);
         self.setState({
           draft_picks: data.draft_picks,
           unpicked_players: data.unpicked_players,
@@ -127,11 +128,12 @@ class DraftPicks extends Component {
   }
 
   render () {
-    if (this.state == null || this.state.league == null || this.state.draft_picks == null) {
+    if (this.state == null || this.state.league == null || this.state.draft_picks == null || this.state.teams == null) {
       return (
         <p>Loading...</p>
       )
     } else {
+      console.log(this.state)
       return (
         <div>
           <DraftPlayersTable

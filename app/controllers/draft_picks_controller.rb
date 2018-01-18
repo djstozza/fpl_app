@@ -38,7 +38,7 @@ class DraftPicksController < ApplicationController
   # PATCH/PUT /draft_picks/1.json
   def update
     league_decorator = LeagueDraftPicksDecorator.new(@league)
-    form = Leagues::UpdateDraftPickForm.new(
+    form = Leagues::UpdateDraftPickForm.run(
       league: @league,
       player: Player.find_by(id: params[:player_id]),
       current_user: current_user,
@@ -46,7 +46,7 @@ class DraftPicksController < ApplicationController
     )
 
     respond_to do |format|
-      if form.save
+      if form.valid?
         format.json do
           render json: {
             draft_picks: league_decorator.all_draft_picks,

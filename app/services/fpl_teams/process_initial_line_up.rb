@@ -3,7 +3,7 @@ class FplTeams::ProcessInitialLineUp < ActiveInteraction::Base
 
   def execute
     ActiveRecord::Base.transaction do
-      fpl_team_list = FplTeamList.create(fpl_team: fpl_team, round: Round.first)
+      fpl_team_list = FplTeamList.create(fpl_team: fpl_team, round: Round.current_round)
       fpl_team_decorator = FplTeamDecorator.new(fpl_team)
       starting = []
       starting += fpl_team_decorator.players_by_position(position: 'forwards')

@@ -43,7 +43,6 @@ class TradeGroupDecorator < SimpleDelegator
   def out_players_tradeable
     out_fpl_team = self.out_fpl_team_list.fpl_team
     id = self.id
-    print id
 
     Player
       .joins(:team)

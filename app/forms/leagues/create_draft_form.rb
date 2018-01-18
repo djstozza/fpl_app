@@ -23,7 +23,8 @@ class Leagues::CreateDraftForm
       (player_arr.count * PICKS_PER_TEAM).times do |i|
         DraftPick.create(pick_number: (i + 1), league: league)
       end
-      @league.draft_picks.each_slice(player_arr.count) do |batch|
+
+      @league.draft_picks.sort.each_slice(player_arr.count) do |batch|
         if batch.last.pick_number % (2 * player_arr.count) == 0
           batch.each_with_index { |pick, i| pick.update(fpl_team: player_arr.reverse[i]) }
         else
