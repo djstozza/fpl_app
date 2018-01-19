@@ -22,10 +22,11 @@ export default class DraftPlayersTable extends Component {
 
     this.draftButton = this.draftButton.bind(this);
     this.showDraftCol = this.showDraftCol.bind(this);
+    this.draftPlayer = this.draftPlayer.bind(this);
   }
 
   draftPlayer (playerId) {
-    this.props.onChange(playerId)
+    this.props.draftPlayer(playerId)
   }
 
   linkCellText (cell, row) {
@@ -38,32 +39,9 @@ export default class DraftPlayersTable extends Component {
 
   showDraftCol () {
     if (this.props.current_draft_pick && this.props.current_draft_pick.fpl_team_id == this.props.fpl_team.id) {
-      return (
-        <TableHeaderColumn
-          dataField='id'
-          dataAlign='center'
-          dataFormat={ this.draftButton }>
-          <span data-tip='Draft Player'>DP</span>
-        </TableHeaderColumn>
-      )
-    }
-  }
-
-  componentWillReceiveProps (nextProps) {
-    if (nextProps.current_draft_pick) {
-      this.yourTurn(nextProps.current_draft_pick.fpl_team_id, nextProps.fpl_team.id);
-    }
-  }
-
-  yourTurn (current_pick_fpl_team_id, fpl_team_id) {
-    if (current_pick_fpl_team_id == fpl_team_id) {
-      return (
-        Alert.info("It's your turn to pick a player", {
-          position: 'top',
-          effect: 'bouncyflip',
-          timeout: 5000
-        })
-      )
+      return false;
+    } else {
+      return true;
     }
   }
 
@@ -95,14 +73,14 @@ export default class DraftPlayersTable extends Component {
 
     const statusText = _.mapObject(statuses, (val, key) => {
       return val['title']
-    })
+    });
 
     let statusIconCell = function (cell, row) {
       return (
         <Icon size='lg' name={ statuses[cell].name } />
-      )
+      );
     }
-    console.log(this.props);
+
     return (
       <div>
         <BootstrapTable
@@ -160,10 +138,16 @@ export default class DraftPlayersTable extends Component {
             filter={ { type: 'SelectFilter', options: statusText, placeholder: ' ' } }>
             <span data-tip='Status'>S</span>
           </TableHeaderColumn>
-          { this.showDraftCol() }
+          <TableHeaderColumn
+            hidden={this.showDraftCol()}
+            dataField='id'
+            dataAlign='center'
+            dataFormat={ this.draftButton }>
+            <span data-tip='Draft Player'>DP</span>
+          </TableHeaderColumn>
         </BootstrapTable>
         <ReactTooltip />
       </div>
-    )
+    );
   }
 }
