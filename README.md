@@ -1,5 +1,4 @@
 # Fpl-app
----
 
 ## General Info
 
@@ -57,19 +56,18 @@ There are three types of trading:
  2. Trading free agents
  3. Inter team trades (trades between users in the league, which can encompass more than one player)
 
-####Waiver Picks
+#### Waiver Picks
 Waiver pick requests are processed 24 hours before a round's game week deadline (except for round 1, which has no waiver round).  A user can put forward several waiver requests during a round, which can be ordered. The lowest-ranked team will get their first waiver choice. After a successful (approved) waiver request, the team will move to the back of the waiver queue.
 
-####Trading free agents
+#### Trading free agents
 
 Users can openly pick up free agent (unpicked) players in the 24 hours between when waiver picks are processed and the round's game week. The exception to this is round 1, which has free agent trading from the completion of the draft up until the start of the round.
 
-####Inter-team trades
+#### Inter-team trades
 Inter-team trades can occur up until the game week deadline time of a round. The team that receives a proposed inter-team trade can choose to approve or decline it. Any inter-team trades that are not approved or declined by the game week deadline will expire.
 
 
 ## Getting Started
----
 
 ### Prerequisites
 
@@ -82,7 +80,6 @@ React: 16.1.0
 Redis
 Sidekiq
 ```
-
 
 ## Author
 
