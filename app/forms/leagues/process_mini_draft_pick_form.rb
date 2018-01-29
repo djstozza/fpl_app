@@ -31,7 +31,7 @@ class Leagues::ProcessMiniDraftPickForm < ApplicationInteraction
   validate :target_unpicked
   validate :player_in_fpl_team
   validate :authorised_user
-  validate :has_not_passed
+  validate :no_consecutive_passes
 
   run_in_transaction!
 
@@ -60,7 +60,9 @@ class Leagues::ProcessMiniDraftPickForm < ApplicationInteraction
     fpl_team.players << in_player
     errors.merge!(fpl_team.errors)
 
-    if league_decorator.current_draft_pick.fpl_team.mini_draft_picks.public_send(season).where(passed: true).any?
+
+    last_draft_picks = league_decorator.current_draft_pick.fpl_team.mini_draft_picks.public_send(season)&.last(2)
+    if last_draft_picks&.any? && last_draft_picks.count >= 2 && last_draft_picks.all?(&:passed)
       Leagues::PassMiniDraftPickForm.run(
         league: league,
         fpl_team_list_id: league_decorator.current_draft_pick.fpl_team.fpl_team_lists.find_by(round: round).id,
@@ -136,8 +138,9 @@ class Leagues::ProcessMiniDraftPickForm < ApplicationInteraction
     errors.add(:base, 'The player you are trying to trade into your team is owned by another team in your league.')
   end
 
-  def has_not_passed
-    return if fpl_team.mini_draft_picks.public_send(season).where(passed: true).blank?
+  def no_consecutive_passes
+    last_draft_picks = fpl_team.mini_draft_picks.public_send(season)&.last(2)
+    return unless last_draft_picks&.any? && last_draft_picks.count > 2 && last_draft_picks.all?(&:passed)
     errors.add(:base, 'You have already passed and will not be able to make any more mini draft picks.')
   end
 end

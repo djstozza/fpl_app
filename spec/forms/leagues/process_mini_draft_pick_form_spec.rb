@@ -51,6 +51,7 @@ RSpec.describe Leagues::ProcessMiniDraftPickForm, type: :form do
       list_position_id: list_position.id,
       player_id: in_player.id
     )
+
     expect(outcome).to be_valid
     expect(fpl_team_list.reload.players).to include(in_player)
     expect(fpl_team_list.reload.players).not_to include(out_player)

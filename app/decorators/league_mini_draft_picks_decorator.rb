@@ -55,7 +55,10 @@ class LeagueMiniDraftPicksDecorator < LeagueDecorator
   end
 
   def all_fpl_teams_passed?
-    fpl_teams.all? { |fpl_team| fpl_team.mini_draft_picks.public_send(season).where(passed: true).any? }
+    fpl_teams.all? do |fpl_team|
+      last_picks = fpl_team.mini_draft_picks.public_send(season).last(2)
+      last_picks.any? && last_picks.count >= 2 && last_picks.all?(&:passed)
+    end
   end
 
   private

@@ -37,7 +37,8 @@ class Leagues::PassMiniDraftPickForm < ApplicationInteraction
       info: "#{current_user.username} has passed and can no longer make mini draft picks this round."
     })
 
-    if league_decorator.next_fpl_team&.mini_draft_picks&.public_send(season)&.where(passed: true)&.any?
+    last_draft_picks = league_decorator.next_fpl_team&.mini_draft_picks&.public_send(season)&.last(2)
+    if last_draft_picks&.any? && last_draft_picks.count >= 2 && last_draft_picks.all?(&:passed)
       self.class.run(
         league: league,
         fpl_team_list_id: league_decorator.current_draft_pick.fpl_team.fpl_team_lists.find_by(round: round).id,
