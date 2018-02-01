@@ -59,7 +59,7 @@ class MiniDraftPicksController < ApplicationController
     else
       render json: {
           errors: form.errors.full_messages,
-          draft_picks: league_decorator.all_draft_picks,
+          draft_picks: league_decorator.all_non_passed_draft_picks,
           current_draft_pick:  league_decorator.current_draft_pick,
           fpl_team: fpl_team,
           fpl_team_list: fpl_team_list,
