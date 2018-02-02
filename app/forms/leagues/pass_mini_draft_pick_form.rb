@@ -29,16 +29,19 @@ class Leagues::PassMiniDraftPickForm < ApplicationInteraction
     )
     errors.merge!(outcome.errors) if outcome.errors.any?
 
+    no_more_picks_str = 'and cannot make any more picks this round' if consecutive_passes
+
+    info = "#{current_user.username} has passed #{no_more_picks_str}."
+
     ActionCable.server.broadcast("mini_draft_picks_league #{league.id}", {
       draft_picks: league_decorator.all_non_passed_draft_picks,
       current_draft_pick: league_decorator.current_draft_pick,
       unpicked_players: league_decorator.unpicked_players,
       picked_players: league_decorator.picked_players,
-      info: "#{current_user.username} has passed and can no longer make mini draft picks this round."
+      info: info
     })
 
-    last_draft_picks = league_decorator.next_fpl_team&.mini_draft_picks&.public_send(season)&.last(2)
-    if last_draft_picks&.any? && last_draft_picks.count >= 2 && last_draft_picks.all?(&:passed)
+    if consecutive_passes
       self.class.run(
         league: league,
         fpl_team_list_id: league_decorator.current_draft_pick.fpl_team.fpl_team_lists.find_by(round: round).id,
@@ -73,5 +76,10 @@ class Leagues::PassMiniDraftPickForm < ApplicationInteraction
   def authorised_user
     return if fpl_team.user == current_user
     errors.add(:base, 'You are not authorised to make changes to this team.')
+  end
+
+  def consecutive_passes
+    last_draft_picks = league_decorator.next_fpl_team&.mini_draft_picks&.public_send(season)&.last(2)
+    last_draft_picks&.any? && last_draft_picks.count >= 2 && last_draft_picks.all?(&:passed)
   end
 end

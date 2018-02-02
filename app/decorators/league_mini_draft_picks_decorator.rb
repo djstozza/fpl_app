@@ -29,7 +29,7 @@ class LeagueMiniDraftPicksDecorator < LeagueDecorator
   end
 
   def current_draft_pick
-    mini_draft_picks.build(pick_number: next_pick_number, fpl_team: next_fpl_team, season: 'summer')
+    mini_draft_picks.build(pick_number: next_pick_number, fpl_team: next_fpl_team, season: season)
   end
 
   def next_fpl_team
