@@ -5,79 +5,102 @@ RSpec.describe Leagues::JoinLeagueForm, type: :form do
   let(:league) do
     FactoryBot.create(
       :league,
-      name: Faker::GameOfThrones.name,
+      name: 'league 1',
       code: SecureRandom.hex,
       commissioner: FactoryBot.create(:user)
     )
   end
-  let(:form_attributes) { { league_name: league.name, code: league.code, fpl_team_name: Faker::Team.name } }
 
-  context '#save' do
-    it 'successfully joins a league' do
-      form = Leagues::JoinLeagueForm.new(fpl_team: FplTeam.new, current_user: user)
-      form.attributes = form_attributes
-      expect{ form.save }.to change(FplTeam, :count)
-      expect(FplTeam.first).to eq(form.fpl_team)
-      expect(FplTeam.first.league).to eq(League.first)
-      expect(FplTeam.first.user).to eq(user)
-    end
+  it 'successfully joins a league' do
+    name = 'fpl team 1'
+    outcome = described_class.run(
+      current_user: user,
+      league_name: league.name,
+      code: league.code,
+      fpl_team_name: name
+    )
 
-    it 'requires a league name' do
-      invalid_record(attribute: :league_name, message: "League name can't be blank")
-    end
-
-    it 'requires a code' do
-      invalid_record(attribute: :code, message: "Code can't be blank")
-    end
-
-    it 'does not join a league and create a team if the league name is incorrect' do
-      invalid_record(
-        attribute: :league_name,
-        value: Faker::Team.name,
-        message: 'The league name and/or code you have entered is incorrect'
-      )
-    end
-
-    it 'does not join a league and create an fpl team if the code is incorrect' do
-      invalid_record(
-        attribute: :code,
-        value: SecureRandom.hex(6),
-        message: 'The league name and/or code you have entered is incorrect'
-      )
-    end
-
-    it 'requires a unique fpl team name' do
-      fpl_team = FactoryBot.create(:fpl_team, user: FactoryBot.create(:user), league: league)
-      invalid_record(attribute: :fpl_team_name, value: fpl_team.name, message: 'Fpl team name has already been taken')
-    end
-
-    it 'prevents a user joining a team more than once' do
-      fpl_team = FactoryBot.create(:fpl_team, user: FactoryBot.create(:user), league: league)
-      form = Leagues::JoinLeagueForm.new(fpl_team: FplTeam.new, current_user: fpl_team.user)
-      form.attributes = form_attributes
-      expect{ form.save }.to_not change(FplTeam, :count)
-      expect(form.errors.full_messages).to include('You have already joined this league')
-    end
-
-    it 'prevents a user from joining if the fpl team limit has been reached' do
-      11.times do
-        FactoryBot.create(:fpl_team, user: FactoryBot.create(:user), league: league)
-      end
-      form = Leagues::JoinLeagueForm.new(fpl_team: FplTeam.new, current_user: FactoryBot.create(:user))
-      form.attributes = form_attributes
-      expect{ form.save }.to_not change(FplTeam, :count)
-      expect(form.errors.full_messages).to include('Limit on fpl teams for this league has already been reached')
-    end
+    expect(outcome.fpl_team.name).to eq(name)
+    expect(outcome.fpl_team.league).to eq(league)
+    expect(outcome.fpl_team.user).to eq(user)
   end
 
-  private
+  it 'requires a leauge name' do
+    outcome = described_class.run(
+      current_user: user,
+      code: league.code,
+      fpl_team_name: 'fpl team 1'
+    )
 
-  def invalid_record(attribute:, value: nil, message:)
-    form = Leagues::JoinLeagueForm.new(fpl_team: FplTeam.new, current_user: user)
-    form_attributes[attribute] = value
-    form.attributes = form_attributes
-    form.save
-    expect(form.errors.full_messages).to include(message)
-    expect{ form.save }.to_not change(FplTeam, :count)
+    expect(outcome.errors.full_messages).to include('League name is required')
+  end
+
+  it 'requires a code' do
+    outcome = described_class.run(
+      current_user: user,
+      league_name: league.name,
+      fpl_team_name: 'fpl team 1'
+    )
+    expect(outcome.errors.full_messages).to include('Code is required')
+  end
+
+  it 'does not join a league and create a team if the league name or code is incorrect' do
+    outcome = described_class.run(
+      current_user: user,
+      league_name: league.name,
+      code: 'incorrect',
+      fpl_team_name: 'fpl team 1'
+    )
+
+    expect(outcome.errors.full_messages).to include('The league name and/or code you have entered is incorrect.')
+
+    outcome = described_class.run(
+      current_user: user,
+      league_name: 'incorrect',
+      code: league.code,
+      fpl_team_name: 'fpl team 1'
+    )
+
+    expect(outcome.errors.full_messages).to include('The league name and/or code you have entered is incorrect.')
+  end
+
+  it 'requires a unique fpl team name' do
+    fpl_team = FactoryBot.create(:fpl_team, user: FactoryBot.create(:user), league: league)
+    outcome = described_class.run(
+      current_user: user,
+      league_name: league.name,
+      code: league.code,
+      fpl_team_name: fpl_team.name
+    )
+
+    expect(outcome.errors.full_messages).to include('Fpl team name has already been taken.')
+  end
+
+  it 'prevents a user joining a team more than once' do
+    FactoryBot.create(:fpl_team, user: user, league: league)
+
+    outcome = described_class.run(
+      current_user: user,
+      league_name: league.name,
+      code: league.code,
+      fpl_team_name: 'fpl team 2'
+    )
+
+    expect(outcome.errors.full_messages).to include('You have already joined this league')
+  end
+
+  it 'prevents a user from joining if the fpl team limit has been reached' do
+    described_class::MAX_FPL_TEAM_QUOTA.times do
+      FactoryBot.create(:fpl_team, user: FactoryBot.create(:user), league: league)
+    end
+
+    outcome = described_class.run(
+      current_user: user,
+      league_name: league.name,
+      code: league.code,
+      fpl_team_name: 'fpl team 12'
+    )
+
+    expect(outcome.errors.full_messages).to include('The limit on fpl teams for this league has already been reached.')
   end
 end

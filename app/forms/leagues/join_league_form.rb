@@ -51,8 +51,8 @@ class Leagues::JoinLeagueForm < ApplicationInteraction
 
   def fpl_team_quota
     return if league.nil?
-    return if league.fpl_teams.count <= MAX_FPL_TEAM_QUOTA
-    errors.add(:base, 'Limit on fpl teams for this league has already been reached.')
+    return if league.fpl_teams.count < MAX_FPL_TEAM_QUOTA
+    errors.add(:base, 'The limit on fpl teams for this league has already been reached.')
   end
 
   def inactive_league

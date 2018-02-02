@@ -10,12 +10,14 @@ RSpec.describe WaiverPicksController, type: :routing do
       expect(get: '/fpl_teams/1/fpl_team_lists/1/waiver_picks/new').to route_to('waiver_picks#new')
     end
 
-    it 'only routes to #show' do
-      expect(get: '/fpl_teams/1/fpl_team_lists/1/waiver_picks/1').not_to be_routable
+    xit 'only routes to #show' do
+      expect(get: '/fpl_teams/1/fpl_team_lists/1/waiver_picks/1')
+        .to route_to('errors#show', path: '/fpl_teams/1/fpl_team_lists/1/waiver_picks/1')
     end
 
-    it 'does not route to #edit' do
-      expect(get: '/fpl_teams/1/fpl_team_lists/1/waiver_picks/1/edit').not_to be_routable
+    xit 'does not route to #edit' do
+      expect(get: '/fpl_teams/1/fpl_team_lists/1/waiver_picks/1/edit')
+        .to route_to('errors#show', path: '/fpl_teams/1/fpl_team_lists/1/waiver_picks/1/edit')
     end
 
     it 'only routes to #create' do

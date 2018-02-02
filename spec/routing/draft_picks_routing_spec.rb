@@ -6,16 +6,16 @@ RSpec.describe MiniDraftPicksController, type: :routing do
       expect(get: 'leagues/1/draft_picks').to route_to('draft_picks#index', league_id: '1')
     end
 
-    it 'routes to #new' do
-      expect(get: 'leagues/1/draft_picks/new').not_to be_routable
+    it 'does not route to #new' do
+      expect(get: 'leagues/1/draft_picks/new').to route_to('errors#show', path: 'leagues/1/draft_picks/new')
     end
 
     it 'routes to #show' do
-      expect(get: 'leagues/1//draft_picks/1').not_to be_routable
+      expect(get: 'leagues/1//draft_picks/1').to route_to('errors#show', path: 'leagues/1/draft_picks/1')
     end
 
-    it 'routes to #edit' do
-      expect(get: 'leagues/1/draft_picks/1/edit').not_to be_routable
+    it 'does not route to #edit' do
+      expect(get: 'leagues/1/draft_picks/1/edit').to route_to('errors#show', path: 'leagues/1/draft_picks/1/edit')
     end
 
     it 'routes to #create' do
@@ -31,7 +31,7 @@ RSpec.describe MiniDraftPicksController, type: :routing do
     end
 
     it 'does not route to #destroy' do
-      expect(delete: 'leagues/1/draft_picks/1').not_to be_routable
+      expect(delete: 'leagues/1/draft_picks/1').to route_to('errors#show', path: 'leagues/1/draft_picks/1')
     end
 
   end

@@ -11,15 +11,15 @@ class FplTeams::CreateWaiverPickForm < ApplicationInteraction
 
   array :waiver_picks, default: -> { fpl_team_list.reload.waiver_picks }
 
-  object :in_player, class: Player, default: -> { Player.find(target_id) }
+  object :in_player, class: Player
 
   object :list_position, class: ListPosition
 
   object :out_player, class: Player, default: -> { list_position.player }
 
   validate :authorised_user
-  validate :player_in_fpl_team
-  validate :target_unpicked
+  validate :out_player_in_fpl_team
+  validate :in_player_unpicked
   validate :round_is_current
   validate :not_first_round
   validate :waiver_pick_occurring_in_valid_period
@@ -49,12 +49,12 @@ class FplTeams::CreateWaiverPickForm < ApplicationInteraction
     errors.add(:base, 'You are not authorised to make changes to this team.')
   end
 
-  def player_in_fpl_team
+  def out_player_in_fpl_team
     return if fpl_team.players.include?(out_player)
     errors.add(:base, 'You can only trade out players that are part of your team.')
   end
 
-  def target_unpicked
+  def in_player_unpicked
     return unless in_player.leagues.include?(league)
     errors.add(:base, 'The player you are trying to trade into your team is owned by another team in your league.')
   end

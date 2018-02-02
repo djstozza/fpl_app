@@ -60,7 +60,7 @@ RSpec.describe InterTeamTradeGroups::Approve do
   it 'successfully approves trade group' do
     outcome = described_class.run(
       current_user: in_fpl_team.user,
-      inter_team_trade_group: @trade_group
+      inter_team_trade_group: @trade_group.reload
     )
 
     expect(outcome).to be_valid
@@ -84,7 +84,7 @@ RSpec.describe InterTeamTradeGroups::Approve do
 
     outcome = described_class.run(
       current_user: in_fpl_team.user,
-      inter_team_trade_group: @trade_group
+      inter_team_trade_group: @trade_group.reload
     )
 
     expect(outcome).not_to be_valid
@@ -111,7 +111,7 @@ RSpec.describe InterTeamTradeGroups::Approve do
 
     outcome = described_class.run(
       current_user: in_fpl_team.user,
-      inter_team_trade_group: @trade_group
+      inter_team_trade_group: @trade_group.reload
     )
 
     expect(outcome).not_to be_valid
@@ -135,7 +135,7 @@ RSpec.describe InterTeamTradeGroups::Approve do
 
     outcome = described_class.run(
       current_user: in_fpl_team.user,
-      inter_team_trade_group: @trade_group
+      inter_team_trade_group: @trade_group.reload
     )
 
     expect(outcome).not_to be_valid
@@ -156,7 +156,7 @@ RSpec.describe InterTeamTradeGroups::Approve do
   it 'fails if the user is not authorised' do
     outcome = described_class.run(
       current_user: user,
-      inter_team_trade_group: @trade_group
+      inter_team_trade_group: @trade_group.reload
     )
 
     expect(outcome).not_to be_valid

@@ -1,9 +1,9 @@
 class InterTeamTradeGroups::Create < InterTeamTradeGroups::Base
   object :current_user, class: User
 
-  object :inter_team_trade_group, class: InterTeamTradeGroup
+  object :inter_team_trade_group, class: InterTeamTradeGroup, default: -> { InterTeamTradeGroup.new }
 
-  object :out_fpl_team_list, class: FplTeamList, default: -> { inter_team_trade_group.out_fpl_team_list }
+  object :out_fpl_team_list, class: FplTeamList
   object :in_fpl_team_list, class: FplTeamList
 
   object :out_fpl_team, class: FplTeam, default: -> { out_fpl_team_list.fpl_team }
@@ -28,13 +28,14 @@ class InterTeamTradeGroups::Create < InterTeamTradeGroups::Base
   validate :valid_team_quota_in_fpl_team
 
   def execute
-    inter_team_trade_group.update(
+    inter_team_trade_group.assign_attributes(
       out_fpl_team_list: out_fpl_team_list,
       in_fpl_team_list: in_fpl_team_list,
       round: round,
       league: league,
       status: 'pending'
     )
+    inter_team_trade_group.save
     errors.merge!(inter_team_trade_group.errors)
 
     trade = InterTeamTrade.create(
@@ -43,5 +44,6 @@ class InterTeamTradeGroups::Create < InterTeamTradeGroups::Base
       inter_team_trade_group: inter_team_trade_group
     )
     errors.merge!(trade.errors)
+    inter_team_trade_group
   end
 end

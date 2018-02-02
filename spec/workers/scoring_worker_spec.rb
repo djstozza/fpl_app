@@ -3,13 +3,6 @@ require 'rails_helper'
 RSpec.describe ScoringWorker do
   before do
     Round.create(name: 'Gameweek 1', is_current: true, data_checked: true, deadline_time: 4.days.ago)
-    Round.create(
-      name: 'Gameweek 2',
-      is_current: false,
-      is_next: true,
-      deadline_time: 1.week.from_now,
-      data_checked: false
-    )
     10.times do
       user = FactoryBot.create(:user)
       FactoryBot.create(:league, commissioner: user) if user == User.first
@@ -53,6 +46,13 @@ RSpec.describe ScoringWorker do
         )
       end
     end
+    Round.create(
+      name: 'Gameweek 2',
+      is_current: false,
+      is_next: true,
+      deadline_time: 1.week.from_now,
+      data_checked: false
+    )
     League.first.update(active: true)
   end
 

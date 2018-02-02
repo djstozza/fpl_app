@@ -58,7 +58,7 @@ class LeaguesController < ApplicationController
   # PATCH/PUT /leagues/1
   # PATCH/PUT /leagues/1.json
   def update
-    @form = Leagues::ProcessLeagueForm.run(league_params.merge(league: @league, current_user: current_user))
+    @form = Leagues::ProcessLeagueForm.run(league_params.merge(current_user: current_user))
 
     respond_to do |format|
       if @form.valid?

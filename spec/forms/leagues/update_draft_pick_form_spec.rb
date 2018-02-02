@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Leagues::UpdateDraftPickForm, type: :form do
   before :each do
+    FactoryBot.create(:round, deadline_time: 2.days.from_now)
     10.times do |i|
       i += 1
       user = FactoryBot.create(:user, username: "#{Faker::Name.first_name} #{i}")

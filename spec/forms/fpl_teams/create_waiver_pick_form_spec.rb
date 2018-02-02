@@ -55,7 +55,7 @@ RSpec.describe FplTeams::CreateWaiverPickForm, type: :form do
       fpl_team_list: FplTeamList.first,
       fpl_team: fpl_team,
       list_position_id: @list_position.id,
-      target_id: @in_player.id,
+      in_player_id: @in_player.id,
       current_user: user
     )
     expect(outcome).to be_valid
@@ -69,7 +69,7 @@ RSpec.describe FplTeams::CreateWaiverPickForm, type: :form do
       fpl_team_list: FplTeamList.first,
       fpl_team: fpl_team,
       list_position_id: ListPosition.midfielders.second.id,
-      target_id: @in_player.id,
+      in_player_id: @in_player.id,
       current_user: user
     )
 
@@ -95,7 +95,7 @@ RSpec.describe FplTeams::CreateWaiverPickForm, type: :form do
       fpl_team_list: FplTeamList.first,
       fpl_team: fpl_team,
       list_position_id: @list_position.id,
-      target_id: @in_player.id,
+      in_player_id: @in_player.id,
       current_user: user
     )
 
@@ -109,7 +109,7 @@ RSpec.describe FplTeams::CreateWaiverPickForm, type: :form do
       fpl_team_list: FplTeamList.first,
       fpl_team: fpl_team,
       list_position_id: @list_position.id,
-      target_id: @in_player.id,
+      in_player_id: @in_player.id,
       current_user: user
     )
 
@@ -123,7 +123,7 @@ RSpec.describe FplTeams::CreateWaiverPickForm, type: :form do
       fpl_team_list: FplTeamList.first,
       fpl_team: fpl_team,
       list_position_id: @list_position.id,
-      target_id: @in_player.id,
+      in_player_id: @in_player.id,
       current_user: user
     )
 
@@ -139,7 +139,7 @@ RSpec.describe FplTeams::CreateWaiverPickForm, type: :form do
       fpl_team_list: FplTeamList.first,
       fpl_team: fpl_team,
       list_position_id: @list_position.id,
-      target_id: @in_player.id,
+      in_player_id: @in_player.id,
       current_user: user
     )
 
@@ -147,7 +147,7 @@ RSpec.describe FplTeams::CreateWaiverPickForm, type: :form do
       fpl_team_list: FplTeamList.first,
       fpl_team: fpl_team,
       list_position_id: @list_position.id,
-      target_id: @in_player.id,
+      in_player_id: @in_player.id,
       current_user: user
     )
 
@@ -164,7 +164,7 @@ RSpec.describe FplTeams::CreateWaiverPickForm, type: :form do
       fpl_team_list: FplTeamList.first,
       fpl_team: fpl_team,
       list_position_id: @list_position.id,
-      target_id: @in_player.id,
+      in_player_id: @in_player.id,
       current_user: user
     )
 

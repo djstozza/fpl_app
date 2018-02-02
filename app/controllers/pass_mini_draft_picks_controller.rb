@@ -7,7 +7,7 @@ class PassMiniDraftPicksController < ApplicationController
   # POST leagues/1/mini_draft_picks
   # POST leagues/1/mini_draft_picks.json
   def create
-    form = ::Leagues::PassMiniDraftPickForm.run(params.merge(league: @league, current_user: current_user))
+    form = ::Leagues::PassMiniDraftPickForm.run(params.merge(current_user: current_user))
     league_decorator = LeagueMiniDraftPicksDecorator.new(@league)
     fpl_team = FplTeamDecorator.new(current_user.fpl_teams.find_by(league_id: league_decorator.id))
     round = Round.current_round

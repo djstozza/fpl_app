@@ -41,6 +41,5 @@ class InterTeamTradeGroups::Approve < InterTeamTradeGroups::Base
     errors.merge!(in_fpl_team_list.errors)
     @success_message =
       'You have successfully approved the trade. All players players involved have been exchanged.'
-    inter_team_trade_group
   end
 end

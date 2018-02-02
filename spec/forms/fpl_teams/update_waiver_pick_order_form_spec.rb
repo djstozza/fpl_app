@@ -46,7 +46,7 @@ RSpec.describe FplTeams::UpdateWaiverPickOrderForm, type: :form do
         fpl_team_list: FplTeamList.first,
         fpl_team: fpl_team,
         list_position_id: ListPosition.midfielders.first.id,
-        target_id: FactoryBot.create(
+        in_player_id: FactoryBot.create(
           :player,
           position: Position.find_by(singular_name_short: 'MID'),
           team: FactoryBot.create(:team)

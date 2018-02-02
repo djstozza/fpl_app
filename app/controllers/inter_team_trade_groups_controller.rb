@@ -24,6 +24,7 @@ class InterTeamTradeGroupsController < ApplicationController
       InterTeamTradeGroups::Create.run(
         params.merge(
           inter_team_trade_group: InterTeamTradeGroup.new(out_fpl_team_list: @fpl_team_list),
+          out_fpl_team_list: @fpl_team_list,
           current_user: current_user
         )
       )

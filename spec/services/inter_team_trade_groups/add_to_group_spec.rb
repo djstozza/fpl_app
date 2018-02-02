@@ -44,7 +44,7 @@ RSpec.describe InterTeamTradeGroups::AddToGroup do
       in_fpl_team_list: in_fpl_team.fpl_team_lists.first,
       out_player: out_player,
       in_player: in_player
-    ).inter_team_trade_group.reload
+    ).result
   end
 
   it 'successfully adds to the trade group' do

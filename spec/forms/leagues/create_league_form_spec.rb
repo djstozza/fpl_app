@@ -5,7 +5,7 @@ RSpec.describe Leagues::CreateLeagueForm, type: :form do
     user = FactoryBot.create(:user)
     form = described_class.run(
       current_user: user,
-      league_name: Faker::GameOfThrones.house,
+      name: Faker::GameOfThrones.house,
       fpl_team_name: Faker::Team.name,
       code: SecureRandom.hex(6)
     )
@@ -25,23 +25,22 @@ RSpec.describe Leagues::CreateLeagueForm, type: :form do
       code: SecureRandom.hex(6),
       fpl_team_name: Faker::Team.name
     )
-    expect(form.errors.full_messages).to include('League name is required')
+    expect(form.errors.full_messages).to include("Name can't be blank")
 
     form = described_class.run(
       current_user: user,
       code: SecureRandom.hex(6),
-      league_name: Faker::GameOfThrones.house
+      name: Faker::GameOfThrones.house
     )
     expect(form.errors.full_messages).to include('Fpl team name is required')
 
-
     form = described_class.run(
       current_user: user,
-      league_name: Faker::GameOfThrones.house,
+      name: Faker::GameOfThrones.house,
       fpl_team_name: Faker::Team.name
     )
 
-    expect(form.errors.full_messages).to include('Code is required')
+    expect(form.errors.full_messages).to include("Code can't be blank")
 
     user = FactoryBot.create(:user)
     team_name = Faker::Team.unique.name
@@ -49,19 +48,19 @@ RSpec.describe Leagues::CreateLeagueForm, type: :form do
 
     described_class.run!(
       current_user: user,
-      league_name: league_name,
+      name: league_name,
       fpl_team_name: team_name,
       code: SecureRandom.hex(6)
     )
 
     form = described_class.run(
       current_user: user,
-      league_name: league_name,
+      name: league_name,
       fpl_team_name: team_name,
       code: SecureRandom.hex(6)
     )
 
-    expect(form.errors.full_messages).to include('League name has already been taken')
-    expect(form.errors.full_messages).to include('Fpl team name has already been taken')
+    expect(form.errors.full_messages).to include("Name #{league_name} has already been taken")
+    expect(form.errors.full_messages).to include("Fpl team name #{team_name} has already been taken")
   end
 end
