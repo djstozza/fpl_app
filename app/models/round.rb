@@ -37,7 +37,7 @@ class Round < ApplicationRecord
     end
 
     def round_status(round: Round.current_round)
-      if round.mini_draft && Time.now < round.deadline_time
+      if round.mini_draft && Time.now < round.deadline_time - 1.day
         'mini_draft'
       elsif Time.now < round.deadline_time - 1.day && round.id != Round.first.id
         'waiver'
